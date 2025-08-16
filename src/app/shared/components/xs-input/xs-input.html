@@ -1,0 +1,42 @@
+@if (allowFloatLabel) {
+
+  <p-floatlabel [variant]="variant">
+  <input
+    pInputText
+    [pSize]="size"
+    [id]="id"
+    type="text"
+    [formControl]="control"
+    [ngClass]="{
+      'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
+      'p-invalid': control.invalid && control.touched
+    }"
+    autocomplete="off"
+    (input)="onInput($event)"
+  />
+  <label [for]="id">{{ placeholder }}</label>
+  @if (control.errors && control.touched) {
+      <p-message severity="error" size="small" variant="simple">{{control.errors![objectFn.keys(control.errors!)[0]] }}</p-message>
+  }
+</p-floatlabel>
+
+}@else {
+
+  <input
+  pInputText
+  [id]="id"
+  type="text"
+  [formControl]="control"
+  [placeholder]="placeholder"
+  [ngClass]="{
+    'p-invalid': control.invalid && control.touched
+  }"
+  autocomplete="off"
+  (input)="onInput($event)"
+
+/>
+  @if (control.errors && control.touched) {
+      <p-message severity="error" size="small" variant="simple">{{control.errors![objectFn.keys(control.errors!)[0]] }}</p-message>
+  }
+}
+

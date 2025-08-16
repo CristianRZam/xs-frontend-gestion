@@ -1,0 +1,28 @@
+<xs-card class="w-full max-w-md mx-auto mt-10 p-6">
+    <ng-template #content>
+        <form [formGroup]="exampleForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4 w-full sm:w-80">
+
+  <!-- Text Input -->
+  <xs-input-text
+    [control]="exampleForm.controls['username']" 
+    label="Username" 
+    [id]="'hola'"
+    placeholder="Enter your username" 
+    type="text" >
+  </xs-input-text>
+
+
+
+  <xs-input-password 
+    [control]="exampleForm.controls['password']" 
+    [id]="'hola4'"
+    placeholder="Password" >
+  </xs-input-password>
+
+
+  <xs-button type="submit" label="Ingresar" ></xs-button>
+</form>
+    </ng-template>
+
+
+</xs-card> 
