@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators, FormGroup, FormControl, AbstractControl } from '@angular/forms';
 import { XsCard } from '../../../shared/components/xs-card/xs-card';
 import { XsInputText } from '../../../shared/components/xs-input-text/xs-input-text';
 import { XsInputPassword } from '../../../shared/components/xs-input-password/xs-input-password';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { XsButton } from "../../../shared/components/xs-button/xs-button";
+import { Formvalidators } from '../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-login',
@@ -20,40 +21,44 @@ import { XsButton } from "../../../shared/components/xs-button/xs-button";
     XsButton
 ],
   templateUrl: './xs-login.html',
-  styleUrls: ['./xs-login.scss'], // corregí "styleUrl" -> "styleUrls"
+  styleUrls: ['./xs-login.scss'],
 })
-export class XsLogin {
-  exampleForm!: FormGroup<{
-    username: FormControl<string | null>;
-    password: FormControl<string | null>;
-  }>;
+export class XsLogin implements OnInit {
+  public formulario!: FormGroup;
+
+  constructor(
+    private formBuilder: FormBuilder,
+    private validators: Formvalidators,
+  ) {}
+
+  get username(): AbstractControl | null { return this.formulario.get('username'); }
+  get password(): AbstractControl | null { return this.formulario.get('password'); }
 
   ngOnInit(): void {
-    this.exampleForm = new FormGroup({
-      username: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      password: new FormControl('', [Validators.required, Validators.minLength(6)]),
-    });
+    this.configurarFormulario();
+  }
 
-    // Suscribirse a cambios de todo el formulario
-    this.exampleForm.valueChanges.subscribe(values => {
-      console.log('Form values changed:', values);
-    });
-
-    // Suscribirse a cambios de cada control individual (opcional)
-    this.exampleForm.controls.username.valueChanges.subscribe(value => {
-      console.log('Username changed:', value);
-    });
-    this.exampleForm.controls.password.valueChanges.subscribe(value => {
-      console.log('Password changed:', value);
+  configurarFormulario(): void {
+    this.formulario = this.formBuilder.group({
+      username: [null, [
+        this.validators.requiredValidator('Ingrese su usuario'),
+      ]],
+      password: [null, [
+        this.validators.requiredValidator('Ingrese su contraseña'),
+      ]],
     });
   }
 
-  onSubmit(): void {
-    if (this.exampleForm.valid) {
-      console.log('Form submitted:', this.exampleForm.value);
-    } else {
-      console.log('Form invalid');
-      this.exampleForm.markAllAsTouched();
+  formSubmitEvent(): void {
+    if (this.formulario.valid) {
+          console.log(this.formulario.value);
+    }else {
+      Object.keys(this.formulario.controls).forEach(field => {
+        const control = this.formulario.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+      
     }
   }
 }
+

@@ -35,7 +35,6 @@ export class XsInputText {
 
   ngOnInit(): void {
     if (!this.id) this.id = `xs-input-${Math.floor(Math.random() * 100000)}`;
-    
     this.control.updateValueAndValidity();
   }
 

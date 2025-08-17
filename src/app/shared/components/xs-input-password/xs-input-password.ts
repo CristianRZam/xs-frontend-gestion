@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import {Password } from 'primeng/password';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,4 +21,6 @@ export class XsInputPassword {
   @Input() variant: 'over' | 'in' | 'on' = 'on';
   @Input() allowFloatLabel: boolean = true;
   public objectFn = Object;
+
+  
 }
