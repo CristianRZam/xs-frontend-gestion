@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@use "tailwindcss";
+
 .full-width,
 .full-width > button {
   width: 100% !important;
@@ -7,4 +8,12 @@
 p-floatlabel {
   display: block;
   margin-bottom: 0.25rem !important;
+}
+
+/* Solo para el loader dialog */
+.p-dialog.xs-loader {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
 }

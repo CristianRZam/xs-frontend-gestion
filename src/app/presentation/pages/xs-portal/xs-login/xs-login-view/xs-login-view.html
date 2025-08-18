@@ -1,0 +1,52 @@
+<!-- xs-login-view.component.html -->
+<div class="min-h-screen flex">
+  <!-- Lado izquierdo con imagen -->
+  <!-- Lado izquierdo con imagen mejorada -->
+  <div class="hidden md:flex md:w-1/2 relative items-center justify-center  overflow-hidden">
+    
+    <!-- Overlay semitransparente -->
+    <div class="absolute inset-0"></div>
+
+    <!-- Imagen decorativa centrada -->
+    <img 
+      src="assets/images/img.png" 
+      alt="Login illustration" 
+      class="relative max-w-full max-h-full object-contain z-10"
+    />
+
+    <!-- Texto opcional encima de la imagen -->
+    <div class="absolute bottom-8 left-8  z-10">
+      <h3 class="text-3xl font-bold mb-2">Bienvenido a TuApp</h3>
+      <p class="text-sm opacity-80 max-w-xs">
+        Ingresa para acceder a todas tus herramientas y funcionalidades.
+      </p>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- Lado derecho con el form -->
+  <div class="w-full md:w-1/2 flex items-center justify-center p-6">
+    <div class="w-full max-w-md">
+      <!-- Logo arriba -->
+      <div class="flex justify-center mb-8">
+        <img src="assets/logos/logo.svg" alt="Logo" class="h-12" />
+      </div>
+
+      <!-- Título -->
+      <h2 class="text-2xl font-bold text-center mb-6">
+        Iniciar sesión
+      </h2>
+
+      <!-- Aquí va el formulario -->
+      <xs-ingresar></xs-ingresar>
+
+      <!-- Pie -->
+      <p class="text-center text-sm text-gray-500 mt-6">
+        © 2025 Tu Empresa. Todos los derechos reservados.
+      </p>
+    </div>
+  </div>
+</div>

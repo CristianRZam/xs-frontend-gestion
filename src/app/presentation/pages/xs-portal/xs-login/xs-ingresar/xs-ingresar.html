@@ -1,0 +1,41 @@
+<xs-card>
+  <ng-template #content>
+    <!-- Contenedor para centrar el form -->
+    <div class="flex flex-col justify-center items-center w-full h-full">
+      <form
+        [formGroup]="formulario"
+        (ngSubmit)="formSubmitEvent()"
+        class="flex flex-col gap-4 w-full max-w-sm"
+      >
+        <!-- Username -->
+        <xs-input-text
+          [control]="$any(username)"
+          label="Username"
+          [id]="'username'"
+          placeholder="Usuario o Correo Electrónico"
+          type="text"
+        ></xs-input-text>
+
+        <!-- Password -->
+        <xs-input-password
+          [control]="$any(password)"
+          [inputId]="'password'"
+          placeholder="Contraseña"
+        ></xs-input-password>
+
+        <!-- Submit Button -->
+        <xs-button
+          type="submit"
+          label="Ingresar"
+          [fullWidth]="true"
+        ></xs-button>
+      </form>
+    </div>
+  </ng-template>
+</xs-card>
+
+<xs-toast #xsToast toastKey="loginToastKey"></xs-toast>
+<xs-loader #xsLoader></xs-loader>
+<!-- <div class="bg-green-500 text-white p-4 rounded-lg text-center">
+  🚀 Si ves este fondo azul y texto blanco, Tailwind funciona!
+</div> -->

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { XsLogin } from './xs-login';
+import { XsLoader } from './xs-loader';
 
-describe('XsLogin', () => {
-  let component: XsLogin;
-  let fixture: ComponentFixture<XsLogin>;
+describe('XsLoader', () => {
+  let component: XsLoader;
+  let fixture: ComponentFixture<XsLoader>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [XsLogin]
+      imports: [XsLoader]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(XsLogin);
+    fixture = TestBed.createComponent(XsLoader);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
