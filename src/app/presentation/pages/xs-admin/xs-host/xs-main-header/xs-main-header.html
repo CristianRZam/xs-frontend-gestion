@@ -1,0 +1,17 @@
+<p-menubar class="sticky top-0 z-50 bg-white shadow">
+  <ng-template #start>
+    <div class="flex items-center gap-4">
+      <span>Hola</span>
+      <p-breadcrumb [model]="breadcrumbItems" />
+    </div>
+  </ng-template>
+
+  <ng-template #end>
+    <div class="flex items-center gap-4">
+        <p-overlaybadge value="2">
+            <i class="pi pi-bell" style="font-size: 2rem"></i>
+        </p-overlaybadge>
+        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+    </div>
+  </ng-template>
+</p-menubar>

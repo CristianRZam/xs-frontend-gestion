@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { XsHome } from './xs-home/xs-home';
+import { XsDashboard } from './xs-dashboard/xs-dashboard';
 
 export const ADMIN_ROUTES: Routes = [
-  { path: 'admin', component: XsHome},
+  { path: '', component: XsDashboard},
 ];
