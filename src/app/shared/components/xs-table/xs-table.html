@@ -1,0 +1,46 @@
+<p-table #table [value]="dataSource" [selectionMode]="selectByCheckbox ? 'multiple' : null" [dataKey]="rowID" styleClass="w-full min-w-max">
+  <!-- Caption dinámico -->
+  <ng-template pTemplate="caption">
+    <div class="flex flex-wrap justify-content-between align-items-center">
+      @if (showTitle) {
+        <div class="flex align-items-center">
+          <div>{{ title }}</div>
+        </div>
+      }
+    </div>
+  </ng-template>
+
+  <!-- Header dinámico -->
+  <ng-template pTemplate="header">
+    <tr>
+      @if (selectByCheckbox){
+        <th>
+          <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+        </th>
+      }
+
+      @for (col of columns; track col.field) {
+        <th [style.text-align]="col.headerTextAlign">
+          {{ col.headerText }}
+        </th>
+      }
+    </tr>
+  </ng-template>
+
+  <!-- Body dinámico -->
+  <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+    <tr>
+      @if (selectByCheckbox){
+        <td>
+          <p-tableCheckbox [pSelectableRow]="item" [pSelectableRowIndex]="rowIndex" [value]="item" >
+          </p-tableCheckbox>
+        </td>
+      }
+      @for (col of columns; track col.field) {
+        <td [style.text-align]="col.textAlign">
+          {{ item[col.field || ''] }}
+        </td>
+      }
+    </tr>
+  </ng-template>
+</p-table>

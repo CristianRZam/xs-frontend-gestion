@@ -1,0 +1,13 @@
+<xs-main-sidebar [(visible)]="sidebarVisible">
+
+  <!-- Header -->
+  <div header>
+    <xs-main-header (toggleSidebar)="toggleSidebar()"></xs-main-header>
+  </div>
+
+  <!-- Contenido -->
+  <div content>
+    <router-outlet></router-outlet>
+  </div>
+
+</xs-main-sidebar>

@@ -1,17 +1,51 @@
 <p-menubar class="sticky top-0 z-50 bg-white shadow">
   <ng-template #start>
     <div class="flex items-center gap-4">
-      <span>Hola</span>
-      <p-breadcrumb [model]="breadcrumbItems" />
+      <xs-button 
+        icon="fa-solid fa-align-justify" 
+        size="small" 
+        severity="contrast" 
+        variant="text" 
+        [rounded]="false"
+        (click)="onMenuClick()">
+      </xs-button>
+
+      <!-- Breadcrumb oculto en móviles -->
+      <p-breadcrumb 
+        [model]="breadcrumbItems" 
+        class="hidden sm:block" />
     </div>
   </ng-template>
 
   <ng-template #end>
     <div class="flex items-center gap-4">
-        <p-overlaybadge value="2">
-            <i class="pi pi-bell" style="font-size: 2rem"></i>
-        </p-overlaybadge>
-        <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle" />
+      <p-overlaybadge value="2">
+        <i class="fa-solid fa-bell text-2xl cursor-pointer"></i>
+      </p-overlaybadge>
+
+      <p-avatar 
+        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
+        shape="circle" 
+        class="cursor-pointer"
+        (click)="toggleAvatarMenu($event); $event.stopPropagation()">
+      </p-avatar>
+
+      <p-menu
+        #avatarMenu
+        [model]="avatarMenuItems"
+        [popup]="true"
+        [appendTo]="'body'"
+        [autoZIndex]="true"
+        [baseZIndex]="10000">
+        <ng-template let-item pTemplate="item">
+          <a pRipple 
+             [ngClass]="{'text-red-400 font-medium': item.isLogout}" 
+             class="flex items-center gap-2 p-2 cursor-pointer">
+            <span [class]="item.icon"></span>
+            <span>{{ item.label }}</span>
+          </a>
+        </ng-template>
+      </p-menu>
     </div>
   </ng-template>
 </p-menubar>

@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
 import { XsPortalHost } from './presentation/pages/xs-portal/xs-portal-host/xs-portal-host';
-import { XsAdminHost } from './presentation/pages/xs-admin/xs-admin-host/xs-admin-host';
 import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { XsNoFound } from './presentation/pages/xs-no-found/xs-no-found';
+import { XsHostView } from './presentation/pages/xs-admin/xs-host/xs-host-view/xs-host-view';
 
 export const routes: Routes = [
   {
@@ -20,7 +20,7 @@ export const routes: Routes = [
   },
   {
     path: 'admin',
-    component: XsAdminHost,
+    component: XsHostView,
     canActivate: [authGuard],
     children: [
       {

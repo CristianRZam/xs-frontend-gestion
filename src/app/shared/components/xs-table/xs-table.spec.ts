@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { XsAdminHost } from './xs-admin-host';
+import { XsTable } from './xs-table';
 
-describe('XsAdminHost', () => {
-  let component: XsAdminHost;
-  let fixture: ComponentFixture<XsAdminHost>;
+describe('XsTable', () => {
+  let component: XsTable;
+  let fixture: ComponentFixture<XsTable>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [XsAdminHost]
+      imports: [XsTable]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(XsAdminHost);
+    fixture = TestBed.createComponent(XsTable);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

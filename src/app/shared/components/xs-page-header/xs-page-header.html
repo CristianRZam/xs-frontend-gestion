@@ -1,0 +1,16 @@
+<div class="flex flex-col sm:flex-row sm:items-center sm:justify-between pb-4 mb-6">
+  <!-- Título y descripción -->
+  <div class="flex flex-col text-left">
+    <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
+      {{ title }}
+    </h1>
+    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
+      {{ description }}
+    </p>
+  </div>
+
+  <!-- Botón -->
+  <div class="mt-4 sm:mt-0">
+    <xs-button [label]="buttonText" (click)="handleClick()" severity="info" icon="fa fa-plus" [rounded]="false" variant="outlined"></xs-button>
+  </div>
+</div>

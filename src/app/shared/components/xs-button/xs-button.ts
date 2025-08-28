@@ -13,7 +13,7 @@ import { ButtonModule } from 'primeng/button';
 export class XsButton {
   @Input() label?: string;
   @Input() type: 'button' | 'submit' | 'reset' = 'button';
-  @Input() size: 'small' | 'large' = 'large';
+  @Input() size: 'small' | 'large' = 'small';
 
   @Input() icon?: string;
   @Input() iconPos: 'left' | 'right' | 'top' | 'bottom' = 'left';

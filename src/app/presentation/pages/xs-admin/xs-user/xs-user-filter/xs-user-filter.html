@@ -1,0 +1,20 @@
+<div class="mt-4">
+  <xs-fieldset legend="Criterios de búsqueda">
+    <ng-template #content>
+      <div class="flex flex-col gap-4">
+        
+        <!-- Input Nombre -->
+        <div class="w-full">
+          <xs-input-text placeholder="Nombre"></xs-input-text>
+        </div>
+
+        <!-- Botones -->
+        <div class="flex justify-center space-x-2">
+            <xs-button label="Filtrar" icon="fa-solid fa-filter" variant="outlined" size="small" severity="info"></xs-button>
+            <xs-button label="Limpiar" icon="fa-solid fa-broom" variant="outlined" size="small" severity="info"></xs-button>
+        </div>
+
+      </div>
+    </ng-template>
+  </xs-fieldset>
+</div>

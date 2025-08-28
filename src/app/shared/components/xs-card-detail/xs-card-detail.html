@@ -1,0 +1,27 @@
+<xs-card>
+  <ng-template #content>
+    <div class="flex items-center justify-between">
+      
+      <!-- Texto -->
+      <div class="flex flex-col">
+        <span class="text-sm font-medium text-gray-500 dark:text-gray-300">
+          {{ titulo }}
+        </span>
+        <span class="text-2xl font-bold text-gray-900 dark:text-white">
+          {{ cantidad }}
+        </span>
+        <span *ngIf="detalle" [ngClass]="colorDetalle" class="text-xs mt-1">
+          {{ detalle }}
+        </span>
+      </div>
+
+      <!-- Icono con círculo -->
+      <div 
+        class="flex items-center justify-center w-12 h-12 rounded-full"
+        [ngStyle]="iconStyles">
+        <i [class]="icono + ' text-xl'"></i>
+      </div>
+
+    </div>
+  </ng-template>
+</xs-card>
