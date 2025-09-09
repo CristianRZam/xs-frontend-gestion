@@ -10,11 +10,12 @@ import { XsButton } from "../xs-button/xs-button";
 export class XsPageHeader {
   @Input() title: string = '';
   @Input() description: string = '';
-  @Input() buttonText: string = 'Nuevo';
+  @Input() buttonText: string = 'Volver';
 
   @Output() onNew = new EventEmitter<void>();
 
   handleClick() {
+    window.history.back();
     this.onNew.emit();
   }
 }

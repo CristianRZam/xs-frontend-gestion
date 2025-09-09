@@ -36,4 +36,5 @@ export class XsUserTable {
   eliminarUsuario(usuario: any) {
     console.log('Eliminar usuario', usuario);
   }
+
 }

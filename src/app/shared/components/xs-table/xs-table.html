@@ -1,14 +1,63 @@
-<p-table #table [value]="dataSource" [selectionMode]="selectByCheckbox ? 'multiple' : null" [dataKey]="rowID" styleClass="w-full min-w-max">
+<p-table #table [value]="dataSource" [selectionMode]="selectByCheckbox ? 'multiple' : null" [dataKey]="rowID"
+         [paginator]="paginator" [rows]="5" [rowsPerPageOptions]="showRowsPerPage ? rowsPerPageOptions : undefined"
+         [showCurrentPageReport]="showCurrentPageReport" currentPageReportTemplate="Registros {first}-{last} de {totalRecords}"
+         [lazy]="lazy" [totalRecords]="totalRecords" (onLazyLoad)="loadLazyData($event)">
   <!-- Caption dinámico -->
   <ng-template pTemplate="caption">
-    <div class="flex flex-wrap justify-content-between align-items-center">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+      <!-- Título -->
       @if (showTitle) {
-        <div class="flex align-items-center">
-          <div>{{ title }}</div>
+        <div class="flex items-center">
+          <span class="font-semibold text-lg">{{ title }}</span>
         </div>
       }
+
+      <!-- Botones -->
+      <div class="flex flex-col sm:flex-row sm:justify-center sm:gap-x-2 gap-y-2 w-full sm:w-auto ml-auto">
+        @if (exportExcelButtonShow) {
+          <xs-button
+            label="Exportar"
+            [icon]="exportExcelButtonIcon"
+            [rounded]="false"
+            [variant]="'outlined'"
+            (click)="onClickExportar('EXCEL')"
+            [disabled]="disabled"
+            [fullWidth]="true"
+            class="w-full sm:w-auto">
+          </xs-button>
+        }
+
+        @if (exportPdfButtonShow) {
+          <xs-button
+            label="Exportar"
+            [icon]="exportPdfButtonIcon"
+            [rounded]="false"
+            [variant]="'outlined'"
+            [severity]="'danger'"
+            (click)="onClickExportar('PDF')"
+            [disabled]="disabled"
+            [fullWidth]="true"
+            class="w-full sm:w-auto">
+          </xs-button>
+        }
+
+        @if (addButtonShow) {
+          <xs-button
+            [label]="addButtonLabel"
+            [icon]="addButtonIcon"
+            [rounded]="false"
+            [variant]="'outlined'"
+            severity="info"
+            (click)="onClickAdd()"
+            [disabled]="disabled"
+            [fullWidth]="true"
+            class="w-full sm:w-auto">
+          </xs-button>
+        }
+      </div>
     </div>
   </ng-template>
+
 
   <!-- Header dinámico -->
   <ng-template pTemplate="header">
@@ -19,9 +68,20 @@
         </th>
       }
 
+      @if (showRowNumbers) {
+        <th class="col-row-number">N°</th>
+      }
+
+
       @for (col of columns; track col.field) {
         <th [style.text-align]="col.headerTextAlign">
           {{ col.headerText }}
+        </th>
+      }
+
+      @if (selectedItems.length == 0 && (editButtonShow) && showOptionsColumn){
+        <th style="text-align: center;" [style.max-width]="buttonsColumnWidth + 'px'" [style.min-width]="buttonsColumnWidth + 'px'">
+          Opciones
         </th>
       }
     </tr>
@@ -29,18 +89,57 @@
 
   <!-- Body dinámico -->
   <ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
-    <tr>
+    <tr (click)="onSelectedRow(item)">
       @if (selectByCheckbox){
         <td>
           <p-tableCheckbox [pSelectableRow]="item" [pSelectableRowIndex]="rowIndex" [value]="item" >
           </p-tableCheckbox>
         </td>
       }
+
+      @if (showRowNumbers){
+        <td>
+          {{ rowIndex + 1 }}
+        </td>
+      }
+
       @for (col of columns; track col.field) {
         <td [style.text-align]="col.textAlign">
           {{ item[col.field || ''] }}
         </td>
       }
+
+      @if (selectedItems.length == 0 && (editButtonShow) && showOptionsColumn){
+        <td style="text-align: center;">
+          <div class="flex justify-center gap-2">
+            @if (editButtonIcon) {
+              <xs-button
+                [icon]="editButtonIcon"
+                [rounded]="false"
+                [variant]="'outlined'"
+                (click)="onClickUpdate(item)"
+                [severity]="'info'"
+                [disabled]="disabled">
+              </xs-button>
+            }
+
+            @if (deleteButtonIcon) {
+              <xs-button
+                [icon]="deleteButtonIcon"
+                [rounded]="false"
+                [variant]="'outlined'"
+                (click)="onClickDelete(item)"
+                [severity]="'danger'"
+                [disabled]="disabled">
+              </xs-button>
+            }
+
+            <ng-container *ngTemplateOutlet="additionalTableButtons; context: { item: item }"></ng-container>
+          </div>
+        </td>
+      }
     </tr>
   </ng-template>
 </p-table>
+
+<xs-confirm-dialog #xsConfirmDialog [key]="keyConfirmDialog"></xs-confirm-dialog>

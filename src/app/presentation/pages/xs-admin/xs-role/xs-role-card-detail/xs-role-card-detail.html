@@ -1,0 +1,29 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <xs-card-detail
+    titulo="Roles Totales"
+    [cantidad]="totalRoles"
+    icono="fa-solid fa-user-tag"
+    color="#3B82F6"> <!-- Azul -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Roles Activos"
+    [cantidad]="activeRoles"
+    icono="fa-solid fa-users"
+    color="#10B981"> <!-- Verde -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Roles Inactivos"
+    [cantidad]="inactiveRoles"
+    icono="fa-solid fa-user-slash"
+    color="#EF4444"> <!-- Rojo -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Permisos Totales"
+    [cantidad]="totalPermissions"
+    icono="fa-solid fa-key"
+    color="#F59E0B"> <!-- Amarillo -->
+  </xs-card-detail>
+</div>

@@ -1,12 +1,19 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { Confirmation } from 'primeng/api';
-import * as i0 from "@angular/core";
+import {ConfirmationService} from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import {XsButton} from '../xs-button/xs-button';
 
 @Component({
   selector: 'xs-confirm-dialog',
-  imports: [],
+  imports: [
+    ConfirmDialogModule,
+    XsButton
+  ],
   templateUrl: './xs-confirm-dialog.html',
   styleUrl: './xs-confirm-dialog.scss',
+  providers: [
+    ConfirmationService
+  ]
 })
 export class XsConfirmDialog implements OnInit {
 
@@ -15,7 +22,10 @@ export class XsConfirmDialog implements OnInit {
   rejectCallback?: () => unknown;
   @Input() key: string = "";
   @Input() acceptButtonLabel: string = "Aceptar";
-  @Input() rejectButtonLabel: string = "Cancelar";
+  @Input() acceptButtonIcon: string = 'fa-regular fa-circle-check';
+  @Input() rejectButtonLabel: string = 'Cancelar';
+  @Input() rejectButtonIcon: string = 'fa-solid fa-ban';
+
 
   constructor(private confirmationService: ConfirmationService) { }
 
@@ -47,17 +57,4 @@ export class XsConfirmDialog implements OnInit {
     if (this.rejectCallback) this.rejectCallback();
     this.confirmationService.close();
   }
-}
-
-
-export declare class ConfirmationService {
-    private requireConfirmationSource;
-    private acceptConfirmationSource;
-    requireConfirmation$: import("rxjs").Observable<Confirmation>;
-    accept: import("rxjs").Observable<Confirmation>;
-    confirm(confirmation: Confirmation): this;
-    close(): this;
-    onAccept(): void;
-    static ɵfac: i0.ɵɵFactoryDeclaration<ConfirmationService, never>;
-    static ɵprov: i0.ɵɵInjectableDeclaration<ConfirmationService>;
 }

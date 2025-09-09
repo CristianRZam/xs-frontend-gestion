@@ -14,7 +14,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 export class XsLoader {
   public display: boolean = false;
   public title: string = 'Cargando';
-  
+
   constructor() { }
 
   ngOnInit(): void {

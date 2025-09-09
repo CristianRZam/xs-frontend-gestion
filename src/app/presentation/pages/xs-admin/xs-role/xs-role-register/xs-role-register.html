@@ -1,0 +1,27 @@
+<xs-dialog
+  [header]="dialogModel.header!"
+  okButtonLabel="Guardar"
+  [showOkButton]="dialogModel.showOkButton!"
+  size="md"
+  [display]="dialogModel.display!"
+  (onAceptar)="onAceptarDialog()"
+  (onCerrar)="cerrarDialog()">
+
+  <ng-template #content>
+    <form [formGroup]="formConfig.formulario" (ngSubmit)="formSubmitEvent()" class="flex flex-col gap-4 w-full my-2">
+      <xs-input-text
+        placeholder="Nombre"
+        [control]="$any(formConfig.name)"
+        class="w-full">
+      </xs-input-text>
+
+      <xs-text-area
+        placeholder="Descripción"
+        [control]="$any(formConfig.description)"
+        class="w-full">
+      </xs-text-area>
+    </form>
+  </ng-template>
+
+</xs-dialog>
+<xs-toast #xsToastRegister position="top-center"></xs-toast>

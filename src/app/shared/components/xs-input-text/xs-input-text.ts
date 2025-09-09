@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,7 +18,7 @@ import { MessageModule } from 'primeng/message';
   templateUrl: './xs-input-text.html',
   styleUrl: './xs-input-text.scss'
 })
-export class XsInputText {
+export class XsInputText implements OnInit {
  @Input() control: FormControl = new FormControl();
   @Input() placeholder: string = '';
   @Input() type: 'text' | 'password' | 'number' | 'date' | 'mask' = 'text';

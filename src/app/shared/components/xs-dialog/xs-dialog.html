@@ -1,0 +1,26 @@
+<p-dialog [(visible)]="display" [modal]="true" [closable]="false"  [draggable]="false"
+           [closeOnEscape]="false" closeAriaLabel="Cerrar ventana" [styleClass]="styleClass"
+          [breakpoints]="{'960px': '80vw', '600px': '100vw'}" appendTo="body" [style]="{width: initialWidth}"
+          (onHide)="onHide()" [position]="position" [resizable]="resizable" [maximizable]="maximizable">
+  <ng-template pTemplate="header">
+    {{ header }}
+  </ng-template>
+  <ng-template pTemplate="content">
+    <div>
+      <ng-container *ngTemplateOutlet="content"></ng-container>
+    </div>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    @if (showCancelButton) {
+      <xs-button [label]="cancelButtonLabel" [severity]="'danger'" icon="fa-solid fa-ban"
+                 (click)="onHide()" [variant]="'outlined'"></xs-button>
+    }
+
+    @if (showOkButton) {
+      <xs-button [label]="okButtonLabel" [severity]="'info'" [icon]="okButtonIcon" (click)="onClickAceptar()"
+                 [disabled]="isDisabled" [style.pointer-events]="isDisabled ? 'none' : ''" [variant]="'outlined'"></xs-button>
+    }
+
+    <ng-container *ngTemplateOutlet="additionalButtons"></ng-container>
+  </ng-template>
+</p-dialog>

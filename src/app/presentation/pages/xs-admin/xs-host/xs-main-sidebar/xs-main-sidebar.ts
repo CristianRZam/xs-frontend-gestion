@@ -28,10 +28,18 @@ export class XsMainSidebar {
       expanded: true,
       items: [
         { label: 'Dashboard', icon: 'fas fa-home', routerLink: '/admin' },
-        { label: 'Usuarios', icon: 'fas fa-user', routerLink: '/admin/user' },
-        { 
-          label: 'Reports', 
-          icon: 'fas fa-chart-line', 
+        {
+          label: 'Seguridad',
+          icon: 'fas fa-user-shield',
+          expanded: false,
+          children: [
+            { label: 'Usuarios', icon: 'fas fa-users', routerLink: '/admin/user'},
+            { label: 'Roles', icon: 'fas fa-user-tag', routerLink: '/admin/role'},
+          ]
+        },
+        {
+          label: 'Reports',
+          icon: 'fas fa-chart-line',
           expanded: false,
           children: [
             {

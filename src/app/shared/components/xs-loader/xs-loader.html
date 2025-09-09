@@ -1,17 +1,17 @@
-<p-dialog 
-  styleClass="xs-loader" 
-  [(visible)]="display" 
-  [modal]="true" 
-  [draggable]="false" 
+<p-dialog
+  styleClass="xs-loader"
+  [(visible)]="display"
+  [modal]="true"
+  [draggable]="false"
   [closable]="false"
   [style]="{width: '25vw', padding: '2rem'}"
-  [breakpoints]="{'960px': '40vw', '640px': '70vw'}" 
+  [breakpoints]="{'960px': '40vw', '640px': '70vw'}"
   appendTo="body"
 >
   <div class="loader-content flex flex-col items-center justify-center gap-6">
     <h1 class="loader-title">{{ title }}</h1>
-    <p-progressSpinner 
-      [animationDuration]="'1s'" 
+    <p-progressSpinner
+      [animationDuration]="'1s'"
       [style]="{width: '4rem', height: '4rem'}"
       strokeWidth="10"
       styleClass="loader-spinner">

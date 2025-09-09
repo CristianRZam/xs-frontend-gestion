@@ -1,1 +1,7 @@
-<p>xs-confirm-dialog works!</p>
+<p-confirmDialog icon="pi pi-exclamation-triangle" [key]="key" [closable]="true"
+                 header="Confirmación" appendTo="body">
+  <ng-template pTemplate="footer">
+    <xs-button [severity]="'danger'" [variant]="'outlined'" [label]="rejectButtonLabel" [icon]="rejectButtonIcon" (click)="onClickReject()"></xs-button>
+    <xs-button [variant]="'outlined'" [label]="acceptButtonLabel" [icon]="acceptButtonIcon" (click)="onClickAccept()"></xs-button>
+  </ng-template>
+</p-confirmDialog>

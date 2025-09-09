@@ -10,7 +10,14 @@
   </div>
 
   <!-- Botón -->
-  <div class="mt-4 sm:mt-0">
-    <xs-button [label]="buttonText" (click)="handleClick()" severity="info" icon="fa fa-plus" [rounded]="false" variant="outlined"></xs-button>
+  <div class="mt-4 sm:mt-0 hidden sm:block">
+    <xs-button
+      [label]="buttonText"
+      (click)="handleClick()"
+      severity="danger"
+      icon="fa fa-arrow-left"
+      [rounded]="false"
+      variant="outlined">
+    </xs-button>
   </div>
 </div>

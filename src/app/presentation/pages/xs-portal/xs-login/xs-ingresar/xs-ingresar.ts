@@ -12,6 +12,7 @@ import { Formvalidators } from '../../../../../shared/validators/form-validators
 import { LoginUseCase } from '../../../../../core/application/use-cases/login.usecase';
 import { AuthRequest } from '../../../../../core/domain/dtos/resquests/auth.request';
 import { Router } from '@angular/router';
+import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
 
 @Component({
   selector: 'xs-ingresar',
@@ -39,6 +40,7 @@ export class XsIngresar implements OnInit {
     private formBuilder: FormBuilder,
     private validators: Formvalidators,
     private readonly loginUseCase: LoginUseCase,
+    private authService: AuthService,
     private router: Router
   ) {}
 
@@ -64,15 +66,16 @@ export class XsIngresar implements OnInit {
     if (this.formulario.valid) {
       this.loader.show('Validando credenciales');
 
-      
       const request: AuthRequest = {
         email: this.username?.value,
         password: this.password?.value,
       };
 
       try {
-        await this.loginUseCase.execute(request);
-        this.router.navigate(['/admin']);
+        const response = await this.loginUseCase.execute(request);
+        this.authService.setToken(response.token);
+
+        await this.router.navigate(['/admin']);
       } catch (err: any) {
         const msg = err?.error?.message || 'Credenciales inválidas';
         this.toast.show(msg, 'error', 'Login');
@@ -92,5 +95,6 @@ export class XsIngresar implements OnInit {
       );
     }
   };
+
 
 }

@@ -1,9 +1,8 @@
-<div class="flex h-screen overflow-hidden">
+<div class="h-screen relative">
   <!-- Sidebar -->
   <div
-    class="transition-all duration-300 h-full bg-blue-700 dark:bg-gray-950 border-r border-gray-none dark:border-gray-700"
+    class="absolute top-0 left-0 h-full transition-all duration-300 bg-blue-700 dark:bg-gray-950 border-r dark:border-gray-700"
     [style.width.px]="visible ? 280 : 0"
-    [class.overflow-hidden]="!visible"
   >
     <div *ngIf="visible" class="flex flex-col h-full">
 
@@ -109,18 +108,20 @@
     </div>
   </div>
 
-  <!-- Content wrapper -->
-  <div class="flex-1 flex flex-col transition-all duration-300 bg-[#f8f9fc] dark:bg-[#1f1f1f]">
-    <div class="flex-1 overflow-y-auto">
-      <!-- Header sin padding -->
-      <div class="sticky top-0 z-10">
-        <ng-content select="[header]"></ng-content>
-      </div>
-      <!-- Contenido con padding -->
-      <div class="p-7 overflow-x-auto">
-  <ng-content select="[content]"></ng-content>
-</div>
-
+  <!-- Content -->
+  <div
+    class="absolute top-0 right-0 h-full transition-all duration-300 bg-[#f8f9fc] dark:bg-[#1f1f1f] flex flex-col"
+    [style.left.px]="visible ? 280 : 0"
+  >
+    <!-- Header -->
+    <div class="sticky top-0 z-10">
+      <ng-content select="[header]"></ng-content>
     </div>
+
+    <!-- Contenido scrollable -->
+    <div class="flex-1 overflow-y-auto p-7">
+      <ng-content select="[content]"></ng-content>
+    </div>
+
   </div>
 </div>

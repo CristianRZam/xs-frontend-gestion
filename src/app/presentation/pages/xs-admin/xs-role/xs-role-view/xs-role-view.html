@@ -1,0 +1,13 @@
+<xs-page-header title="Gestion de Roles y Permisos" description="Gestiona a todos los permisos del sisetma aquí"></xs-page-header>
+
+<xs-role-card-detail [totalRoles]="totalRoles" [activeRoles]="activeRoles" [inactiveRoles]="inactiveRoles" [totalPermissions]="totalPermissions"></xs-role-card-detail>
+
+<xs-role-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-role-filter>
+
+<xs-role-table [roles]="roles" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRoles"></xs-role-table>
+
+<xs-role-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-role-register>
+
+<xs-loader #xsLoader></xs-loader>
+
+<xs-toast #xsToastRoleView position="top-center"></xs-toast>
