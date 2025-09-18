@@ -1,33 +1,26 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
 import { catchError, throwError } from 'rxjs';
+import {AuthService} from '../../infraestructure/persistence/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const localStorageCrypt = inject(LocalStorageService);
+  const auth = inject(AuthService);
   const router = inject(Router);
-  const jwtHelper = new JwtHelperService();
 
-  const authToken = localStorageCrypt.getItem<string>('auth_token');
+  const token = auth.getToken();
 
-  if (authToken && !jwtHelper.isTokenExpired(authToken)) {
+  if (token) {
     req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${authToken}`
-      }
+      setHeaders: { Authorization: `Bearer ${token}` }
     });
-  } else if (authToken && jwtHelper.isTokenExpired(authToken)) {
-    localStorageCrypt.clear();
-    router.navigateByUrl('').then(() => window.location.reload());
   }
 
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
       if (error.status === 401) {
-        localStorageCrypt.clear();
-        router.navigate(['']);
+        auth.clearToken();
+        router.navigate(['/']);
       }
       return throwError(() => error);
     })

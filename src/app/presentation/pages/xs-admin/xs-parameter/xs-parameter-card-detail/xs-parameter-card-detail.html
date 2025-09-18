@@ -1,0 +1,29 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+  <xs-card-detail
+    titulo="Parámetros Totales"
+    [cantidad]="totalParameters"
+    icono="fa-solid fa-sliders-h"
+    color="#3B82F6"> <!-- Azul -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Parámetros Activos"
+    [cantidad]="activeParameters"
+    icono="fa-solid fa-check-circle"
+    color="#10B981"> <!-- Verde -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Parámetros Inactivos"
+    [cantidad]="inactiveParameters"
+    icono="fa-solid fa-times-circle"
+    color="#EF4444"> <!-- Rojo -->
+  </xs-card-detail>
+
+  <xs-card-detail
+    titulo="Parámetros con Padre"
+    [cantidad]="parametersWithParent"
+    icono="fa-solid fa-sitemap"
+    color="#F59E0B"> <!-- Amarillo -->
+  </xs-card-detail>
+</div>

@@ -2,7 +2,7 @@ import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core'
 import {XsDialog} from '../../../../../shared/components/xs-dialog/xs-dialog';
 import {ReactiveFormsModule} from '@angular/forms';
 import {XsInputText} from '../../../../../shared/components/xs-input-text/xs-input-text';
-import {FormRegistrarConfig} from './form-resgister-config';
+import {FormRegistrarConfig} from './form-register-config';
 import {XsTextArea} from '../../../../../shared/components/xs-text-area/xs-text-area';
 import {XsLoader} from '../../../../../shared/components/xs-loader/xs-loader';
 import {XsToast} from '../../../../../shared/components/xs-toast/xs-toast';

@@ -38,6 +38,15 @@ export class XsMainSidebar {
           ]
         },
         {
+          label: 'Configuraciones',
+          icon: 'fas fa-cogs',
+          expanded: false,
+          children: [
+            { label: 'Parámetros', icon: 'fas fa-sliders-h', routerLink: '/admin/parameter' },
+            { label: 'Ajustes generales', icon: 'fas fa-wrench' }
+          ]
+        },
+        {
           label: 'Reports',
           icon: 'fas fa-chart-line',
           expanded: false,

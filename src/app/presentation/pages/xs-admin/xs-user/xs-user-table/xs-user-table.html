@@ -1,4 +1,7 @@
 <div class="my-4">
-  <xs-table [columns]="columns" [dataSource]="usuarios" title="Lista de usuarios" [addButtonShow]="true">
+  <xs-table [columns]="columns" [dataSource]="users" title="Lista de usuarios" [addButtonShow]="true" [exportExcelButtonShow]="true"
+            [exportPdfButtonShow]="true" [statusToggleButtonActive]="true" (onUpdateActiveItem)="onUpdateActiveItem($event)"
+            (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
+            (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
   </xs-table>
 </div>

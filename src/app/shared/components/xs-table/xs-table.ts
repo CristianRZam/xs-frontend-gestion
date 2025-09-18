@@ -44,6 +44,7 @@ export class XsTable implements OnInit {
   @Input() editButtonShow: boolean = true;
   @Input() deleteButtonIcon: string = 'fa-regular fa-trash-can';
   @Input() deleteButtonShow: boolean = true;
+  @Input() statusToggleButtonActive: boolean = false;
   @Input() exportExcelButtonShow: boolean = false;
   @Input() exportExcelButtonIcon: string = 'fa-regular fa-file-excel';
   @Input() exportPdfButtonShow: boolean = false;
@@ -54,6 +55,7 @@ export class XsTable implements OnInit {
   @Output() addItem: EventEmitter<any> = new EventEmitter();
   @Output() updateItem: EventEmitter<any> = new EventEmitter();
   @Output() deleteItem: EventEmitter<any> = new EventEmitter();
+  @Output() onUpdateActiveItem: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() lazyLoad: EventEmitter<any> = new EventEmitter();
@@ -104,6 +106,17 @@ export class XsTable implements OnInit {
     this.deleteItem.emit(item);
   }
 
+  onClickToggleActive(item: any) {
+    this.confirmDialog.show({
+      message: '¿Está seguro(a) que desea cambiar el estado?',
+      onClickAceptar: () => this.toggleActive(item),
+    });
+  }
+
+  private toggleActive(item: any): void {
+    this.onUpdateActiveItem.emit(item);
+  }
+
   onClickExportar(tipo: 'EXCEL' | 'PDF') {
     if (tipo == 'EXCEL') {
       this.exportExcel.emit(this.columnsToDisplaySelected?.value);
@@ -112,5 +125,16 @@ export class XsTable implements OnInit {
       this.exportPdf.emit(this.columnsToDisplaySelected?.value);
     }
   }
+
+  getTextColor(bgHex: string): string {
+    const c = bgHex.substring(1);
+    const rgb = parseInt(c, 16);
+    const r = (rgb >> 16) & 0xff;
+    const g = (rgb >> 8) & 0xff;
+    const b = rgb & 0xff;
+    const brightness = (r*299 + g*587 + b*114) / 1000;
+    return brightness > 125 ? '#000000' : '#ffffff';
+  }
+
 }
 

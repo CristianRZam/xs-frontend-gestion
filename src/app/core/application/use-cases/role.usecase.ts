@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { RoleRepository } from '../../domain/repositories/role.repository';
-import { RoleViewResponse } from '../../domain/dtos/responses/role-view.response';
 import { Observable } from 'rxjs';
 import {RoleViewRequest} from '../../domain/dtos/resquests/role-view.request';
 import {RoleModel} from '../../domain/models/role.model';
@@ -28,5 +27,17 @@ export class RoleUseCase {
 
   delete(id: number): Observable<ApiResponse<any>> {
     return this.roleRepository.delete(id);
+  }
+
+  updateStatus(id: number): Observable<ApiResponse<any>> {
+    return this.roleRepository.updateStatus(id);
+  }
+
+  exportPdf(request: RoleViewRequest): Observable<Blob> {
+    return this.roleRepository.exportPdf(request);
+  }
+
+  exportExcel(request: RoleViewRequest): Observable<Blob> {
+    return this.roleRepository.exportExcel(request);
   }
 }

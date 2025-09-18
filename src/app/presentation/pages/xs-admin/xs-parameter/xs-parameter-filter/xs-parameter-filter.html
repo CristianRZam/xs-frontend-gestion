@@ -1,0 +1,51 @@
+<div class="mt-4">
+  <xs-fieldset legend="Criterios de búsqueda">
+    <ng-template #content>
+      <!-- Grid responsiva -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <!-- Nombre -->
+        <div class="w-full">
+          <xs-input-text
+            placeholder="Nombre"
+            [control]="$any(name)">
+          </xs-input-text>
+        </div>
+
+        <!-- Nombre corto -->
+        <div class="w-full">
+          <xs-input-text
+            placeholder="Nombre corto"
+            [control]="$any(shortName)">
+          </xs-input-text>
+        </div>
+
+        <!-- Código -->
+        <div class="w-full">
+          <xs-input-text
+            placeholder="Código"
+            [control]="$any(code)">
+          </xs-input-text>
+        </div>
+
+        <!-- Tipo -->
+        <div class="w-full">
+          <xs-select
+            placeholder="Tipo"
+            [control]="$any(type)"
+            [dataSource]="types"
+            optionLabel="name"
+            optionValue="parameterId"
+            class="w-full">
+          </xs-select>
+        </div>
+      </div>
+      <div class="mt-2">
+        <xs-filter-buttons
+          (clear)="onClickClear()"
+          (filter)="onClickFilter()">
+        </xs-filter-buttons>
+      </div>
+    </ng-template>
+  </xs-fieldset>
+</div>

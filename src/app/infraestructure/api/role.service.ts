@@ -9,7 +9,7 @@ import {RoleModel} from '../../core/domain/models/role.model';
 import {ApiResponse} from '../../core/domain/dtos/responses/api.response';
 
 @Injectable({ providedIn: 'root' })
-export class RoleApiRepository implements RoleRepository {
+export class RoleService implements RoleRepository {
   private baseUrl = `${environment.API_URL}/role`;
 
   constructor(private http: HttpClient) {}
@@ -41,6 +41,25 @@ export class RoleApiRepository implements RoleRepository {
     return this.http.delete<ApiResponse<boolean>>(
       `${this.baseUrl}/delete/${id}`
     );
+  }
+
+  updateStatus(id: number): Observable<ApiResponse<boolean>> {
+    return this.http.put<ApiResponse<boolean>>(
+      `${this.baseUrl}/update-status`,
+      id
+    );
+  }
+
+  exportPdf(request: RoleViewRequest): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/export-pdf`, request, {
+      responseType: 'blob',
+    });
+  }
+
+  exportExcel(request: RoleViewRequest): Observable<Blob> {
+    return this.http.post(`${this.baseUrl}/export-excel`, request, {
+      responseType: 'blob',
+    });
   }
 
 }

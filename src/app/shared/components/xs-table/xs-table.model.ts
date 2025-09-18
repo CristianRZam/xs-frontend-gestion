@@ -8,6 +8,10 @@ export interface XsTableColumnModel {
   displayOnInit?: boolean;
   isDefault?: boolean;
   widthColPdf?: number | null;
+
+  isBadge?: boolean;
+  badgeColorMap?: Record<string, string>;
+  badgeTextFn?: (value: any, row?: any) => string;
 }
 
 const defaults: XsTableColumnModel = {

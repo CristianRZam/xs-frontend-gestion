@@ -9,4 +9,7 @@ export abstract class RoleRepository {
   abstract create(request: RoleModel): Observable<ApiResponse<any>>;
   abstract update(request: RoleModel): Observable<ApiResponse<any>>;
   abstract delete(id: number): Observable<ApiResponse<any>>;
+  abstract updateStatus(id: number): Observable<ApiResponse<any>>;
+  abstract exportPdf(request: RoleViewRequest): Observable<Blob>;
+  abstract exportExcel(request: RoleViewRequest): Observable<Blob>;
 }

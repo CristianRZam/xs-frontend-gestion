@@ -1,0 +1,15 @@
+<xs-page-header title="Gestión de Parametros" description="Gestiona todos los parametros del sisetma aquí"></xs-page-header>
+
+<xs-parameter-card-detail [totalParameters]="totalParameters" [activeParameters]="activeParameters" [inactiveParameters]="inactiveParameters" [parametersWithParent]="parametersWithParent"></xs-parameter-card-detail>
+
+<xs-parameter-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-parameter-filter>
+
+<xs-parameter-table [parameters]="parameters" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)"
+                    (updateActiveItem)="onUpdateActiveItem($event)" (deleteItem)="onDeleteItem($event)"
+                    [totalRecords]="totalParameters" (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)"></xs-parameter-table>
+
+<xs-parameter-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-parameter-register>
+
+<xs-loader #xsLoader></xs-loader>
+
+<xs-toast #xsToastParameterView position="top-center"></xs-toast>

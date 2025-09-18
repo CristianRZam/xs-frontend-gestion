@@ -1,16 +1,14 @@
-import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { AuthService } from '../../infraestructure/persistence/auth.service';
+import { inject } from '@angular/core';
+import {AuthService} from '../../infraestructure/persistence/auth.service';
 
 export const authGuard: CanActivateFn = () => {
-  const authService = inject(AuthService);
+  const auth = inject(AuthService);
   const router = inject(Router);
 
-  if (authService.isAuthenticated()) {
-    return true;
-  } else {
-    authService.clearToken();
-    router.navigate(['']);
-    return false;
-  }
+  if (auth.isAuthenticated()) return true;
+
+  auth.clearToken();
+  router.navigate(['/']);
+  return false;
 };

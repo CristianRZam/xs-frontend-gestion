@@ -178,4 +178,68 @@ export class XsRoleView implements OnInit, AfterViewInit {
       complete: () => this.loader.hide()
     });
   }
+
+  onUpdateActiveItem(item: RoleModel) {
+    this.loader.show('Actualizando...');
+    this.roleUsecase.updateStatus(item.id!).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show("Rol actualizado correctamente.");
+          this.loadRoles();
+          this.roleRegister.cerrarDialog();
+        } else {
+          this.toast.show(res.message || "No se pudo actualizar el rol.", 'error');
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "rol");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+
+  exportPdf($event: any) {
+    this.loader.show('Generando PDF...');
+    this.roleUsecase.exportPdf(this.filter).subscribe({
+      next: (blob) => {
+        this.downloadFile(blob, 'roles_report.pdf');
+        this.toast.show("Reporte PDF generado con éxito.");
+      },
+      error: (e) => {
+        console.error('Error al generar PDF', e);
+        this.toast.show("Error al generar PDF", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  exportExcel($event: any) {
+    this.loader.show('Generando Excel...');
+    this.roleUsecase.exportExcel(this.filter).subscribe({
+      next: (blob) => {
+        this.downloadFile(blob, 'roles_report.xlsx');
+        this.toast.show("Reporte Excel generado con éxito.");
+      },
+      error: (e) => {
+        console.error('Error al generar Excel', e);
+        this.toast.show("Error al generar Excel", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  // 📌 Utilidad para descargar archivo
+  private downloadFile(blob: Blob, filename: string) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
 }

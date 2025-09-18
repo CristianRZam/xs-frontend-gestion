@@ -4,6 +4,7 @@ import { authGuard } from './core/guards/auth.guard';
 import { guestGuard } from './core/guards/guest.guard';
 import { XsNoFound } from './presentation/pages/xs-no-found/xs-no-found';
 import { XsHostView } from './presentation/pages/xs-admin/xs-host/xs-host-view/xs-host-view';
+import {XsUnauthorized} from './presentation/pages/xs-unauthorized/xs-unauthorized';
 
 export const routes: Routes = [
   {
@@ -29,6 +30,10 @@ export const routes: Routes = [
           import('./presentation/pages/xs-admin/admin.routes').then(m => m.ADMIN_ROUTES),
       },
     ],
+  },
+  {
+    path: 'unauthorized',
+    component: XsUnauthorized,
   },
   {
     path: '**',

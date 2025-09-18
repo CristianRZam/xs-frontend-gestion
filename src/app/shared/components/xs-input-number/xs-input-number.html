@@ -1,0 +1,22 @@
+<p-floatlabel [variant]="variant">
+  <p-inputnumber [formControl]="control"
+                 [inputId]="id"
+                 [size]="size"
+                 [ngClass]="{
+                    'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
+                    'p-invalid ng-dirty': control.invalid && control.touched
+                  }"
+                 autocomplete="off"
+                 (input)="onInput($event)"></p-inputnumber>
+  <label [for]="id">{{placeholder}}</label>
+</p-floatlabel>
+
+@if (control.errors && control.touched) {
+  <p-message
+    class="xs-error-message"
+    severity="error"
+    size="small"
+    variant="simple">
+    {{ control.errors![objectFn.keys(control.errors!)[0]] }}
+  </p-message>
+}

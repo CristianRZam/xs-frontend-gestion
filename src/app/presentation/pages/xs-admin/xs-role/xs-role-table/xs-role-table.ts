@@ -21,12 +21,24 @@ export class XsRoleTable {
   @Output() addItem: EventEmitter<any> = new EventEmitter();
   @Output() updateItem: EventEmitter<RoleModel> = new EventEmitter();
   @Output() deleteItem: EventEmitter<RoleModel> = new EventEmitter();
-
+  @Output() updateActiveItem: EventEmitter<RoleModel> = new EventEmitter();
+  @Output() exportPdf: EventEmitter<any> = new EventEmitter();
+  @Output() exportExcel: EventEmitter<any> = new EventEmitter();
 
   columns = [
     new XsTableColumn({ field: 'name', headerText: 'Rol', displayOnInit: true, isDefault: true }),
-    new XsTableColumn({ field: 'active', headerText: 'Estado', displayOnInit: true, isDefault: true }),
     new XsTableColumn({ field: 'description', headerText: 'Descripción', displayOnInit: true, isDefault: true }),
+    new XsTableColumn({
+      field: 'active',
+      headerText: 'Estado',
+      displayOnInit: true,
+      isDefault: true,
+      textAlign: 'center',
+      headerTextAlign: 'center',
+      isBadge: true,
+      badgeColorMap: { true: '#16A34A', false: '#DC2626' },
+      badgeTextFn: (value) => value ? 'Habilitado' : 'Inhabilitado'
+    }),
   ];
 
   constructor(private router: Router) {}
@@ -45,5 +57,17 @@ export class XsRoleTable {
 
   onEditPermission(item: RoleModel) {
     this.router.navigate([`/admin/role/${item.id}/permission`]);
+  }
+
+  onUpdateActiveItem(item: RoleModel) {
+    this.updateActiveItem.emit(item);
+  }
+
+  onExportPdf($event: any) {
+    this.exportPdf.emit($event);
+  }
+
+  onExportExcel($event: any) {
+    this.exportExcel.emit($event);
   }
 }

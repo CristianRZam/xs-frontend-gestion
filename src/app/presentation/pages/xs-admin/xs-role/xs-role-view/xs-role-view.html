@@ -4,7 +4,9 @@
 
 <xs-role-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-role-filter>
 
-<xs-role-table [roles]="roles" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRoles"></xs-role-table>
+<xs-role-table [roles]="roles" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)"
+               (updateActiveItem)="onUpdateActiveItem($event)" (deleteItem)="onDeleteItem($event)"
+               [totalRecords]="totalRoles" (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)"></xs-role-table>
 
 <xs-role-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-role-register>
 

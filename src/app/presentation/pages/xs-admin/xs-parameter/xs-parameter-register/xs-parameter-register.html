@@ -1,0 +1,78 @@
+<xs-dialog
+  [header]="dialogModel.header!"
+  okButtonLabel="Guardar"
+  [showOkButton]="true"
+  size="md"
+  [display]="dialogModel.display!"
+  (onAceptar)="onAceptarDialog()"
+  (onCerrar)="cerrarDialog()">
+
+  <ng-template #content>
+    <form [formGroup]="formConfig.formulario"
+          (ngSubmit)="formSubmitEvent()"
+          class="flex flex-col gap-4 w-full my-2">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Código -->
+        <xs-input-text
+          placeholder="Código"
+          [control]="$any(formConfig.code)"
+          class="w-full">
+        </xs-input-text>
+
+        <!-- Tipo -->
+        <xs-select
+          placeholder="Tipo"
+          [control]="$any(formConfig.type)"
+          [dataSource]="types"
+          optionLabel="name"
+          optionValue="parameterId"
+          class="w-full">
+        </xs-select>
+
+        <!-- Orden -->
+        <xs-input-number
+          placeholder="Orden"
+          [control]="$any(formConfig.orderNumber)"
+          class="w-full">
+        </xs-input-number>
+
+        <!-- Nombre corto -->
+        <xs-input-text
+          placeholder="Nombre corto"
+          [control]="$any(formConfig.shortName)"
+          class="w-full">
+        </xs-input-text>
+      </div>
+
+      <xs-input-text
+        placeholder="Nombre"
+        [control]="$any(formConfig.name)"
+        class="w-full">
+      </xs-input-text>
+
+      <!-- Campo dinámico para Name -->
+      <!--<div class="w-full">
+        @if (selectedType === 1) {
+          <xs-input-file
+            placeholder="Subir archivo"
+            accept="image/*,application/pdf"
+            [control]="$any(formConfig.name)">
+          </xs-input-file>
+        }
+
+
+        @if (!selectedType || selectedType === 2) {
+          <xs-input-text
+            placeholder="Nombre"
+            [control]="$any(formConfig.name)"
+            class="w-full">
+          </xs-input-text>
+        }
+      </div> -->
+
+    </form>
+  </ng-template>
+</xs-dialog>
+
+<xs-toast #xsToastRegister position="top-center"></xs-toast>

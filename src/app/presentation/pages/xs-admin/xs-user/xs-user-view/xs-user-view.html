@@ -1,8 +1,13 @@
 <xs-page-header title="Gestion de Usuarios" description="Gestiona a todos tus usuarios aquí"></xs-page-header>
 
-<xs-user-card-detail></xs-user-card-detail>
+<xs-user-card-detail [totalUsers]="totalUsers" [activeUsers]="activeUsers" [inactiveUsers]="inactiveUsers" [totalAdmins]="totalAdmins"></xs-user-card-detail>
 
-<xs-user-filter></xs-user-filter>
+<xs-user-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-user-filter>
 
-<xs-user-table></xs-user-table>
+<xs-user-table [users]="users" (addItem)="onAddItem()"></xs-user-table>
 
+<xs-user-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-user-register>
+
+<xs-loader #xsLoader></xs-loader>
+
+<xs-toast #xsToastUserView position="top-center"></xs-toast>

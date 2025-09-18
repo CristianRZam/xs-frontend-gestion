@@ -1,0 +1,22 @@
+:host ::ng-deep {
+  .p-floatlabel {
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .p-floatlabel label {
+    font-size: 0.875rem;
+    color: #6c757d;
+  }
+
+  .p-floatlabel.p-invalid label {
+    color: #dc3545;
+  }
+
+  input {
+    width: 100%;
+  }
+  p-inputnumber{
+    width: 100%;
+  }
+}

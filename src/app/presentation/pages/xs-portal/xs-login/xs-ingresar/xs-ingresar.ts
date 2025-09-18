@@ -73,7 +73,7 @@ export class XsIngresar implements OnInit {
 
       try {
         const response = await this.loginUseCase.execute(request);
-        this.authService.setToken(response.token);
+        this.authService.setToken(response.data.token);
 
         await this.router.navigate(['/admin']);
       } catch (err: any) {
