@@ -136,5 +136,10 @@ export class XsTable implements OnInit {
     return brightness > 125 ? '#000000' : '#ffffff';
   }
 
+  getValue(item: any, field: string | undefined): any {
+    if (!field) return '';
+    return field.split('.').reduce((acc, key) => acc?.[key], item);
+  }
+
 }
 

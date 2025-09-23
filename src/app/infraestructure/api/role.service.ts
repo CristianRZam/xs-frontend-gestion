@@ -22,7 +22,6 @@ export class RoleService implements RoleRepository {
     return this.http.get<ApiResponse<RoleModel>>(`${this.baseUrl}/get/${id}`);
   }
 
-
   create(request: RoleModel): Observable<ApiResponse<RoleModel>> {
     return this.http.post<ApiResponse<RoleModel>>(
       `${this.baseUrl}/create`,

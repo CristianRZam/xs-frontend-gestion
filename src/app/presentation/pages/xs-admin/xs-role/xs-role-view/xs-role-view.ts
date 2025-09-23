@@ -9,6 +9,7 @@ import { XsLoader } from '../../../../../shared/components/xs-loader/xs-loader';
 import {XsRoleRegister} from '../xs-role-register/xs-role-register';
 import {XsToast} from '../../../../../shared/components/xs-toast/xs-toast';
 import {ErrorHandlerService} from '../../../../../shared/services/error-handler.service';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-role-view',
@@ -42,7 +43,11 @@ export class XsRoleView implements OnInit, AfterViewInit {
   };
 
 
-  constructor(private roleUsecase: RoleUseCase, private errorHandler: ErrorHandlerService) {}
+  constructor(
+    private roleUsecase: RoleUseCase,
+    private errorHandler: ErrorHandlerService,
+    private util: Formvalidators,
+  ) {}
 
   ngOnInit(): void {}
 
@@ -200,12 +205,11 @@ export class XsRoleView implements OnInit, AfterViewInit {
     });
   }
 
-
   exportPdf($event: any) {
     this.loader.show('Generando PDF...');
     this.roleUsecase.exportPdf(this.filter).subscribe({
       next: (blob) => {
-        this.downloadFile(blob, 'roles_report.pdf');
+        this.util.downloadFile(blob, 'roles_report.pdf');
         this.toast.show("Reporte PDF generado con éxito.");
       },
       error: (e) => {
@@ -221,7 +225,7 @@ export class XsRoleView implements OnInit, AfterViewInit {
     this.loader.show('Generando Excel...');
     this.roleUsecase.exportExcel(this.filter).subscribe({
       next: (blob) => {
-        this.downloadFile(blob, 'roles_report.xlsx');
+        this.util.downloadFile(blob, 'roles_report.xlsx');
         this.toast.show("Reporte Excel generado con éxito.");
       },
       error: (e) => {
@@ -233,13 +237,4 @@ export class XsRoleView implements OnInit, AfterViewInit {
     });
   }
 
-  // 📌 Utilidad para descargar archivo
-  private downloadFile(blob: Blob, filename: string) {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
-  }
 }

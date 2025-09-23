@@ -5,15 +5,9 @@
     [style.width.px]="visible ? 280 : 0"
   >
     <div *ngIf="visible" class="flex flex-col h-full">
-
-      <!-- Logo / Header Sidebar -->
-      <div class="flex items-center px-6 py-5 shrink-0">
-        <span class="inline-flex items-center gap-2">
-          <svg width="31" height="33" viewBox="0 0 31 33" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- SVG -->
-          </svg>
-          <span class="font-semibold text-2xl text-white">Your Logo</span>
-        </span>
+      <!-- Logo / Header -->
+      <div class="flex items-center px-6 py-5 shrink-0 text-white font-semibold text-2xl">
+        Your Logo
       </div>
 
       <!-- Menu -->
@@ -23,14 +17,14 @@
             <!-- Section header -->
             <div
               pRipple
-              class="px-4 py-3 flex items-center justify-between cursor-pointer text-gray-600 dark:text-gray-300 font-semibold uppercase text-sm rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              class="px-4 py-3 flex items-center justify-between cursor-pointer text-white font-semibold uppercase text-sm rounded hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               (click)="section.expanded = !section.expanded"
             >
-              <span class="text-white">{{ section.label }}</span>
+              <span>{{ section.label }}</span>
               <i [class]="section.expanded ? 'fas fa-chevron-up' : 'fas fa-chevron-down'"></i>
             </div>
 
-            <!-- Section items -->
+            <!-- Items -->
             <ul *ngIf="section.expanded" class="list-none p-0 m-0">
               <ng-container *ngFor="let item of section.items">
                 <ng-template [ngTemplateOutlet]="menuItem" [ngTemplateOutletContext]="{ item: item }"></ng-template>
@@ -38,67 +32,9 @@
             </ul>
           </li>
         </ul>
-
-        <!-- Recursive template -->
-        <ng-template #menuItem let-item="item">
-          <li>
-            <!-- Si el item tiene routerLink -->
-            <a *ngIf="item.routerLink"
-               [routerLink]="item.routerLink"
-               (click)="selectItem(item)"
-               pRipple
-               [ngClass]="{
-                 'bg-gray-100 dark:bg-gray-800': item.active,
-                 'hover:bg-gray-50 dark:hover:bg-gray-700': !item.active
-               }"
-               class="flex items-center justify-between cursor-pointer px-4 py-2 rounded transition-colors duration-150"
-            >
-              <div class="flex items-center gap-2">
-                <i [class]="item.icon"></i>
-                <span class="font-medium">{{ item.label }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span *ngIf="item.badge"
-                      class="ml-auto bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  {{ item.badge }}
-                </span>
-              </div>
-            </a>
-
-            <!-- Si no tiene routerLink -->
-            <div *ngIf="!item.routerLink"
-                 pRipple
-                 (click)="selectItem(item); item.expanded = !item.expanded; $event.stopPropagation()"
-                 [ngClass]="{
-                   'bg-gray-100 dark:bg-gray-800': item.active,
-                   'hover:bg-gray-50 dark:hover:bg-gray-700': !item.active
-                 }"
-                 class="flex items-center justify-between cursor-pointer px-4 py-2 rounded transition-colors duration-150"
-            >
-              <div class="flex items-center gap-2">
-                <i [class]="item.icon"></i>
-                <span class="font-medium">{{ item.label }}</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <span *ngIf="item.badge"
-                      class="ml-auto bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
-                  {{ item.badge }}
-                </span>
-                <i *ngIf="item.children" [class]="item.expanded ? 'fas fa-chevron-up ml-auto' : 'fas fa-chevron-down ml-auto'"></i>
-              </div>
-            </div>
-
-            <!-- Hijos -->
-            <ul *ngIf="item.children && item.expanded" class="list-none p-0 pl-6 mt-1 transition-all duration-300 ease-in-out">
-              <ng-container *ngFor="let child of item.children">
-                <ng-template [ngTemplateOutlet]="menuItem" [ngTemplateOutletContext]="{ item: child }"></ng-template>
-              </ng-container>
-            </ul>
-          </li>
-        </ng-template>
       </div>
 
-      <!-- Footer Sidebar -->
+      <!-- Footer -->
       <div class="mt-auto border-t border-gray-200 dark:border-gray-700 p-4">
         <a pRipple class="flex items-center gap-2 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800 rounded px-2 py-1 transition-colors">
           <p-avatar image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" shape="circle"></p-avatar>
@@ -113,15 +49,61 @@
     class="absolute top-0 right-0 h-full transition-all duration-300 bg-[#f8f9fc] dark:bg-[#1f1f1f] flex flex-col"
     [style.left.px]="visible ? 280 : 0"
   >
-    <!-- Header -->
     <div class="sticky top-0 z-10">
       <ng-content select="[header]"></ng-content>
     </div>
-
-    <!-- Contenido scrollable -->
     <div class="flex-1 overflow-y-auto p-7">
       <ng-content select="[content]"></ng-content>
     </div>
-
   </div>
 </div>
+
+<!-- Recursive menu item -->
+<ng-template #menuItem let-item="item">
+  <li>
+    <!-- Link -->
+    <a *ngIf="item.routerLink"
+       [routerLink]="item.routerLink"
+       pRipple
+       (click)="selectItem(item)"
+       [ngClass]="{
+         'bg-gray-100 dark:bg-gray-800': item.active,
+         'hover:bg-gray-50 dark:hover:bg-gray-700': !item.active
+       }"
+       class="flex items-center justify-between cursor-pointer px-4 py-2 rounded transition-colors duration-150"
+    >
+      <div class="flex items-center gap-2">
+        <i [class]="item.icon"></i>
+        <span class="font-medium">{{ item.label }}</span>
+      </div>
+      <span *ngIf="item.badge"
+            class="ml-auto bg-primary text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+        {{ item.badge }}
+      </span>
+    </a>
+
+    <!-- No link -->
+    <div *ngIf="!item.routerLink"
+         pRipple
+         (click)="item.expanded = !item.expanded"
+         [ngClass]="{
+           'bg-gray-100 dark:bg-gray-800': item.active,
+           'hover:bg-gray-50 dark:hover:bg-gray-700': !item.active
+         }"
+         class="flex items-center justify-between cursor-pointer px-4 py-2 rounded transition-colors duration-150"
+    >
+      <div class="flex items-center gap-2">
+        <i [class]="item.icon"></i>
+        <span class="font-medium">{{ item.label }}</span>
+      </div>
+      <i *ngIf="item.children" [class]="item.expanded ? 'fas fa-chevron-up ml-auto' : 'fas fa-chevron-down ml-auto'"></i>
+    </div>
+
+    <!-- Children -->
+    <ul *ngIf="item.children && item.expanded" class="list-none p-0 pl-6 mt-1">
+      <ng-container *ngFor="let child of item.children">
+        <ng-template [ngTemplateOutlet]="menuItem" [ngTemplateOutletContext]="{ item: child }"></ng-template>
+      </ng-container>
+    </ul>
+  </li>
+</ng-template>

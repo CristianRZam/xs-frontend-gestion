@@ -79,7 +79,7 @@
         </th>
       }
 
-      @if (selectedItems.length == 0 && (editButtonShow) && showOptionsColumn){
+      @if (selectedItems.length == 0 && showOptionsColumn){
         <th style="text-align: center;" [style.max-width]="buttonsColumnWidth + 'px'" [style.min-width]="buttonsColumnWidth + 'px'">
           Opciones
         </th>
@@ -118,7 +118,7 @@
         {{ col.badgeTextFn ? col.badgeTextFn!(item[col.field || ''], item) : item[col.field || ''] }}
       </span>
           } @else {
-            {{ item[col.field || ''] }}
+            {{ getValue(item, col.field) }}
           }
         </td>
       }
@@ -127,7 +127,7 @@
 
 
 
-      @if (selectedItems.length == 0 && (editButtonShow) && showOptionsColumn){
+      @if (selectedItems.length == 0 && showOptionsColumn){
         <td style="text-align: center;">
           <div class="flex justify-center gap-2">
             @if (editButtonShow) {

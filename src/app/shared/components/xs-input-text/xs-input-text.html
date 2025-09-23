@@ -7,6 +7,7 @@
     [id]="id"
     type="text"
     [formControl]="control"
+    [maxlength]="maxLength"
     [ngClass]="{
       'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
       'p-invalid': control.invalid && control.touched
@@ -25,6 +26,7 @@
   [id]="id"
   type="text"
   [formControl]="control"
+  [maxlength]="maxLength"
   [placeholder]="placeholder"
   [ngClass]="{
     'p-invalid': control.invalid && control.touched

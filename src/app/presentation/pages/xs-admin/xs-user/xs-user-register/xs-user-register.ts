@@ -8,6 +8,9 @@ import {UserModel} from '../../../../../core/domain/models/user.model';
 import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
 import {UserFormResponse} from '../../../../../core/domain/dtos/responses/user-form.response';
 import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
+import {XsMultiselect} from '../../../../../shared/components/xs-multiselect/xs-multiselect';
+import {RoleModel} from '../../../../../core/domain/models/role.model';
+import {UserRequest} from '../../../../../core/domain/dtos/resquests/user.request';
 
 @Component({
   selector: 'xs-user-register',
@@ -16,7 +19,8 @@ import {ParameterModel} from '../../../../../core/domain/models/parameter.model'
     ReactiveFormsModule,
     XsDialog,
     XsInputText,
-    XsSelect
+    XsSelect,
+    XsMultiselect
   ],
   templateUrl: './xs-user-register.html',
   styleUrl: './xs-user-register.scss'
@@ -24,18 +28,24 @@ import {ParameterModel} from '../../../../../core/domain/models/parameter.model'
 export class XsUserRegister implements OnInit {
   @ViewChild('xsToastRegister') private toast!: XsToast;
 
-  @Output() onCreate: EventEmitter<UserModel> = new EventEmitter();
-  @Output() onUpdate: EventEmitter<UserModel> = new EventEmitter();
+  @Output() onCreate: EventEmitter<UserRequest> = new EventEmitter();
+  @Output() onUpdate: EventEmitter<UserRequest> = new EventEmitter();
+
+  maxLengthDocument: number = 8;
+
+  public readonly NUMBER_DIGITS_DNI = 8;
+  public readonly NUMBER_DIGITS_OTHER_DOCUMENT = 20;
 
   dialogModel: { header?: string, display?: boolean, showOkButton?: boolean } = { header: '', display: false, showOkButton: true };
   public opcion: '' | 'AGREGAR' | 'MODIFICAR' = '';
-  public userModel: UserModel = {};
+  public userRequest: UserRequest = {};
 
   public constructor(
     public formConfig: FormRegistrarConfig,
   ) {
   }
   public typeDocuments: ParameterModel[] = [];
+  public roles: RoleModel[] = [];
 
 
   ngOnInit(): void {
@@ -52,13 +62,19 @@ export class XsUserRegister implements OnInit {
     if (item?.user && opcion === 'MODIFICAR') {
       this.formConfig.formulario.patchValue({
         id: item.user.id,
+        typeDocument: item.user.person?.typeDocument,
+        document: item.user.person?.document,
+        fullName: item.user.person?.fullName,
+        phone: item.user.person?.phone,
+        address: item.user.person?.address,
         username: item.user.username,
-        email: item.user.email
+        email: item.user.email,
+        roleIds: item.user.roles?.map(r => r.id)
       });
-      this.userModel = item.user!;
     }
 
     this.typeDocuments = item?.documentTypes!;
+    this.roles = item?.roles!;
 
     this.dialogModel.display = true;
   }
@@ -90,12 +106,20 @@ export class XsUserRegister implements OnInit {
   }
 
   agregar() {
-    this.userModel = this.formConfig.assignModel();
-    this.onCreate.emit(this.userModel);
+    this.userRequest = this.formConfig.assignModel();
+    this.onCreate.emit(this.userRequest);
   }
 
   modificar() {
-    this.userModel = this.formConfig.assignModel();
-    this.onUpdate.emit(this.userModel);
+    this.userRequest = this.formConfig.assignModel();
+    this.onUpdate.emit(this.userRequest);
+  }
+
+  onChangeTypeDocument() {
+    if (this.formConfig.typeDocument?.value == 1) {
+      this.maxLengthDocument = this.NUMBER_DIGITS_DNI;
+    } else {
+      this.maxLengthDocument = this.NUMBER_DIGITS_OTHER_DOCUMENT;
+    }
   }
 }

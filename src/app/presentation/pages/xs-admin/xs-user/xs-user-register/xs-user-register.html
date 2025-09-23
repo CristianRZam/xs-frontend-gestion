@@ -23,6 +23,7 @@
           <xs-select
             [control]="$any(formConfig.typeDocument)"
             [dataSource]="typeDocuments"
+            (change)="onChangeTypeDocument()"
             optionLabel="name"
             optionValue="parameterId"
             placeholder="Tipo de documento">
@@ -32,6 +33,7 @@
         <div class="flex-1">
           <xs-input-text
             placeholder="Nº Documento"
+            [maxLength]="maxLengthDocument"
             [control]="$any(formConfig.document)"
             class="w-full">
           </xs-input-text>
@@ -42,18 +44,21 @@
 
       <xs-input-text
         placeholder="Nombre completo"
+        [maxLength]="255"
         [control]="$any(formConfig.fullName)"
         class="w-full">
       </xs-input-text>
 
       <xs-input-text
         placeholder="Teléfono"
+        [maxLength]="50"
         [control]="$any(formConfig.phone)"
         class="w-full">
       </xs-input-text>
 
       <xs-input-text
         placeholder="Dirección"
+        [maxLength]="255"
         [control]="$any(formConfig.address)"
         class="w-full">
       </xs-input-text>
@@ -63,14 +68,24 @@
       ====================== -->
       <h3 class="text-lg font-semibold mt-4">Cuenta de usuario</h3>
 
+      <xs-multiselect
+        [control]="$any(formConfig.roleIds)"
+        [dataSource]="roles"
+        optionLabel="name"
+        optionValue="id"
+        placeholder="Roles">
+      </xs-multiselect>
+
       <xs-input-text
-        placeholder="Username"
+        placeholder="Nombre de Usuario"
+        [maxLength]="50"
         [control]="$any(formConfig.username)"
         class="w-full">
       </xs-input-text>
 
       <xs-input-text
         placeholder="Correo"
+        [maxLength]="100"
         [control]="$any(formConfig.email)"
         class="w-full">
       </xs-input-text>

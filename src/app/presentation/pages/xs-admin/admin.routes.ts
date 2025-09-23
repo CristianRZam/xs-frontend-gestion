@@ -17,19 +17,19 @@ export const ADMIN_ROUTES: Routes = [
     path: 'user',
     component: XsUserView,
     canActivate: [permissionGuard],
-    data: { permissions: ['MANAGE_USERS'] } // ✅ llave cerrada
+    data: { permissions: ['VIEW_USER'] }
   },
   {
     path: 'role',
     component: XsRoleView,
     canActivate: [permissionGuard],
-    data: { permissions: ['MANAGE_ROLES'] }
+    data: { permissions: ['VIEW_ROLE'] }
   },
   {
     path: 'role/:id/permission',
     component: XsPermissionView,
     canActivate: [permissionGuard],
-    data: { permissions: ['MANAGE_PERMISSIONS'] }
+    data: { permissions: ['VIEW_PERMISSION'] }
   },
   {
     path: 'parameter',

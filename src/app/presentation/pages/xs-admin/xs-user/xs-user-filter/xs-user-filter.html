@@ -1,13 +1,70 @@
 <div class="mt-4">
   <xs-fieldset legend="Criterios de búsqueda">
     <ng-template #content>
-      <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-        <div class="w-full">
-          <xs-input-text placeholder="Nombre" [control]="$any(name)"></xs-input-text>
+        <!-- Tipos de documentos -->
+        <div>
+          <xs-multiselect
+            placeholder="Tipos de documentos"
+            [dataSource]="typeDocumentsData"
+            optionValue="parameterId"
+            optionLabel="name"
+            [control]="$any(typeDocuments)"
+            [maxSelectedLabels]="4">
+          </xs-multiselect>
         </div>
 
-        <xs-filter-buttons (clear)="onClickClear()" (filter)="onClickFilter()"></xs-filter-buttons>
+        <!-- Nº de Documento -->
+        <div>
+          <xs-input-text
+            placeholder="Nº de Documento"
+            [control]="$any(document)">
+          </xs-input-text>
+        </div>
+
+        <!-- Nombre de Usuario -->
+        <div>
+          <xs-input-text
+            placeholder="Nombres"
+            [control]="$any(fullName)">
+          </xs-input-text>
+        </div>
+
+        <div>
+          <xs-input-text
+            placeholder="Nombre de Usuario"
+            [control]="$any(username)">
+          </xs-input-text>
+        </div>
+
+        <div>
+          <xs-input-text
+            placeholder="Correo Electrónico"
+            [control]="$any(email)">
+          </xs-input-text>
+        </div>
+
+        <div>
+          <xs-select
+            placeholder="Estado"
+            [control]="$any(status)"
+            [dataSource]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true">
+          </xs-select>
+        </div>
+
+
+      </div>
+
+      <!-- Botones -->
+      <div class="mt-4 flex justify-center gap-2">
+        <xs-filter-buttons
+          (clear)="onClickClear()"
+          (filter)="onClickFilter()">
+        </xs-filter-buttons>
       </div>
     </ng-template>
   </xs-fieldset>

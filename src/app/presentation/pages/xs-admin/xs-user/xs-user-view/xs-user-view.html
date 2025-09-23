@@ -2,9 +2,10 @@
 
 <xs-user-card-detail [totalUsers]="totalUsers" [activeUsers]="activeUsers" [inactiveUsers]="inactiveUsers" [totalAdmins]="totalAdmins"></xs-user-card-detail>
 
-<xs-user-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-user-filter>
+<xs-user-filter (filter)="updateFilter($event)" (clear)="updateFilter($event)" [typeDocumentsData]="typeDocuments"></xs-user-filter>
 
-<xs-user-table [users]="users" (addItem)="onAddItem()"></xs-user-table>
+<xs-user-table [users]="users" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" (updateActiveItem)="onUpdateActiveItem($event)"
+               (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalUsers" ></xs-user-table>
 
 <xs-user-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-user-register>
 

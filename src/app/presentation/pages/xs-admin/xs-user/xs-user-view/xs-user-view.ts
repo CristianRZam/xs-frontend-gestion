@@ -11,6 +11,10 @@ import {UserModel} from '../../../../../core/domain/models/user.model';
 import {XsUserRegister} from '../xs-user-register/xs-user-register';
 import {UserFormResponse} from '../../../../../core/domain/dtos/responses/user-form.response';
 import {UserFormRequest} from '../../../../../core/domain/dtos/resquests/user-form.request';
+import {UserRequest} from '../../../../../core/domain/dtos/resquests/user.request';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
+import {UserViewRequest} from '../../../../../core/domain/dtos/resquests/user-view.request';
+import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
 
 @Component({
   selector: 'xs-user-view',
@@ -31,7 +35,9 @@ export class XsUserView implements OnInit, AfterViewInit {
   @ViewChild('xsToastUserView') private toast!: XsToast;
   @ViewChild(XsUserRegister) userRegister!: XsUserRegister;
 
-  public users: UserModel[] = [];  public totalUsers = 0;
+  public users: UserModel[] = [];
+  public typeDocuments: ParameterModel[] = [];
+  public totalUsers = 0;
   public formData: UserFormResponse = {
     documentTypes: [],
     roles: []
@@ -41,13 +47,17 @@ export class XsUserView implements OnInit, AfterViewInit {
   public activeUsers = 0;
   public inactiveUsers = 0;
   public totalAdmins = 0;
-  filter: { name: string; page: number; size: number } = {
-    name: '',
+  filter: UserViewRequest = {
     page: 0,
     size: 5
   };
 
-  constructor(private userUseCase: UserUseCase, private errorHandler: ErrorHandlerService) {}
+
+  constructor(
+    private userUseCase: UserUseCase,
+    private errorHandler: ErrorHandlerService,
+    private util: Formvalidators,
+    ) {}
 
   ngOnInit(): void {}
 
@@ -65,6 +75,7 @@ export class XsUserView implements OnInit, AfterViewInit {
         if (response.success && response.data) {
           const data = response.data;
           this.users = data.users;
+          this.typeDocuments = data.typeDocuments;
           this.totalUsers = data.totalUsers;
           this.activeUsers = data.activeUsers;
           this.inactiveUsers = data.inactiveUsers;
@@ -108,8 +119,13 @@ export class XsUserView implements OnInit, AfterViewInit {
   }
 
 
-  updateFilter(event: { name: string } = { name: '' }) {
-    this.filter.name = event.name;
+  updateFilter(event: UserViewRequest) {
+    this.filter.typeDocuments = event.typeDocuments;
+    this.filter.document = event.document;
+    this.filter.fullName = event.fullName;
+    this.filter.username = event.username;
+    this.filter.email = event.email;
+    this.filter.status = event.status;
     this.filter.page = 0;
     this.filter.size = this.filter.size || 5;
 
@@ -120,11 +136,121 @@ export class XsUserView implements OnInit, AfterViewInit {
     this.loadUserById('AGREGAR');
   }
 
-  create($event: UserModel) {
-
+  onUpdateItem(item: UserModel) {
+    this.loadUserById('MODIFICAR', item.id);
   }
 
-  update($event: UserModel) {
+  create(item: UserRequest) {
+    this.loader.show('Guardando usuario...');
+    this.userUseCase.create(item).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show("Usuario registrado con éxito.");
+          this.load();
+          this.userRegister.cerrarDialog();
+        } else {
+          this.toast.show(res.message || "No se pudo registrar al usuario.", 'error');
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(e, "registrar", "usuario");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
 
+  update(item: UserRequest) {
+    this.loader.show('Actualizando usuario...');
+    this.userUseCase.update(item).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show("Usuario actualizado con éxito.");
+          this.load();
+          this.userRegister.cerrarDialog();
+        } else {
+          this.toast.show(res.message || "No se pudo actualizar datos del usuario.", 'error');
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "usuario");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  onDeleteItem(item: UserModel) {
+    this.loader.show('Eliminando usuario...');
+    this.userUseCase.delete(item.id!).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show("Usuario eliminado correctamente.");
+          this.load();
+        } else {
+          this.toast.show(res.message || "No se pudo eliminar al usuario.", 'error');
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(e, "eliminar", "usuario");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  onUpdateActiveItem(item: UserModel) {
+    this.loader.show('Actualizando...');
+    this.userUseCase.updateStatus(item.id!).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show("Usuario actualizado correctamente.");
+          this.load();
+        } else {
+          this.toast.show(res.message || "No se pudo actualizar el estado del usuario.", 'error');
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "usuario");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  exportPdf($event: any) {
+    this.loader.show('Generando PDF...');
+    this.userUseCase.exportPdf(this.filter).subscribe({
+      next: (blob) => {
+        this.util.downloadFile(blob, 'users_report.pdf');
+        this.toast.show("Reporte PDF generado con éxito.");
+      },
+      error: (e) => {
+        console.error('Error al generar PDF', e);
+        this.toast.show("Error al generar PDF", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  exportExcel($event: any) {
+    this.loader.show('Generando Excel...');
+    this.userUseCase.exportExcel(this.filter).subscribe({
+      next: (blob) => {
+        this.util.downloadFile(blob, 'users_report.xlsx');
+        this.toast.show("Reporte Excel generado con éxito.");
+      },
+      error: (e) => {
+        console.error('Error al generar Excel', e);
+        this.toast.show("Error al generar Excel", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
   }
 }

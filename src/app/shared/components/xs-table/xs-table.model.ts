@@ -12,6 +12,8 @@ export interface XsTableColumnModel {
   isBadge?: boolean;
   badgeColorMap?: Record<string, string>;
   badgeTextFn?: (value: any, row?: any) => string;
+
+  valueFn?: (row: any) => string;
 }
 
 const defaults: XsTableColumnModel = {

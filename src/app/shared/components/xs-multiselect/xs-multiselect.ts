@@ -1,9 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MultiSelectModule} from 'primeng/multiselect';
+import {CommonModule} from '@angular/common';
+import {FloatLabelModule} from 'primeng/floatlabel';
+import {Message} from 'primeng/message';
 
 @Component({
   selector: 'xs-multiselect',
-  imports: [],
+  imports: [
+    MultiSelectModule,
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    FloatLabelModule,
+    Message
+  ],
   templateUrl: './xs-multiselect.html',
   styleUrl: './xs-multiselect.scss'
 })
@@ -18,9 +29,13 @@ export class XsMultiselect implements OnInit {
   @Input() optionLabel: string = 'nombre';
   @Input() optionValue: string = 'idParametro';
   @Input() displayMode: string = 'chip';
+  @Input() showClear: boolean = true;
+  @Input() filter: boolean = true;
   @Input() esRequerido: boolean = true;
   @Input() styleClass: string = '';
   @Input() maxSelectedLabels: number = 2;
+  @Input() variant: 'over' | 'in' | 'on' = 'on';
+  @Input() size: 'small' |  'large'  = 'large';
   @Output() change: EventEmitter<any> = new EventEmitter();
   public objectFn = Object;
 

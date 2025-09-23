@@ -1,6 +1,5 @@
 import { ElementRef, EventEmitter, Injectable } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
-declare var require: any;
 // import html2canvas from 'html2canvas';
 import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 
@@ -97,6 +96,16 @@ export class Formvalidators {
     iframe.contentWindow?.print();
   }
 
+  // 📌 Utilidad para descargar archivo
+  downloadFile(blob: Blob, filename: string) {
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
   /** Validate the text passed */
   validateText(str: string, length?: any, maxLength?: any): boolean {
     str = str ? str.toString() : "";
@@ -187,6 +196,22 @@ export class Formvalidators {
       return null;
     };
   }
+
+  // Only letters and spaces validator
+  public onlyLettersAndSpaces(fieldName: string = "") {
+    return (control: FormControl) => {
+      const value = control.value;
+      const regex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]*$/; // letras + acentos + ñ + espacios
+      if (value && !regex.test(value)) {
+        return {
+          onlyLetters:
+            "Ingrese un valor válido para " + fieldName + ". Solo se permiten letras y espacios"
+        };
+      }
+      return null;
+    };
+  }
+
 
   // Only alpha numeric hyphen validator
   public password(fieldName: string = "") {
