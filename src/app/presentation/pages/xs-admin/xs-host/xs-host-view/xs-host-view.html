@@ -1,8 +1,8 @@
-<xs-main-sidebar [(visible)]="sidebarVisible">
+<xs-main-sidebar [(visible)]="sidebarVisible" [user]="user">
 
   <!-- Header -->
   <div header>
-    <xs-main-header (toggleSidebar)="toggleSidebar()"></xs-main-header>
+    <xs-main-header [breadcrumbItems]="breadcrumbItems" (toggleSidebar)="toggleSidebar()" [user]="user"></xs-main-header>
   </div>
 
   <!-- Contenido -->

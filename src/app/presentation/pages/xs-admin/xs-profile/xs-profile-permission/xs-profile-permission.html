@@ -1,0 +1,49 @@
+<xs-dialog
+  [header]="dialogModel.header!"
+  cancelButtonLabel="Cerrar"
+  cancelButtonIcon="fa fa-times"
+  [showOkButton]="false"
+  size="md"
+  [display]="dialogModel.display!"
+  (onCerrar)="cerrarDialog()">
+
+  <ng-template #content>
+    <div *ngIf="groupedPermissions.length; else noPermissions" class="flex flex-col gap-6 p-5">
+
+      <div *ngFor="let group of groupedPermissions">
+
+        <!-- Título del módulo con icono opcional -->
+        <div class="flex items-center gap-3 mb-4">
+          <svg class="w-5 h-5 text-blue-500 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm1 11H9v-2h2v2zm0-4H9V5h2v4z"/>
+          </svg>
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-100">
+            {{ group.module }}
+          </h3>
+        </div>
+
+        <!-- Lista de permisos como tags profesionales -->
+        <div class="flex flex-wrap gap-3">
+          <span *ngFor="let perm of group.permissions"
+                class="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200
+                       rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700
+                       hover:bg-blue-50 dark:hover:bg-blue-900 transition-colors cursor-default">
+            <svg class="w-4 h-4 text-blue-500 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <path d="M16.707 5.293a1 1 0 00-1.414 0L9 11.586 6.707 9.293a1 1 0 00-1.414 1.414l3 3a1 1 0 001.414 0l7-7a1 1 0 000-1.414z"/>
+            </svg>
+            {{ perm.description }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
+    <ng-template #noPermissions>
+      <div class="flex justify-center items-center p-6">
+        <p class="text-gray-500 dark:text-gray-400 text-sm italic">
+          No tienes permisos asignados.
+        </p>
+      </div>
+    </ng-template>
+  </ng-template>
+</xs-dialog>

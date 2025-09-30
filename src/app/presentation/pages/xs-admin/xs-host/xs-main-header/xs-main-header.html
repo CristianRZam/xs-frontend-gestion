@@ -1,31 +1,33 @@
 <p-menubar class="sticky top-0 z-50 bg-white shadow">
   <ng-template #start>
     <div class="flex items-center gap-4">
-      <xs-button 
-        icon="fa-solid fa-align-justify" 
-        size="small" 
-        severity="contrast" 
-        variant="text" 
+      <xs-button
+        icon="fa-solid fa-align-justify"
+        size="small"
+        severity="contrast"
+        variant="text"
         [rounded]="false"
         (click)="onMenuClick()">
       </xs-button>
 
       <!-- Breadcrumb oculto en móviles -->
-      <p-breadcrumb 
-        [model]="breadcrumbItems" 
+      <p-breadcrumb
+        [model]="breadcrumbItems"
         class="hidden sm:block" />
     </div>
   </ng-template>
 
   <ng-template #end>
     <div class="flex items-center gap-4">
-      <p-overlaybadge value="2">
-        <i class="fa-solid fa-bell text-2xl cursor-pointer"></i>
-      </p-overlaybadge>
+<!--      <p-overlaybadge value="2">-->
+<!--        <i class="fa-solid fa-bell text-2xl cursor-pointer"></i>-->
+<!--      </p-overlaybadge>-->
 
-      <p-avatar 
-        image="https://primefaces.org/cdn/primeng/images/demo/avatar/amyelsner.png" 
-        shape="circle" 
+      <p-avatar
+        [image]="image"
+        [label]="initials"
+        shape="circle"
+        [style]="{ 'background-color': '#ece9fc', color: '#2a1261' }"
         class="cursor-pointer"
         (click)="toggleAvatarMenu($event); $event.stopPropagation()">
       </p-avatar>
@@ -36,16 +38,34 @@
         [popup]="true"
         [appendTo]="'body'"
         [autoZIndex]="true"
-        [baseZIndex]="10000">
+        [baseZIndex]="10000"
+      >
         <ng-template let-item pTemplate="item">
-          <a pRipple 
-             [ngClass]="{'text-red-400 font-medium': item.isLogout}" 
-             class="flex items-center gap-2 p-2 cursor-pointer">
+          <a
+            pRipple
+            *ngIf="item.routerLink; else noLink"
+            [routerLink]="item.routerLink"
+            [ngClass]="{ 'text-red-400 font-medium': item.isLogout }"
+            class="flex items-center gap-2 p-2 cursor-pointer"
+          >
             <span [class]="item.icon"></span>
             <span>{{ item.label }}</span>
           </a>
+
+          <ng-template #noLink>
+            <a
+              pRipple
+              (click)="item.command?.()"
+              [ngClass]="{ 'text-red-400 font-medium': item.isLogout }"
+              class="flex items-center gap-2 p-2 cursor-pointer"
+            >
+              <span [class]="item.icon"></span>
+              <span>{{ item.label }}</span>
+            </a>
+          </ng-template>
         </ng-template>
       </p-menu>
+
     </div>
   </ng-template>
 </p-menubar>

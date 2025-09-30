@@ -226,7 +226,7 @@ export class Formvalidators {
         return {
           password:
             fieldName +
-            "Debe contener mínimo 8 y máximo 50 caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
+            "debe contener mínimo 8 y máximo 50 caracteres, al menos una letra mayúscula, una letra minúscula, un número y un carácter especial"
         };
       }
       return null;
@@ -336,6 +336,41 @@ export class Formvalidators {
     return edad;
   }
 
+  getInitials(fullName: string | undefined | null): string {
+    if (!fullName) return '';
+
+    const clean = fullName.trim();
+    if (clean.length === 0) return '';
+
+    const parts = clean.split(' ');
+    return parts.length > 1
+      ? (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+      : parts[0][0].toUpperCase();
+  }
+
+
+  formSubmitEvent(form: FormGroup): { error: boolean; mensaje?: string } {
+    if (form.valid) {
+      return { error: false };
+    } else {
+      Object.keys(form.controls).forEach((field: string) => {
+        let control = form.get(field);
+
+        // Marcar el control principal
+        control?.markAsTouched({ onlySelf: true });
+
+        // Si el control tiene subcontroles (FormGroup o FormArray)
+        if ((control as any)?.controls) {
+          Object.keys((control as any).controls).forEach((subField: string) => {
+            const subControl = (control as any).get(subField);
+            subControl?.markAsTouched({ onlySelf: true });
+          });
+        }
+      });
+
+      return { error: true, mensaje: this.obtenerPrimerMensajeErrorFormulario(form) };
+    }
+  }
 
 
 }

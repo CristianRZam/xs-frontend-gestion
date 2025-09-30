@@ -2,7 +2,7 @@
 
 <xs-role-card-detail [totalRoles]="totalRoles" [activeRoles]="activeRoles" [inactiveRoles]="inactiveRoles" [totalPermissions]="totalPermissions"></xs-role-card-detail>
 
-<xs-role-filter (filter)="updateFilter($event)" (clear)="updateFilter()"></xs-role-filter>
+<xs-role-filter (filter)="updateFilter($event)" (clear)="updateFilter($event)"></xs-role-filter>
 
 <xs-role-table [roles]="roles" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)"
                (updateActiveItem)="onUpdateActiveItem($event)" (deleteItem)="onDeleteItem($event)"

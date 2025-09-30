@@ -1,47 +1,63 @@
 <xs-card>
   <ng-template #content>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      @for (permission of permissions; track permission.id) {
-        <div (click)="togglePermission(permission)"
-             class="flex items-center justify-between p-4 rounded-lg cursor-pointer transition
-                    border hover:shadow-md
-                    bg-white text-gray-700
-                    dark:bg-[#1f1f1f] dark:text-white
-                    hover:bg-gray-50 dark:hover:bg-gray-700"
-             [class.border-green-500]="isAssigned(permission)"
-             [class.border-gray-300]="!isAssigned(permission)"
-             [class.dark:border-green-400]="isAssigned(permission)"
-             [class.dark:border-gray-600]="!isAssigned(permission)">
+    <div class="space-y-6">
+      @for (module of objectFn.keys(groupedPermissions); track module) {
+        <div>
+          <!-- Encabezado de módulo -->
+          <h3 class="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 flex items-center gap-2">
+            <i class="fa-solid fa-folder-tree text-blue-500"></i>
+            {{ module }}
+          </h3>
 
-          <span class="font-medium">
-            {{ permission.description }}
-          </span>
+          <!-- Grid de permisos -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @for (permission of groupedPermissions[module]; track permission.id) {
+              <div (click)="togglePermission(permission)"
+                   class="flex items-center justify-between p-4 rounded-lg cursor-pointer transition
+                          border hover:shadow-md
+                          bg-white text-gray-700
+                          dark:bg-[#1f1f1f] dark:text-white
+                          hover:bg-gray-50 dark:hover:bg-gray-700"
+                   [class.border-green-500]="isAssigned(permission)"
+                   [class.border-gray-300]="!isAssigned(permission)"
+                   [class.dark:border-green-400]="isAssigned(permission)"
+                   [class.dark:border-gray-600]="!isAssigned(permission)">
 
-          <span class="px-3 py-1 rounded-full text-xs font-semibold transition"
-                [ngClass]="isAssigned(permission)
-                  ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200'
-                  : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-white'">
-            {{ isAssigned(permission) ? 'Asignado' : 'No asignado' }}
-          </span>
-        </div>
-      } @empty {
-        <div class="col-span-full text-center text-gray-500 dark:text-gray-400">
-          No hay permisos disponibles.
+                <div class="flex items-center gap-2">
+                  <!-- Icono especial para el permiso crítico -->
+                  @if (permission.name === 'VIEW_DASHBOARD') {
+                    <i class="fa-solid fa-star text-yellow-500 text-lg"
+                       title="Permiso clave para loguearse"></i>
+                  }
+                  <span class="font-medium">{{ permission.description }}</span>
+                </div>
+
+                <span class="px-3 py-1 rounded-full text-xs font-semibold transition"
+                      [ngClass]="isAssigned(permission)
+                        ? 'bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200'
+                        : 'bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-white'">
+                  {{ isAssigned(permission) ? 'Asignado' : 'No asignado' }}
+                </span>
+              </div>
+            }
+          </div>
         </div>
       }
     </div>
   </ng-template>
 
-  <ng-template #footer>
-    <div class="flex justify-center mt-4">
-      <xs-button
-        label="Guardar"
-        severity="info"
-        [rounded]="false"
-        [variant]="'outlined'"
-        icon="fa-regular fa-floppy-disk"
-        (click)="onSave()">
-      </xs-button>
-    </div>
-  </ng-template>
+  @if (canEdit){
+    <ng-template #footer>
+      <div class="flex justify-center mt-4">
+        <xs-button
+          label="Guardar"
+          severity="info"
+          [rounded]="false"
+          [variant]="'outlined'"
+          icon="fa-regular fa-floppy-disk"
+          (click)="onSave()">
+        </xs-button>
+      </div>
+    </ng-template>
+  }
 </xs-card>

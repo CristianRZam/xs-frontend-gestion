@@ -69,15 +69,27 @@ export class XsUserRegister implements OnInit {
         address: item.user.person?.address,
         username: item.user.username,
         email: item.user.email,
-        roleIds: item.user.roles?.map(r => r.id)
+        roleIds: item.user.userRoles?.map(ur => ur.role?.id)
       });
     }
 
     this.typeDocuments = item?.documentTypes!;
-    this.roles = item?.roles!;
+
+    // roles válidos (activos y no eliminados)
+    const rolesDisponibles = item?.roles?.filter(r => !r.deleted && r.active) ?? [];
+
+    // roles inactivos o eliminados que el usuario ya tenía asignados
+    const rolesAsignadosNoDisponibles: RoleModel[] = item?.user?.userRoles
+      ?.map(ur => ur.role)
+      ?.filter((r): r is RoleModel => !!r && (r.deleted || !r.active)) ?? [];
+
+    // unir ambos para que el multiselect pueda renderizarlos
+    this.roles = [...rolesDisponibles, ...rolesAsignadosNoDisponibles];
 
     this.dialogModel.display = true;
   }
+
+
 
 
   cerrarDialog() {

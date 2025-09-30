@@ -1,0 +1,146 @@
+<xs-card styleClass="w-full bg-white dark:bg-[#18181b] shadow-lg rounded-2xl overflow-hidden transition-colors duration-300">
+  <!-- HEADER -->
+  <ng-template #header>
+    <div
+      class="relative
+             bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700
+             dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
+             p-8 flex flex-col sm:flex-row items-center sm:items-end gap-6
+             text-white transition-colors duration-300">
+
+      <!-- Avatar -->
+      <div class="relative w-28 h-28 rounded-full overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 group">
+        <img [src]="user.avatarUrl || 'https://www.w3schools.com/howto/img_avatar.png'"
+             alt="Avatar"
+             class="w-full h-full object-cover">
+
+        <!-- Overlay central -->
+        <div class="absolute inset-0 bg-opacity-10 flex flex-col items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button (click)="fileInput.click()"
+                  title="Editar foto"
+                  class="p-2 bg-white dark:bg-gray-800 rounded-full shadow hover:scale-110 transform transition cursor-pointer">
+            <i class="fas fa-camera text-gray-700 dark:text-white"></i>
+          </button>
+
+          <button *ngIf="user.avatarUrl"
+                  (click)="onDeleteAvatar()"
+                  title="Eliminar foto"
+                  class="p-2 bg-white dark:bg-gray-800 rounded-full shadow hover:scale-110 transform transition cursor-pointer">
+            <i class="fas fa-trash text-red-600 dark:text-red-400"></i>
+          </button>
+        </div>
+
+        <!-- Input oculto -->
+        <input type="file" #fileInput accept="image/*" (change)="onAvatarSelected($event)" class="hidden">
+      </div>
+
+
+
+      <!-- Nombre y roles -->
+      <div class="text-center sm:text-left flex-1">
+        <h1 class="text-3xl font-extrabold tracking-tight">{{ user.person?.fullName }}</h1>
+        <p class="text-sm opacity-90 flex items-center gap-2 justify-center sm:justify-start">
+          <i class="fas fa-user-tag"></i> {{ user.roles?.join(', ') }}
+        </p>
+        <span class="inline-flex items-center mt-2 px-3 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700 dark:bg-green-800 dark:text-green-200">
+          <i class="fas fa-check-circle me-1"></i> Cuenta activa
+        </span>
+      </div>
+
+      <!-- Botón editar -->
+      <div class="flex gap-2">
+        <xs-button label="Editar Perfil" icon="fas fa-pen me-2" variant="outlined" (click)="onUpdate()"></xs-button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- CONTENT -->
+  <ng-template #content>
+    <div class="p-8 grid grid-cols-1 lg:grid-cols-12 gap-6 w-full">
+
+      <!-- Información personal -->
+      <div class="col-span-12 lg:col-span-9 w-full h-full">
+        <xs-card
+          styleClass="w-full h-full bg-white dark:bg-[#18181b] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-6 transition-colors">
+          <ng-template #header>
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+              <i class="fas fa-user-circle text-indigo-500"></i>
+              Información personal
+            </h2>
+          </ng-template>
+          <ng-template #content>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <!-- Tipo de documento -->
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 tracking-wide">Tipo de documento</span>
+                <span class="text-sm text-gray-700 dark:text-gray-200 flex items-center gap-2 mt-1">
+                  <i class="fas fa-id-card text-blue-500"></i>
+                  {{ user.person?.typeDocumentName }}
+                </span>
+              </div>
+
+              <!-- Documento -->
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 tracking-wide">Nº de Documento</span>
+                <span class="text-sm text-gray-700 dark:text-gray-200 flex items-center gap-2 mt-1">
+                  <i class="fas fa-id-badge text-yellow-500"></i>
+                  {{ user.person?.document }}
+                </span>
+              </div>
+
+              <!-- Correo -->
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 tracking-wide">Correo electrónico</span>
+                <span class="text-sm text-gray-700 dark:text-gray-200 flex items-center gap-2 mt-1">
+                  <i class="fas fa-envelope text-indigo-500"></i>
+                  {{ user.email }}
+                </span>
+              </div>
+
+              <!-- Teléfono -->
+              <div class="flex flex-col">
+                <span class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 tracking-wide">Teléfono</span>
+                <span class="text-sm text-gray-700 dark:text-gray-200 flex items-center gap-2 mt-1">
+                  <i class="fas fa-phone text-green-500"></i>
+                  {{ user.person?.phone }}
+                </span>
+              </div>
+
+              <!-- Dirección -->
+              <div class="flex flex-col sm:col-span-2">
+                <span class="text-xs font-semibold uppercase text-gray-400 dark:text-gray-500 tracking-wide">Dirección</span>
+                <span class="text-sm text-gray-700 dark:text-gray-200 flex items-center gap-2 mt-1">
+                  <i class="fas fa-location-dot text-pink-500"></i>
+                  {{ user.person?.address }}
+                </span>
+              </div>
+            </div>
+          </ng-template>
+        </xs-card>
+      </div>
+
+      <!-- Acciones rápidas -->
+      <div class="col-span-12 lg:col-span-3 w-full h-full">
+        <xs-card
+          styleClass="w-full h-full bg-white dark:bg-[#18181b] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-sm p-6 transition-colors">
+          <ng-template #header>
+            <h2 class="text-lg font-semibold text-gray-800 dark:text-gray-100 flex items-center gap-2">
+              <i class="fas fa-bolt text-yellow-500"></i>
+              Acciones rápidas
+            </h2>
+          </ng-template>
+          <ng-template #content>
+            <div class="flex flex-col gap-3">
+              <xs-button label="Ver mis permisos" icon="fas fa-user-shield" [fullWidth]="true" variant="outlined" severity="success" (click)="onViewPermissions()"></xs-button>
+              <xs-button label="Cambiar contraseña" icon="fas fa-key" [fullWidth]="true" variant="outlined" severity="info" (click)="onChangePassword()"></xs-button>
+              <xs-button label="Desactivar cuenta" icon="fas fa-user-slash" [fullWidth]="true" variant="outlined" severity="danger" (click)="onDisable()"></xs-button>
+            </div>
+          </ng-template>
+        </xs-card>
+      </div>
+
+    </div>
+  </ng-template>
+</xs-card>
+
+<xs-confirm-dialog #xsConfirmDialog [key]="'keyConfirmDialogDisable'"></xs-confirm-dialog>

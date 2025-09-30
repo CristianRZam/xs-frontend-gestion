@@ -1,10 +1,21 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  HostListener,
+} from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { Ripple } from 'primeng/ripple';
 import { AvatarModule } from 'primeng/avatar';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
+import { MenuItem } from 'primeng/api';
+import { UserModel } from '../../../../../core/domain/models/user.model';
+import { Formvalidators } from '../../../../../shared/validators/form-validators';
 
 interface SidebarItem {
   label: string;
@@ -14,6 +25,7 @@ interface SidebarItem {
   active?: boolean;
   badge?: number;
   children?: SidebarItem[];
+  permission?: string | string[];
 }
 
 @Component({
@@ -21,68 +33,125 @@ interface SidebarItem {
   standalone: true,
   imports: [ButtonModule, Ripple, AvatarModule, CommonModule, RouterModule],
   templateUrl: './xs-main-sidebar.html',
-  styleUrls: ['./xs-main-sidebar.scss']
+  styleUrls: ['./xs-main-sidebar.scss'],
 })
-export class XsMainSidebar {
+export class XsMainSidebar implements OnInit {
   @Input() visible: boolean = false;
+  @Input() user: UserModel = {};
   @Output() visibleChange = new EventEmitter<boolean>();
 
-  constructor(private router: Router) {
-    // Detectar cambios de ruta
-    this.router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    ).subscribe((event: NavigationEnd) => {
-      this.markActiveByUrl(event.urlAfterRedirects);
-    });
+  public image: string = '';
+  public initials: string = '';
+  public isMobile: boolean = false;
+
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private util: Formvalidators
+  ) {
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.markActiveByUrl(event.urlAfterRedirects);
+      });
+
+    this.applyPermissions();
   }
 
-  toggleSidebar() {
-    this.visible = !this.visible;
-    this.visibleChange.emit(this.visible);
+  ngOnInit(): void {
+    this.initials = this.util.getInitials(this.user?.person?.fullName);
+    this.checkScreenSize();
   }
 
-  sidebarSections: { label: string; expanded: boolean; items: SidebarItem[] }[] = [
-    {
-      label: 'FAVORITES',
-      expanded: true,
-      items: [
-        { label: 'Dashboard', icon: 'fas fa-home', routerLink: '/admin' },
-        {
-          label: 'Seguridad',
-          icon: 'fas fa-user-shield',
-          expanded: false,
-          children: [
-            { label: 'Usuarios', icon: 'fas fa-users', routerLink: '/admin/user' },
-            { label: 'Roles', icon: 'fas fa-user-tag', routerLink: '/admin/role' }
-          ]
-        },
-        {
-          label: 'Configuraciones',
-          icon: 'fas fa-cogs',
-          expanded: false,
-          children: [
-            { label: 'Parámetros', icon: 'fas fa-sliders-h', routerLink: '/admin/parameter' },
-            { label: 'Ajustes generales', icon: 'fas fa-wrench' }
-          ]
-        }
-      ]
+  @HostListener('window:resize', [])
+  onResize() {
+    this.checkScreenSize();
+  }
+
+  private checkScreenSize() {
+    this.isMobile = window.innerWidth < 1024;
+  }
+
+
+  closeSidebar() {
+    if (this.isMobile) {
+      this.visible = false;
+      this.visibleChange.emit(this.visible);
     }
-  ];
+  }
 
-  // Selecciona item manualmente
+  sidebarSections: { label: string; expanded: boolean; items: SidebarItem[] }[] =
+    [
+      {
+        label: 'INICIO',
+        expanded: true,
+        items: [
+          { label: 'Dashboard', icon: 'fas fa-home', routerLink: '/admin' },
+        ],
+      },
+      {
+        label: 'MANTENEDORES',
+        expanded: true,
+        items: [
+          {
+            label: 'Seguridad',
+            icon: 'fas fa-user-shield',
+            expanded: false,
+            permission: ['VIEW_USER', 'VIEW_ROLE'],
+            children: [
+              {
+                label: 'Usuarios',
+                icon: 'fas fa-users',
+                routerLink: '/admin/user',
+                permission: 'VIEW_USER',
+              },
+              {
+                label: 'Roles',
+                icon: 'fas fa-user-tag',
+                routerLink: '/admin/role',
+                permission: 'VIEW_ROLE',
+              },
+            ],
+          },
+          {
+            label: 'Configuraciones',
+            icon: 'fas fa-cogs',
+            expanded: false,
+            permission: ['VIEW_PARAMETER', 'VIEW_SETTINGS'],
+            children: [
+              {
+                label: 'Parámetros',
+                icon: 'fas fa-sliders-h',
+                routerLink: '/admin/parameter',
+                permission: 'VIEW_PARAMETER',
+              },
+              {
+                label: 'Ajustes generales',
+                icon: 'fas fa-wrench',
+                permission: 'VIEW_SETTINGS',
+              },
+            ],
+          },
+        ],
+      },
+    ];
+
   selectItem(selected: SidebarItem) {
     this.clearActiveExcept(selected);
     selected.active = true;
-    // Expandir padres si tiene hijos
     if (selected.children) {
       selected.expanded = !selected.expanded;
     }
+    if (this.isMobile) {
+      this.closeSidebar();
+    }
   }
 
-  // Limpiar active en todo el sidebar excepto el seleccionado
   private clearActiveExcept(selected: SidebarItem) {
-    this.sidebarSections.forEach(section =>
-      section.items.forEach(item => this.clearActiveRecursive(item, selected))
+    this.sidebarSections.forEach((section) =>
+      section.items.forEach((item) =>
+        this.clearActiveRecursive(item, selected)
+      )
     );
   }
 
@@ -91,49 +160,86 @@ export class XsMainSidebar {
       item.active = false;
     }
     if (item.children) {
-      item.children.forEach(child => this.clearActiveRecursive(child, exception));
+      item.children.forEach((child) =>
+        this.clearActiveRecursive(child, exception)
+      );
     }
   }
 
-  // Marca items activos según la URL
   private markActiveByUrl(url: string) {
-    this.sidebarSections.forEach(section =>
-      section.items.forEach(item => this.markActiveRecursive(item, url))
+    this.sidebarSections.forEach((section) =>
+      section.items.forEach((item) => this.markActiveRecursive(item, url))
     );
   }
 
-  private markActiveRecursive(item: SidebarItem, url: string): boolean {
+  private markActiveRecursive(
+    item: SidebarItem,
+    url: string,
+    trail: MenuItem[] = []
+  ): boolean {
     let isActive = false;
+    const currentTrail = [...trail, { label: item.label, routerLink: item.routerLink }];
 
-    if (item.routerLink) {
-      // Solo marcamos activo exacto si no tiene hijos
-      if (!item.children) {
-        item.active = url === item.routerLink;
-        isActive = item.active;
-      }
+    if (item.routerLink && !item.children) {
+      item.active = url === item.routerLink;
+      isActive = item.active;
     }
 
     if (item.children) {
       let childActive = false;
-      item.children.forEach(child => {
-        if (this.markActiveRecursive(child, url)) {
+      item.children.forEach((child) => {
+        if (this.markActiveRecursive(child, url, currentTrail)) {
           childActive = true;
         }
       });
 
       if (childActive) {
-        item.expanded = true; // expandir padre si algún hijo está activo
-        item.active = true;   // padre también activo
+        item.expanded = true;
+        item.active = true;
         isActive = true;
       } else {
-        // Si ningún hijo está activo, colapsar el padre y desactivarlo
         item.expanded = false;
-        item.active = url === item.routerLink; // activo solo si la ruta exacta coincide
+        item.active = url === item.routerLink;
       }
     }
 
     return isActive;
   }
 
+  private applyPermissions() {
+    const permissions = this.authService.getPermissions();
 
+    const hasAnyPermission = (
+      itemPermission: string | string[] | undefined
+    ): boolean => {
+      if (!itemPermission) return true;
+      if (Array.isArray(itemPermission)) {
+        return itemPermission.some((p) => permissions.includes(p));
+      }
+      return permissions.includes(itemPermission);
+    };
+
+    const filterItemsByPermission = (items: SidebarItem[]): SidebarItem[] => {
+      return items
+        .map((item) => {
+          if (item.children) {
+            item.children = filterItemsByPermission(item.children);
+          }
+
+          const hasVisibleChildren = item.children && item.children.length > 0;
+          const hasPermission = hasAnyPermission(item.permission);
+
+          if (hasPermission || hasVisibleChildren) {
+            return item;
+          }
+
+          return null;
+        })
+        .filter((item) => item !== null) as SidebarItem[];
+    };
+
+    this.sidebarSections.forEach((section) => {
+      section.items = filterItemsByPermission(section.items);
+    });
+  }
 }

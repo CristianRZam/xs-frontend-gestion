@@ -1,0 +1,12 @@
+<xs-profile-detail [user]="user" (updateProfile)="loadForm()" (changePassword)="onChangePassword()" (disable)="onDisable()"
+(uploadAvatar)="updateAvatar($event)" (deleteAvatar)="deleteAvatar()" (viewPermissions)="loadPermissions()" ></xs-profile-detail>
+
+<xs-profile-register (onUpdate)="update($event)"></xs-profile-register>
+
+<xs-profile-password-change (onUpdate)="updatePassword($event)"></xs-profile-password-change>
+
+<xs-profile-permission></xs-profile-permission>
+
+<xs-loader #xsLoader></xs-loader>
+
+<xs-toast #xsToastRoleView position="top-center"></xs-toast>

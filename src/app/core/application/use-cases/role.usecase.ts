@@ -4,32 +4,33 @@ import { Observable } from 'rxjs';
 import {RoleViewRequest} from '../../domain/dtos/resquests/role-view.request';
 import {RoleModel} from '../../domain/models/role.model';
 import {ApiResponse} from '../../domain/dtos/responses/api.response';
+import {RoleViewResponse} from '../../domain/dtos/responses/role-view.response';
 
 @Injectable({ providedIn: 'root' })
 export class RoleUseCase {
   constructor(private readonly roleRepository: RoleRepository) {}
 
-  init(request: RoleViewRequest): Observable<ApiResponse<any>> {
+  init(request: RoleViewRequest): Observable<ApiResponse<RoleViewResponse>> {
     return this.roleRepository.init(request);
   }
 
-  getRoleById(id: number): Observable<ApiResponse<any>> {
+  getRoleById(id: number): Observable<ApiResponse<RoleModel>> {
     return this.roleRepository.getRoleById(id);
   }
 
-  create(request: RoleModel): Observable<ApiResponse<any>> {
+  create(request: RoleModel): Observable<ApiResponse<RoleModel>> {
     return this.roleRepository.create(request);
   }
 
-  update(request: RoleModel): Observable<ApiResponse<any>> {
+  update(request: RoleModel): Observable<ApiResponse<RoleModel>> {
     return this.roleRepository.update(request);
   }
 
-  delete(id: number): Observable<ApiResponse<any>> {
+  delete(id: number): Observable<ApiResponse<boolean>> {
     return this.roleRepository.delete(id);
   }
 
-  updateStatus(id: number): Observable<ApiResponse<any>> {
+  updateStatus(id: number): Observable<ApiResponse<boolean>> {
     return this.roleRepository.updateStatus(id);
   }
 

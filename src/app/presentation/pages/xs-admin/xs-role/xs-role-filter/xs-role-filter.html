@@ -1,13 +1,31 @@
 <div class="mt-4">
   <xs-fieldset legend="Criterios de búsqueda">
     <ng-template #content>
-      <div class="flex flex-col gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
         <div class="w-full">
           <xs-input-text placeholder="Nombre" [control]="$any(name)"></xs-input-text>
         </div>
 
-        <xs-filter-buttons (clear)="onClickClear()" (filter)="onClickFilter()"></xs-filter-buttons>
+        <div class="w-full">
+          <xs-input-text placeholder="Descripción" [control]="$any(description)"></xs-input-text>
+        </div>
+
+        <div class="w-full">
+          <xs-select
+            placeholder="Estado"
+            [control]="$any(status)"
+            [dataSource]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true">
+          </xs-select>
+        </div>
+
+        <div class="w-full md:col-span-3 flex justify-center gap-2">
+          <xs-filter-buttons (clear)="onClickClear()" (filter)="onClickFilter()"></xs-filter-buttons>
+        </div>
+
       </div>
     </ng-template>
   </xs-fieldset>

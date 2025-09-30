@@ -10,6 +10,7 @@ import {XsRoleRegister} from '../xs-role-register/xs-role-register';
 import {XsToast} from '../../../../../shared/components/xs-toast/xs-toast';
 import {ErrorHandlerService} from '../../../../../shared/services/error-handler.service';
 import {Formvalidators} from '../../../../../shared/validators/form-validators';
+import {RoleViewRequest} from '../../../../../core/domain/dtos/resquests/role-view.request';
 
 @Component({
   selector: 'xs-role-view',
@@ -36,8 +37,7 @@ export class XsRoleView implements OnInit, AfterViewInit {
   public activeRoles = 0;
   public inactiveRoles = 0;
   public totalPermissions = 0;
-  filter: { name: string; page: number; size: number } = {
-    name: '',
+  filter: RoleViewRequest = {
     page: 0,
     size: 5
   };
@@ -82,8 +82,10 @@ export class XsRoleView implements OnInit, AfterViewInit {
   }
 
 
-  updateFilter(event: { name: string } = { name: '' }) {
+  updateFilter(event: RoleViewRequest) {
     this.filter.name = event.name;
+    this.filter.description = event.description;
+    this.filter.status = event.status;
     this.filter.page = 0;
     this.filter.size = this.filter.size || 5;
 

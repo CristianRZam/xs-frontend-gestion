@@ -1,0 +1,83 @@
+<xs-dialog
+  [header]="dialogModel.header!"
+  okButtonLabel="Guardar"
+  [showOkButton]="dialogModel.showOkButton!"
+  size="md"
+  [display]="dialogModel.display!"
+  (onAceptar)="onAceptarDialog()"
+  (onCerrar)="cerrarDialog()">
+
+  <ng-template #content>
+    <form [formGroup]="formConfig.formulario"
+          (ngSubmit)="formSubmitEvent()"
+          class="flex flex-col gap-4 w-full">
+
+      <!-- =====================
+           DATOS DE PERSONA
+      ====================== -->
+      <h3 class="text-lg font-semibold">Datos personales</h3>
+
+      <div class="flex flex-col md:flex-row gap-4">
+
+        <div class="flex-1">
+          <xs-select
+            [control]="$any(formConfig.typeDocument)"
+            [dataSource]="typeDocuments"
+            (change)="onChangeTypeDocument()"
+            optionLabel="name"
+            optionValue="parameterId"
+            placeholder="Tipo de documento">
+          </xs-select>
+        </div>
+
+        <div class="flex-1">
+          <xs-input-text
+            placeholder="Nº Documento"
+            [maxLength]="maxLengthDocument"
+            [control]="$any(formConfig.document)"
+            class="w-full">
+          </xs-input-text>
+        </div>
+
+      </div>
+
+
+      <xs-input-text
+        placeholder="Nombre completo"
+        [maxLength]="255"
+        [control]="$any(formConfig.fullName)"
+        class="w-full">
+      </xs-input-text>
+
+      <xs-input-text
+        placeholder="Teléfono"
+        [maxLength]="50"
+        [control]="$any(formConfig.phone)"
+        class="w-full">
+      </xs-input-text>
+
+      <xs-input-text
+        placeholder="Dirección"
+        [maxLength]="255"
+        [control]="$any(formConfig.address)"
+        class="w-full">
+      </xs-input-text>
+
+      <!-- =====================
+           DATOS DE USUARIO
+      ====================== -->
+
+      <xs-input-text
+        placeholder="Correo"
+        [maxLength]="100"
+        [control]="$any(formConfig.email)"
+        class="w-full">
+      </xs-input-text>
+
+
+
+    </form>
+  </ng-template>
+</xs-dialog>
+
+<xs-toast #xsToastRegister position="top-center"></xs-toast>

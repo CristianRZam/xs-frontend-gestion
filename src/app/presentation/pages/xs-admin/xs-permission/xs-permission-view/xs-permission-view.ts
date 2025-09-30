@@ -29,6 +29,7 @@ export class XsPermissionView implements OnInit, AfterViewInit {
   assignedPermissions: PermissionModel[] = [];
 
   private roleId!: number;
+  public roleName: string = "";
 
   constructor(
     private permissionUseCase: PermissionUseCase,
@@ -64,7 +65,7 @@ export class XsPermissionView implements OnInit, AfterViewInit {
           this.role = data.role;
           this.allPermissions = data.allPermissions;
           this.assignedPermissions = data.assignedPermissions;
-
+          this.roleName = this.role.name!;
         } else {
           console.warn('No se recibieron datos válidos', response);
         }

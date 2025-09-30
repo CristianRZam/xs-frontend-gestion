@@ -4,24 +4,34 @@ import { XsFieldset } from "../../../../../shared/components/xs-fieldset/xs-fiel
 import { XsInputText } from "../../../../../shared/components/xs-input-text/xs-input-text";
 import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import {XsFilterButtons} from '../../../../../shared/components/xs-filter-buttons/xs-filter-buttons';
+import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
+import {RoleViewRequest} from '../../../../../core/domain/dtos/resquests/role-view.request';
 
 @Component({
   selector: 'xs-role-filter',
   imports: [
     XsFieldset,
     XsInputText,
-    XsFilterButtons
+    XsFilterButtons,
+    XsSelect
   ],
   templateUrl: './xs-role-filter.html',
   styleUrls: ['./xs-role-filter.scss']
 })
 export class XsRoleFilter implements OnInit {
-  @Output() filter: EventEmitter<{ name: string }> = new EventEmitter();
-  @Output() clear: EventEmitter<{}> = new EventEmitter();
+  @Output() filter: EventEmitter<RoleViewRequest> = new EventEmitter();
+  @Output() clear: EventEmitter<RoleViewRequest> = new EventEmitter();
 
   public formulario!: FormGroup;
 
+  public statusOptions = [
+    { label: 'Habilitado', value: true },
+    { label: 'Inhabilitado', value: false }
+  ];
+
   get name(): AbstractControl | null { return this.formulario.get('name'); }
+  get description(): AbstractControl | null { return this.formulario.get('description'); }
+  get status(): AbstractControl | null { return this.formulario.get('status'); }
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -32,17 +42,34 @@ export class XsRoleFilter implements OnInit {
   private configForm(): void {
     this.formulario = this.formBuilder.group({
       name: [null],
+      description: [null],
+      status: [null]
     });
   }
 
   onClickFilter(): void {
-    this.filter.emit({
-      name: this.name?.value ? this.name.value : '',
-    });
+    const request: RoleViewRequest = {
+      name: this.name?.value || '',
+      description: this.description?.value || '',
+      status: this.status?.value !== null ? this.status?.value : undefined,
+      page: 0,
+      size: 5
+    };
+
+    this.filter.emit(request);
   }
 
   onClickClear(): void {
-    this.name?.setValue(null);
-    this.clear.emit();
+    this.formulario.reset();
+
+    const request: RoleViewRequest = {
+      name:  '',
+      description: '',
+      status: undefined,
+      page: 0,
+      size: 5
+    };
+
+    this.clear.emit(request);
   }
 }

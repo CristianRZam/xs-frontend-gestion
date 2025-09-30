@@ -12,7 +12,7 @@
   </ng-template>
   <ng-template pTemplate="footer">
     @if (showCancelButton) {
-      <xs-button [label]="cancelButtonLabel" [severity]="'danger'" icon="fa-solid fa-ban"
+      <xs-button [label]="cancelButtonLabel" [severity]="'danger'" [icon]="cancelButtonIcon"
                  (click)="onHide()" [variant]="'outlined'"></xs-button>
     }
 

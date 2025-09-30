@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { XsCard } from '../../../../../shared/components/xs-card/xs-card';
 import { XsButton } from '../../../../../shared/components/xs-button/xs-button';
 import { PermissionModel } from '../../../../../core/domain/models/permission.model';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 
 @Component({
   selector: 'xs-permission-by-role-register',
@@ -16,6 +17,14 @@ export class XsPermissionByRoleRegister {
   @Input() assignedPermissions: PermissionModel[] = [];
 
   @Output() saved = new EventEmitter<number[]>();
+
+  canEdit: boolean = false;
+  objectFn = Object; // para poder usar Object.keys en la vista
+
+  constructor(private authService: AuthService) {
+    const permissions = this.authService.getPermissions();
+    this.canEdit = permissions.includes('ASSIGN_PERMISSION');
+  }
 
   isAssigned(permission: PermissionModel): boolean {
     return this.assignedPermissions.some(p => p.id === permission.id);
@@ -36,4 +45,15 @@ export class XsPermissionByRoleRegister {
     this.saved.emit(selectedIds);
   }
 
+  // Agrupar permisos por módulo
+  get groupedPermissions(): Record<string, PermissionModel[]> {
+    return this.permissions.reduce((groups: Record<string, PermissionModel[]>, perm) => {
+      const key = perm.module || 'Otros';
+      if (!groups[key]) {
+        groups[key] = [];
+      }
+      groups[key].push(perm);
+      return groups;
+    }, {});
+  }
 }

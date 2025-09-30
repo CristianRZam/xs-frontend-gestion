@@ -30,6 +30,7 @@ export class XsDialog implements OnInit {
   @Input() resizable: boolean = true;
   @Input() maximizable: boolean = true;
   @Input() okButtonIcon: string = "fa-regular fa-floppy-disk"
+  @Input() cancelButtonIcon: string = "fa-solid fa-ban"
   @Output() onAceptar: EventEmitter<any> = new EventEmitter();
   @Output() onCerrar: EventEmitter<any> = new EventEmitter();
   @ContentChild('additionalButtons', { read: TemplateRef }) additionalButtons!: TemplateRef<unknown>;

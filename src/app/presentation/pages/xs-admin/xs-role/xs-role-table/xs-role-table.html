@@ -1,10 +1,13 @@
 <div class="my-4">
-  <xs-table [columns]="columns" [dataSource]="roles" title="Lista de usuarios" [addButtonShow]="true" [exportExcelButtonShow]="true"
-            [exportPdfButtonShow]="true" [statusToggleButtonActive]="true" (onUpdateActiveItem)="onUpdateActiveItem($event)"
+  <xs-table [columns]="columns" [dataSource]="roles" title="Lista de usuarios" [addButtonShow]="canCreate" [editButtonShow]="canEdit"
+            [exportExcelButtonShow]="canExport" [deleteButtonShow]="canDelete"
+            [exportPdfButtonShow]="canExport" [statusToggleButtonActive]="canEdit" (onUpdateActiveItem)="onUpdateActiveItem($event)"
   (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
   (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
     <ng-template #additionalTableButtons let-item="item">
-      <xs-button [rounded]="false" [variant]="'outlined'" icon="fa-solid fa-user-shield" (click)="onEditPermission(item)"></xs-button>
+      @if (canViewPermission){
+        <xs-button [rounded]="false" [variant]="'outlined'" icon="fa-solid fa-user-shield" (click)="onEditPermission(item)"></xs-button>
+      }
     </ng-template>
   </xs-table>
 </div>

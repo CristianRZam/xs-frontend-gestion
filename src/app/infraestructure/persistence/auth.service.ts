@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
-import { LocalStorageService } from '../../shared/services/local-storage.service';
-import { JwtHelperService } from '@auth0/angular-jwt';
+import {Injectable} from '@angular/core';
+import {LocalStorageService} from '../../shared/services/local-storage.service';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {UserModel} from '../../core/domain/models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -32,4 +33,26 @@ export class AuthService {
     const decoded = this.jwtHelper.decodeToken<{ permissions: string[] }>(token);
     return decoded?.permissions || [];
   }
+
+  getUser(): UserModel | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    const decoded = this.jwtHelper.decodeToken<any>(token);
+
+    return {
+      id: decoded.id,
+      username: decoded.username,
+      email: decoded.email,
+      active: decoded.active,
+      permissions: decoded.permissions || [],
+      userRoles: decoded.roles?.map((role: string) => ({
+        role: {name: role}
+      })) || [],
+      person: {
+        fullName: decoded.fullname
+      }
+    };
+  }
+
 }

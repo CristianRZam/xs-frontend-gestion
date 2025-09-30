@@ -4,6 +4,7 @@ import {XsTableColumn} from '../../../../../shared/components/xs-table/xs-table.
 import {RoleModel} from '../../../../../core/domain/models/role.model';
 import {XsButton} from '../../../../../shared/components/xs-button/xs-button';
 import {Router} from '@angular/router';
+import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
 
 @Component({
   selector: 'xs-role-table',
@@ -25,6 +26,12 @@ export class XsRoleTable {
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
 
+  canExport = false;
+  canCreate = false;
+  canEdit = false;
+  canDelete = false;
+  canViewPermission =false;
+
   columns = [
     new XsTableColumn({ field: 'name', headerText: 'Rol', displayOnInit: true, isDefault: true }),
     new XsTableColumn({ field: 'description', headerText: 'Descripción', displayOnInit: true, isDefault: true }),
@@ -41,7 +48,14 @@ export class XsRoleTable {
     }),
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private authService: AuthService) {
+    const permissions = this.authService.getPermissions();
+    this.canExport = permissions.includes('EXPORT_ROLE');
+    this.canCreate = permissions.includes('CREATE_ROLE');
+    this.canEdit = permissions.includes('EDIT_ROLE');
+    this.canDelete = permissions.includes('DELETE_ROLE');
+    this.canViewPermission = permissions.includes('VIEW_PERMISSION');
+  }
 
   onAddItem() {
     this.addItem.emit();

@@ -1,4 +1,4 @@
-<xs-page-header title="Gestiona los Permisos" description="Gestiona todos los permisos del rol aquí"></xs-page-header>
+<xs-page-header title="Gestiona los Permisos de {{ roleName }}" description="Gestiona todos los permisos del rol aquí"></xs-page-header>
 
 <xs-permission-by-role-register [permissions]="allPermissions" [assignedPermissions]="assignedPermissions" (saved)="save($event)"></xs-permission-by-role-register>
 
