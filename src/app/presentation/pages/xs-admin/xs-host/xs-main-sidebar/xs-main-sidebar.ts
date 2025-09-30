@@ -72,7 +72,6 @@ export class XsMainSidebar implements OnInit {
     this.isMobile = window.innerWidth < 1024;
   }
 
-
   closeSidebar() {
     if (this.isMobile) {
       this.visible = false;
