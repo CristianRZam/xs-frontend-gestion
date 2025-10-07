@@ -17,7 +17,8 @@
         <xs-input-text
           placeholder="Código"
           [control]="$any(formConfig.code)"
-          class="w-full">
+          class="w-full"
+          [disabled]="parameterModel.id != null">
         </xs-input-text>
 
         <!-- Tipo -->
@@ -27,7 +28,8 @@
           [dataSource]="types"
           optionLabel="name"
           optionValue="parameterId"
-          class="w-full">
+          class="w-full"
+          (change)="onTypeChange($event)">
         </xs-select>
 
         <!-- Orden -->
@@ -45,22 +47,18 @@
         </xs-input-text>
       </div>
 
-      <xs-input-text
-        placeholder="Nombre"
-        [control]="$any(formConfig.name)"
-        class="w-full">
-      </xs-input-text>
-
       <!-- Campo dinámico para Name -->
-      <!--<div class="w-full">
+      <div class="w-full">
         @if (selectedType === 1) {
           <xs-input-file
             placeholder="Subir archivo"
-            accept="image/*,application/pdf"
-            [control]="$any(formConfig.name)">
+            [control]="$any(formConfig.name)"
+            (fileTooLarge)="onFileTooLarge($event)"
+            [maxFileSize]="maxFileSize"
+            (onDownload)="download($event)"
+          >
           </xs-input-file>
         }
-
 
         @if (!selectedType || selectedType === 2) {
           <xs-input-text
@@ -69,8 +67,7 @@
             class="w-full">
           </xs-input-text>
         }
-      </div> -->
-
+      </div>
     </form>
   </ng-template>
 </xs-dialog>

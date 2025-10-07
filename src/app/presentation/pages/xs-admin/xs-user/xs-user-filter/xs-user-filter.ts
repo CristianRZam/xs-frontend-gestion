@@ -31,8 +31,8 @@ export class XsUserFilter implements OnInit {
   public formulario!: FormGroup;
 
   public statusOptions = [
-    { label: 'Habilitado', value: true },
-    { label: 'Inhabilitado', value: false }
+    { label: 'Habilitado', value: true, active: true },
+    { label: 'Inhabilitado', value: false, active: true }
   ];
 
   get typeDocuments(): AbstractControl | null { return this.formulario.get('typeDocuments'); }

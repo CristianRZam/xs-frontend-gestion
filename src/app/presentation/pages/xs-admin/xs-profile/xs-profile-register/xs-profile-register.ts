@@ -65,7 +65,19 @@ export class XsProfileRegister implements OnInit {
       });
     }
 
-    this.typeDocuments = item?.documentTypes!;
+    // --- Filtrado de tipos de documento ---
+    const userTypeDocumentId = item?.user?.person?.typeDocument;
+
+    // 1. Documentos activos y no eliminados
+    const typeDocumentsDisponibles = item?.documentTypes?.filter(d => !d.deleted && d.active) ?? [];
+
+    // 2. Tipo de documento eliminado/inactivo que el usuario tiene asignado
+    const typeDocumentAsignadoNoDisponible = item?.documentTypes?.filter(
+      d => d.parameterId === userTypeDocumentId && (d.deleted || !d.active)
+    ) ?? [];
+
+    // 3. Unir ambos para mostrarlo correctamente
+    this.typeDocuments = [...typeDocumentsDisponibles, ...typeDocumentAsignadoNoDisponible];
 
     this.dialogModel.display = true;
   }

@@ -25,8 +25,8 @@ export class XsRoleFilter implements OnInit {
   public formulario!: FormGroup;
 
   public statusOptions = [
-    { label: 'Habilitado', value: true },
-    { label: 'Inhabilitado', value: false }
+    { label: 'Habilitado', value: true, active: true },
+    { label: 'Inhabilitado', value: false, active: true }
   ];
 
   get name(): AbstractControl | null { return this.formulario.get('name'); }

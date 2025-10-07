@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {XsTableColumn} from '../../../../../shared/components/xs-table/xs-table.model';
-import {Router} from '@angular/router';
 import {XsTable} from '../../../../../shared/components/xs-table/xs-table';
 import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
+import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
 
 @Component({
   selector: 'xs-parameter-table',
@@ -23,10 +23,15 @@ export class XsParameterTable {
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
 
+  canExport = false;
+  canCreate = false;
+  canEdit = false;
+  canDelete = false;
+
   columns = [
     new XsTableColumn({ field: 'name', headerText: 'Nombre', displayOnInit: true, isDefault: true }),
     new XsTableColumn({ field: 'shortName', headerText: 'Nombre Corto', displayOnInit: true, isDefault: true }),
-    new XsTableColumn({ field: 'orderNumber', headerText: 'Orden', displayOnInit: true, isDefault: true, headerTextAlign: 'center', textAlign: 'center', }),
+    new XsTableColumn({ field: 'typeName', headerText: 'Tipo', displayOnInit: true, isDefault: true, headerTextAlign: 'center', textAlign: 'center', }),
     new XsTableColumn({ field: 'code', headerText: 'Código', displayOnInit: true, isDefault: true, headerTextAlign: 'center', textAlign: 'center', }),
     new XsTableColumn({
       field: 'active',
@@ -41,7 +46,13 @@ export class XsParameterTable {
     }),
   ];
 
-  constructor(private router: Router) {}
+  constructor(private authService: AuthService) {
+    const permissions = this.authService.getPermissions();
+    this.canExport = permissions.includes('EXPORT_PARAMETER');
+    this.canCreate = permissions.includes('CREATE_PARAMETER');
+    this.canEdit = permissions.includes('EDIT_PARAMETER');
+    this.canDelete = permissions.includes('DELETE_PARAMETER');
+  }
 
   onAddItem() {
     this.addItem.emit();

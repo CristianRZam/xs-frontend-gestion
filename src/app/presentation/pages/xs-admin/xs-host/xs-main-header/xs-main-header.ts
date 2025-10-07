@@ -37,6 +37,7 @@ export class XsMainHeader implements OnInit {
   @Input() user: UserModel = {};
 
   @Output() toggleSidebar = new EventEmitter<void>();
+  @Output() toggleConfig = new EventEmitter<void>();
 
   avatarMenuItems: MenuItem[] = [];
 
@@ -76,4 +77,7 @@ export class XsMainHeader implements OnInit {
     this.router.navigate(['/']);
   }
 
+  onConfigClick() {
+    this.toggleConfig.emit();
+  }
 }

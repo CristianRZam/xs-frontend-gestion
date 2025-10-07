@@ -98,28 +98,8 @@ export class FormRegistrarConfig {
     };
   }
 
-
-
-
   assignModel(): UserRequest {
     return this.formulario.getRawValue() as UserRequest;
   }
 
-  formSubmitEvent(): { error: boolean, mensaje?: string } {
-    if (this.formulario.valid) {
-      return { error: false };
-    } else {
-      Object.keys(this.formulario.controls).forEach((field: any) => {
-        let control: any = this.formulario.get(field);
-        control?.markAsTouched({ onlySelf: true });
-        if(control.controls) {
-          Object.keys(control.controls).forEach((subField: any) => {
-            control = this.formulario.get(field)!.get(subField);
-            control?.markAsTouched({ onlySelf: true });
-          });
-        }
-      });
-      return { error: true, mensaje: this.util.obtenerPrimerMensajeErrorFormulario(this.formulario) }
-    }
-  }
 }

@@ -9,10 +9,11 @@ export abstract class ParameterRepository {
   abstract init(request: ParameterViewRequest): Observable<ApiResponse<ParameterViewResponse>>;
   abstract initForm(id?: number): Observable<ApiResponse<ParameterFormResponse>>;
   abstract getParameterById(id: number): Observable<ApiResponse<any>>;
-  abstract create(request: ParameterModel): Observable<ApiResponse<any>>;
-  abstract update(request: ParameterModel): Observable<ApiResponse<any>>;
+  abstract create(request: FormData): Observable<ApiResponse<ParameterModel>>;
+  abstract update(request: FormData): Observable<ApiResponse<ParameterModel>>;
   abstract delete(id: number): Observable<ApiResponse<any>>;
   abstract updateStatus(id: number): Observable<ApiResponse<any>>;
   abstract exportPdf(request: ParameterViewRequest): Observable<Blob>;
   abstract exportExcel(request: ParameterViewRequest): Observable<Blob>;
+  abstract download(filename: string): Observable<Blob>;
 }

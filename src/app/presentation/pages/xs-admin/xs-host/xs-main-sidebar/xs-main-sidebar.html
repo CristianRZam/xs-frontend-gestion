@@ -47,10 +47,10 @@
             <!-- Section header -->
             <div
               pRipple
-              class="px-4 py-3 flex items-center justify-between cursor-pointer text-white font-semibold uppercase text-sm rounded hover:bg-white/10 dark:hover:bg-gray-700 transition-colors"
+              class="px-4 py-3 mt-5 flex items-center justify-between cursor-pointer text-white font-semibold uppercase text-sm rounded hover:bg-white/10 dark:hover:bg-gray-700 transition-colors"
               (click)="section.expanded = !section.expanded"
             >
-              <span>{{ section.label }}</span>
+              <span class="font-bold">{{ section.label }}</span>
               <i
                 [class]="
                   section.expanded

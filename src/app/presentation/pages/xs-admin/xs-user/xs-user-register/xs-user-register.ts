@@ -4,13 +4,13 @@ import {FormRegistrarConfig} from './form-register-config';
 import {ReactiveFormsModule} from '@angular/forms';
 import {XsDialog} from '../../../../../shared/components/xs-dialog/xs-dialog';
 import {XsInputText} from '../../../../../shared/components/xs-input-text/xs-input-text';
-import {UserModel} from '../../../../../core/domain/models/user.model';
 import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
 import {UserFormResponse} from '../../../../../core/domain/dtos/responses/user-form.response';
 import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
 import {XsMultiselect} from '../../../../../shared/components/xs-multiselect/xs-multiselect';
 import {RoleModel} from '../../../../../core/domain/models/role.model';
 import {UserRequest} from '../../../../../core/domain/dtos/resquests/user.request';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-user-register',
@@ -42,6 +42,7 @@ export class XsUserRegister implements OnInit {
 
   public constructor(
     public formConfig: FormRegistrarConfig,
+    private util: Formvalidators,
   ) {
   }
   public typeDocuments: ParameterModel[] = [];
@@ -73,7 +74,21 @@ export class XsUserRegister implements OnInit {
       });
     }
 
-    this.typeDocuments = item?.documentTypes!;
+    // --- Filtrado de tipos de documento ---
+    const userTypeDocumentId = item?.user?.person?.typeDocument;
+
+    // 1. Documentos activos y no eliminados
+    const typeDocumentsDisponibles = item?.documentTypes?.filter(d => !d.deleted && d.active) ?? [];
+
+    // 2. Tipo de documento eliminado/inactivo que el usuario tiene asignado
+    const typeDocumentAsignadoNoDisponible = item?.documentTypes?.filter(
+      d => d.parameterId === userTypeDocumentId && (d.deleted || !d.active)
+    ) ?? [];
+
+    // 3. Unir ambos para mostrarlo correctamente
+    this.typeDocuments = [...typeDocumentsDisponibles, ...typeDocumentAsignadoNoDisponible];
+
+
 
     // roles válidos (activos y no eliminados)
     const rolesDisponibles = item?.roles?.filter(r => !r.deleted && r.active) ?? [];
@@ -102,7 +117,7 @@ export class XsUserRegister implements OnInit {
   }
 
   formSubmitEvent(): void {
-    let event = this.formConfig.formSubmitEvent();
+    let event = this.util.formSubmitEvent(this.formConfig.formulario);
     if(event.error) {
       this.toast.show(event.mensaje!, 'error', "Rol");
     }else {

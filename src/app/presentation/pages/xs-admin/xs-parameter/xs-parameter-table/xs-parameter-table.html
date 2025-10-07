@@ -1,6 +1,7 @@
 <div class="my-4">
-  <xs-table [columns]="columns" [dataSource]="parameters" title="Lista de parámetros" [addButtonShow]="true" [exportExcelButtonShow]="true"
-            [exportPdfButtonShow]="true" [statusToggleButtonActive]="true" (onUpdateActiveItem)="onUpdateActiveItem($event)"
+  <xs-table [columns]="columns" [dataSource]="parameters" title="Lista de parámetros" [addButtonShow]="canCreate" [editButtonShow]="canEdit"
+            [exportExcelButtonShow]="canExport" [deleteButtonShow]="canDelete"
+            [exportPdfButtonShow]="canExport" [statusToggleButtonActive]="canEdit" (onUpdateActiveItem)="onUpdateActiveItem($event)"
             (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
             (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
   </xs-table>

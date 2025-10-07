@@ -3,9 +3,9 @@ import { Observable } from 'rxjs';
 import {ApiResponse} from '../../domain/dtos/responses/api.response';
 import {ParameterRepository} from '../../domain/repositories/parameter.repository';
 import {ParameterViewRequest} from '../../domain/dtos/resquests/parameter-view.request';
-import {ParameterModel} from '../../domain/models/parameter.model';
 import {ParameterViewResponse} from '../../domain/dtos/responses/parameter-view.response';
 import {ParameterFormResponse} from '../../domain/dtos/responses/parameter-form.response';
+import {ParameterModel} from '../../domain/models/parameter.model';
 
 @Injectable({ providedIn: 'root' })
 export class ParameterUseCase {
@@ -23,13 +23,14 @@ export class ParameterUseCase {
     return this.repository.getParameterById(id);
   }
 
-  create(request: ParameterModel): Observable<ApiResponse<any>> {
+  create(request: FormData): Observable<ApiResponse<ParameterModel>> {
     return this.repository.create(request);
   }
 
-  update(request: ParameterModel): Observable<ApiResponse<any>> {
+  update(request: FormData): Observable<ApiResponse<ParameterModel>> {
     return this.repository.update(request);
   }
+
 
   delete(id: number): Observable<ApiResponse<any>> {
     return this.repository.delete(id);
@@ -45,5 +46,9 @@ export class ParameterUseCase {
 
   exportExcel(request: ParameterViewRequest): Observable<Blob> {
     return this.repository.exportExcel(request);
+  }
+
+  download(filename: string): Observable<Blob> {
+    return this.repository.download(filename);
   }
 }

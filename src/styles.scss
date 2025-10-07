@@ -1,5 +1,11 @@
 @use "tailwindcss";
 
+//@tailwind base;
+//@tailwind components;
+//@tailwind utilities;
+
+@custom-variant dark (&:where(.dark, .dark *));
+
 .full-width,
 .full-width > button {
   width: 100% !important;

@@ -11,6 +11,7 @@ import {ParameterUseCase} from '../../../../../core/application/use-cases/parame
 import {XsParameterFilter} from '../xs-parameter-filter/xs-parameter-filter';
 import {ParameterFormResponse} from '../../../../../core/domain/dtos/responses/parameter-form.response';
 import {ParameterViewRequest} from '../../../../../core/domain/dtos/resquests/parameter-view.request';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-parameter-view',
@@ -33,22 +34,23 @@ export class XsParameterView implements OnInit, AfterViewInit {
 
   parameterForResponse: ParameterFormResponse = {};
   public parameters: ParameterModel[] = [];
+  public typesParameter: ParameterModel[] = [];
   public totalParameters = 0;
   public activeParameters = 0;
   public inactiveParameters = 0;
   public parametersWithParent = 0;
   filter: ParameterViewRequest = {
-    name: '',
-    shortName: '',
-    code: '',
-    type: undefined,
     page: 0,
     size: 5
   };
 
 
 
-  constructor(private parameterUsecase: ParameterUseCase, private errorHandler: ErrorHandlerService) {}
+  constructor(
+    private parameterUsecase: ParameterUseCase,
+    private errorHandler: ErrorHandlerService,
+    private util: Formvalidators
+  ) {}
 
   ngOnInit(): void {}
 
@@ -66,6 +68,7 @@ export class XsParameterView implements OnInit, AfterViewInit {
         if (response.success && response.data) {
           const data = response.data;
           this.parameters = data.parameters;
+          this.typesParameter = data.typesParameter;
           this.totalParameters = data.totalParameters;
           this.activeParameters = data.activeParameters;
           this.inactiveParameters = data.inactiveParameters;
@@ -83,17 +86,14 @@ export class XsParameterView implements OnInit, AfterViewInit {
   }
 
 
-  updateFilter(
-    event: { name: string; shortName: string; code: string; type: number | null } = { name: '', shortName: '', code: '', type: null }
-  ) {
-    this.filter = {
-      ...this.filter,
-      name: event.name,
-      shortName: event.shortName,
-      code: event.code,
-      type: event.type ?? undefined,
-      page: 0
-    };
+  updateFilter(event: ParameterViewRequest) {
+    this.filter.name = event.name;
+    this.filter.shortName = event.shortName;
+    this.filter.code = event.code;
+    this.filter.type = event.type;
+    this.filter.status = event.status;
+    this.filter.page = 0;
+    this.filter.size = this.filter.size || 5;
 
     this.load();
   }
@@ -134,9 +134,16 @@ export class XsParameterView implements OnInit, AfterViewInit {
 
 
 
-  create(item: ParameterModel) {
+  create(payload: { model: ParameterModel, file: File | null }) {
     this.loader.show('Guardando parametro...');
-    this.parameterUsecase.create(item).subscribe({
+
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify(payload.model)], { type: 'application/json' }));
+    if (payload.file) {
+      formData.append('file', payload.file);
+    }
+
+    this.parameterUsecase.create(formData).subscribe({
       next: (res) => {
         if (res.success) {
           this.toast.show("Parámetro registrado con éxito.");
@@ -155,9 +162,16 @@ export class XsParameterView implements OnInit, AfterViewInit {
     });
   }
 
-  update(item: ParameterModel) {
+  update(payload: { model: ParameterModel, file: File | null }) {
     this.loader.show('Actualizando parámetro...');
-    this.parameterUsecase.update(item).subscribe({
+
+    const formData = new FormData();
+    formData.append('data', new Blob([JSON.stringify(payload.model)], { type: 'application/json' }));
+    if (payload.file) {
+      formData.append('file', payload.file);
+    }
+
+    this.parameterUsecase.update(formData).subscribe({
       next: (res) => {
         if (res.success) {
           this.toast.show("Parámetro actualizado correctamente.");
@@ -168,13 +182,14 @@ export class XsParameterView implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
-        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "rol");
+        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "parámetro");
         this.toast.show(msg, 'error');
         this.loader.hide();
       },
       complete: () => this.loader.hide()
     });
   }
+
 
 
   onDeleteItem(item: ParameterModel) {
@@ -223,7 +238,7 @@ export class XsParameterView implements OnInit, AfterViewInit {
     this.loader.show('Generando PDF...');
     this.parameterUsecase.exportPdf(this.filter).subscribe({
       next: (blob) => {
-        this.downloadFile(blob, 'parameters_report.pdf');
+        this.util.downloadFile(blob, 'parameters_report.pdf');
         this.toast.show("Reporte PDF generado con éxito.");
       },
       error: (e) => {
@@ -239,7 +254,7 @@ export class XsParameterView implements OnInit, AfterViewInit {
     this.loader.show('Generando Excel...');
     this.parameterUsecase.exportExcel(this.filter).subscribe({
       next: (blob) => {
-        this.downloadFile(blob, 'parameters_report.xlsx');
+        this.util.downloadFile(blob, 'parameters_report.xlsx');
         this.toast.show("Reporte Excel generado con éxito.");
       },
       error: (e) => {
@@ -251,13 +266,20 @@ export class XsParameterView implements OnInit, AfterViewInit {
     });
   }
 
-  // 📌 Utilidad para descargar archivo
-  private downloadFile(blob: Blob, filename: string) {
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    a.click();
-    window.URL.revokeObjectURL(url);
+
+  downloadFile(filename: string) {
+    this.loader.show('Descargando archivo...');
+    this.parameterUsecase.download(filename).subscribe({
+      next: (blob) => {
+        this.util.downloadFile(blob, filename);
+        this.toast.show("Archivo descargado correctamente.");
+      },
+      error: (e) => {
+        console.error('Error al descargar archivo', e);
+        this.toast.show("Error al descargar archivo", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
   }
 }

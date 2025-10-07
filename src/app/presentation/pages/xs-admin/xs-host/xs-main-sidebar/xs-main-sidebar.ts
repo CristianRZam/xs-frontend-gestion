@@ -113,22 +113,17 @@ export class XsMainSidebar implements OnInit {
             ],
           },
           {
-            label: 'Configuraciones',
+            label: 'Configuración',
             icon: 'fas fa-cogs',
             expanded: false,
-            permission: ['VIEW_PARAMETER', 'VIEW_SETTINGS'],
+            permission: ['VIEW_PARAMETER'],
             children: [
               {
                 label: 'Parámetros',
                 icon: 'fas fa-sliders-h',
                 routerLink: '/admin/parameter',
                 permission: 'VIEW_PARAMETER',
-              },
-              {
-                label: 'Ajustes generales',
-                icon: 'fas fa-wrench',
-                permission: 'VIEW_SETTINGS',
-              },
+              }
             ],
           },
         ],

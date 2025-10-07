@@ -13,11 +13,46 @@
       'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
       'p-invalid': control.invalid && control.touched
     }"
-  />
-  <label [for]="optionLabel">{{placeholder}}</label>
+  >
+    <!-- Opciones del dropdown -->
+    <ng-template let-option pTemplate="item">
+      <div class="flex items-center gap-2">
+        @if (option.deleted) {
+          <i class="fa-solid fa-ban text-red-500 opacity-70"></i>
+        } @else if (!option.active) {
+          <i class="fa-solid fa-ban text-yellow-600"></i>
+        }
+        <span [ngClass]="{
+          'text-gray-400 opacity-60 line-through': option.deleted,
+          'text-yellow-600 opacity-70': !option.active
+        }">
+          {{ option[optionLabel] }}
+        </span>
+      </div>
+    </ng-template>
+
+    <!-- Cómo se ve el item seleccionado -->
+    <ng-template let-option pTemplate="selectedItem">
+      <div class="flex items-center gap-2">
+        @if (option?.deleted) {
+          <i class="fa-solid fa-ban text-red-500 opacity-70"></i>
+        } @else if (!option?.active) {
+          <i class="fa-solid fa-ban text-yellow-600"></i>
+        }
+        <span [ngClass]="{
+          'text-gray-400 opacity-60 line-through': option?.deleted,
+          'text-yellow-600 opacity-70': !option?.active
+        }">
+          {{ option ? option[optionLabel] : placeholder }}
+        </span>
+      </div>
+    </ng-template>
+  </p-select>
+
+  <label [for]="optionLabel">{{ placeholder }}</label>
 </p-floatlabel>
 
-
+<!-- Mensajes de error -->
 @if (control.errors && control.touched) {
   <p-message
     class="xs-error-message"

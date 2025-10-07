@@ -4,6 +4,7 @@ export interface ParameterModel {
   parameterId?: number;
   code?: string;
   type?: number;
+  typeName?: string;
   name?: string;
   shortName?: string;
   orderNumber?: number;

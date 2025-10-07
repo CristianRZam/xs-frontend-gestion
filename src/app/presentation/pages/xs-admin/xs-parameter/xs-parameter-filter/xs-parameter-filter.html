@@ -2,25 +2,9 @@
   <xs-fieldset legend="Criterios de búsqueda">
     <ng-template #content>
       <!-- Grid responsiva -->
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
-        <!-- Nombre -->
-        <div class="w-full">
-          <xs-input-text
-            placeholder="Nombre"
-            [control]="$any(name)">
-          </xs-input-text>
-        </div>
-
-        <!-- Nombre corto -->
-        <div class="w-full">
-          <xs-input-text
-            placeholder="Nombre corto"
-            [control]="$any(shortName)">
-          </xs-input-text>
-        </div>
-
-        <!-- Código -->
+        <!-- Fila 1 (3 campos) -->
         <div class="w-full">
           <xs-input-text
             placeholder="Código"
@@ -28,19 +12,46 @@
           </xs-input-text>
         </div>
 
-        <!-- Tipo -->
         <div class="w-full">
+          <xs-input-text
+            placeholder="Nombre"
+            [control]="$any(name)">
+          </xs-input-text>
+        </div>
+
+        <div class="w-full">
+          <xs-input-text
+            placeholder="Nombre corto"
+            [control]="$any(shortName)">
+          </xs-input-text>
+        </div>
+
+        <!-- Fila 2 (2 campos, quedarán centrados en desktop) -->
+        <div class="w-full lg:col-span-1">
           <xs-select
             placeholder="Tipo"
             [control]="$any(type)"
-            [dataSource]="types"
+            [dataSource]="typesParameter"
             optionLabel="name"
             optionValue="parameterId"
             class="w-full">
           </xs-select>
         </div>
+
+        <div class="w-full lg:col-span-1">
+          <xs-select
+            placeholder="Estado"
+            [control]="$any(status)"
+            [dataSource]="statusOptions"
+            optionLabel="label"
+            optionValue="value"
+            [showClear]="true">
+          </xs-select>
+        </div>
       </div>
-      <div class="mt-2">
+
+      <!-- Botones de acción -->
+      <div class="mt-4 flex justify-center">
         <xs-filter-buttons
           (clear)="onClickClear()"
           (filter)="onClickFilter()">

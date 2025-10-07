@@ -7,15 +7,23 @@ import { UserModel } from '../../../../../core/domain/models/user.model';
 import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 import { filter } from 'rxjs/operators';
 import {DrawerModule} from 'primeng/drawer';
+import {XsMainConfig} from '../xs-main-config/xs-main-config';
 
 @Component({
   selector: 'xs-host-view',
-  imports: [XsMainSidebar, XsMainHeader, RouterOutlet, DrawerModule],
+  imports: [
+    XsMainSidebar,
+    XsMainHeader,
+    RouterOutlet,
+    DrawerModule,
+    XsMainConfig
+  ],
   templateUrl: './xs-host-view.html',
   styleUrl: './xs-host-view.scss'
 })
 export class XsHostView implements OnInit {
   sidebarVisible: boolean = true;
+  configVisible: boolean = false;
   breadcrumbItems: MenuItem[] = [];
   public user: UserModel = {};
 
@@ -44,6 +52,10 @@ export class XsHostView implements OnInit {
 
   toggleSidebar() {
     this.sidebarVisible = !this.sidebarVisible;
+  }
+
+  toggleConfig() {
+    this.configVisible = !this.configVisible;
   }
 
   private buildBreadcrumbs(

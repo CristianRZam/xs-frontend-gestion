@@ -1,6 +1,6 @@
 @if (allowFloatLabel) {
 
-  <p-floatlabel [variant]="variant">
+  <p-floatlabel [variant]="variant" >
   <input
     pInputText
     [pSize]="size"
@@ -8,6 +8,7 @@
     type="text"
     [formControl]="control"
     [maxlength]="maxLength"
+    [disabled]="disabled"
     [ngClass]="{
       'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
       'p-invalid': control.invalid && control.touched
@@ -28,6 +29,7 @@
   [formControl]="control"
   [maxlength]="maxLength"
   [placeholder]="placeholder"
+  [disabled]="disabled"
   [ngClass]="{
     'p-invalid': control.invalid && control.touched
   }"

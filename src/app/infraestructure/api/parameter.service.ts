@@ -29,19 +29,20 @@ export class ParameterService implements ParameterRepository {
     return this.http.get<ApiResponse<ParameterModel>>(`${this.baseUrl}/get/${id}`);
   }
 
-  create(request: ParameterModel): Observable<ApiResponse<ParameterModel>> {
+  create(request: FormData): Observable<ApiResponse<ParameterModel>> {
     return this.http.post<ApiResponse<ParameterModel>>(
       `${this.baseUrl}/create`,
       request
     );
   }
 
-  update(request: ParameterModel): Observable<ApiResponse<ParameterModel>> {
+  update(request: FormData): Observable<ApiResponse<ParameterModel>> {
     return this.http.put<ApiResponse<ParameterModel>>(
       `${this.baseUrl}/update`,
       request
     );
   }
+
 
   delete(id: number): Observable<ApiResponse<boolean>> {
     return this.http.delete<ApiResponse<boolean>>(
@@ -67,5 +68,14 @@ export class ParameterService implements ParameterRepository {
       responseType: 'blob',
     });
   }
+
+  download(filename: string): Observable<Blob> {
+    const request = { filename };
+    return this.http.post(`${this.baseUrl}/download-file`, request, {
+      responseType: 'blob',
+    });
+  }
+
+
 
 }

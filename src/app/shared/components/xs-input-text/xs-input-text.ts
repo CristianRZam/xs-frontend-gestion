@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FloatLabelModule } from 'primeng/floatlabel';
 import { InputTextModule } from 'primeng/inputtext';
@@ -18,7 +18,7 @@ import { MessageModule } from 'primeng/message';
   templateUrl: './xs-input-text.html',
   styleUrl: './xs-input-text.scss'
 })
-export class XsInputText implements OnInit {
+export class XsInputText implements OnInit, OnChanges  {
  @Input() control: FormControl = new FormControl();
   @Input() placeholder: string = '';
   @Input() type: 'text' | 'password' | 'number' | 'date' | 'mask' = 'text';
@@ -28,6 +28,7 @@ export class XsInputText implements OnInit {
   @Input() maxLength: number = 255;
   @Input() id: string = '';
   @Input() allowFloatLabel: boolean = true;
+  @Input() disabled: boolean = false;
   public objectFn = Object;
 
   @Output() input = new EventEmitter<any>();
@@ -36,7 +37,25 @@ export class XsInputText implements OnInit {
   ngOnInit(): void {
     if (!this.id) this.id = `xs-input-${Math.floor(Math.random() * 100000)}`;
     this.control.updateValueAndValidity();
+
+    // 👇 Sincronizamos disabled con el FormControl
+    if (this.disabled) {
+      this.control.disable({ emitEvent: false });
+    } else {
+      this.control.enable({ emitEvent: false });
+    }
   }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['disabled']) {
+      if (this.disabled) {
+        this.control.disable({ emitEvent: false });
+      } else {
+        this.control.enable({ emitEvent: false });
+      }
+    }
+  }
+
 
   onInput(event: any): void {
     this.input.emit(event);

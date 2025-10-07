@@ -2,7 +2,8 @@
 
   <!-- Header -->
   <div header>
-    <xs-main-header [breadcrumbItems]="breadcrumbItems" (toggleSidebar)="toggleSidebar()" [user]="user"></xs-main-header>
+    <xs-main-header [breadcrumbItems]="breadcrumbItems" (toggleSidebar)="toggleSidebar()" (toggleConfig)="toggleConfig()" [user]="user"></xs-main-header>
+    <xs-main-config [(visible)]="configVisible"></xs-main-config>
   </div>
 
   <!-- Contenido -->

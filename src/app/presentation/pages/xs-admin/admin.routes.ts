@@ -71,7 +71,7 @@ export const ADMIN_ROUTES: Routes = [
     component: XsParameterView,
     canActivate: [permissionGuard],
     data: {
-      permissions: ['MANAGE_PARAMETERS'],
+      permissions: ['VIEW_PARAMETER'],
       breadcrumb: [
         { label: 'Configuraciones' },
         { label: 'Parámetros', routerLink: '/admin/parameter' }

@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
-import { AbstractControl, FormBuilder, FormGroup } from "@angular/forms";
-import {Formvalidators} from '../../../../../shared/validators/form-validators';
-import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
+import { AbstractControl, FormBuilder, FormGroup} from "@angular/forms";
+import { Formvalidators } from '../../../../../shared/validators/form-validators';
+import { ParameterModel } from '../../../../../core/domain/models/parameter.model';
+
 @Injectable({
   providedIn: "root"
 })
-export class FormRegistrarConfig {
+export class FormRegisterConfig {
 
   public formulario!: FormGroup;
+
   get id(): AbstractControl | null { return this.formulario.get('id'); }
   get parameterId(): AbstractControl | null { return this.formulario.get('parameterId'); }
   get parentParameterId(): AbstractControl | null { return this.formulario.get('parentParameterId'); }
@@ -35,8 +37,7 @@ export class FormRegistrarConfig {
         this.util.onlyNumber("El valor seleccionado no es un número."),
       ]],
       name: [null, [
-        this.util.requiredValidator("Nombre Requerido"),
-        this.util.maxlengthValidator(255, "El máximo número de caracteres es 255"),
+        this.dynamicNameValidator()
       ]],
       shortName: [null, [
         this.util.maxlengthValidator(255, "El máximo número de caracteres es 255"),
@@ -48,26 +49,30 @@ export class FormRegistrarConfig {
     });
   }
 
+  dynamicNameValidator() {
+    return (control: AbstractControl): { [key: string]: string } | null => {
+      const value = control.value;
+      const type = control.parent?.get('type')?.value;
 
-  assignModel(): ParameterModel{
+      if (type === 1) {
+        if (!value) {
+          return { required: "Archivo requerido" };
+        }
+      } else {
+        if (!value) {
+          return { required: "Nombre requerido" };
+        }
+        if (value.length > 255) {
+          return { maxlength: "El máximo número de caracteres es 255" };
+        }
+      }
+
+      return null;
+    };
+  }
+
+  assignModel(): ParameterModel {
     return this.formulario.getRawValue() as ParameterModel;
   }
 
-  formSubmitEvent(): { error: boolean, mensaje?: string } {
-    if (this.formulario.valid) {
-      return { error: false };
-    } else {
-      Object.keys(this.formulario.controls).forEach((field: any) => {
-        let control: any = this.formulario.get(field);
-        control?.markAsTouched({ onlySelf: true });
-        if(control.controls) {
-          Object.keys(control.controls).forEach((subField: any) => {
-            control = this.formulario.get(field)!.get(subField);
-            control?.markAsTouched({ onlySelf: true });
-          });
-        }
-      });
-      return { error: true, mensaje: this.util.obtenerPrimerMensajeErrorFormulario(this.formulario) }
-    }
-  }
 }

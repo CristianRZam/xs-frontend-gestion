@@ -4,9 +4,9 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {XsInputText} from '../../../../../shared/components/xs-input-text/xs-input-text';
 import {FormRegistrarConfig} from './form-register-config';
 import {XsTextArea} from '../../../../../shared/components/xs-text-area/xs-text-area';
-import {XsLoader} from '../../../../../shared/components/xs-loader/xs-loader';
 import {XsToast} from '../../../../../shared/components/xs-toast/xs-toast';
 import {RoleModel} from '../../../../../core/domain/models/role.model';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-role-register',
@@ -32,7 +32,8 @@ export class XsRoleRegister implements OnInit {
 
   public constructor(
     public formConfig: FormRegistrarConfig,
-    ) {
+    private util: Formvalidators,
+  ) {
   }
 
   ngOnInit(): void {
@@ -69,7 +70,7 @@ export class XsRoleRegister implements OnInit {
   }
 
   formSubmitEvent(): void {
-    let event = this.formConfig.formSubmitEvent();
+    let event = this.util.formSubmitEvent(this.formConfig.formulario);
     if(event.error) {
       this.toast.show(event.mensaje!, 'error', "Rol");
     }else {

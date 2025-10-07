@@ -1,0 +1,43 @@
+<p-drawer
+  [visible]="visible"
+  position="right"
+  [modal]="true"
+  [dismissible]="true"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="header">
+    <h2 class="text-xl font-bold text-gray-800 dark:text-gray-200">
+      Configuración
+    </h2>
+  </ng-template>
+
+  <!-- Tema -->
+  <div class="mt-6">
+    <span class="block text-gray-700 dark:text-gray-300 font-medium mb-3">
+      Tema
+    </span>
+
+    <!-- Contenedor de selector -->
+    <div
+      class="flex w-fit rounded-md overflow-hidden shadow-sm"
+    >
+      <!-- Botón Claro -->
+      <p-toggleButton
+        [ngModel]="!darkMode"
+        onLabel="Claro"
+        offLabel="Claro"
+        ngClass="w-28 !rounded-none"
+        (onChange)="setTheme(false)"
+      ></p-toggleButton>
+
+      <!-- Botón Oscuro -->
+      <p-toggleButton
+        [ngModel]="darkMode"
+        onLabel="Oscuro"
+        offLabel="Oscuro"
+        ngClass="w-28 !rounded-none"
+        (onChange)="setTheme(true)"
+      ></p-toggleButton>
+    </div>
+  </div>
+</p-drawer>

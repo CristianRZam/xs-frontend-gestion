@@ -1,10 +1,12 @@
-import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {XsFieldset} from '../../../../../shared/components/xs-fieldset/xs-fieldset';
 import {XsInputText} from '../../../../../shared/components/xs-input-text/xs-input-text';
 import {XsFilterButtons} from '../../../../../shared/components/xs-filter-buttons/xs-filter-buttons';
 import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
 import {ParameterModel} from '../../../../../core/domain/models/parameter.model';
+import {ParameterViewRequest} from '../../../../../core/domain/dtos/resquests/parameter-view.request';
+import {UserViewRequest} from '../../../../../core/domain/dtos/resquests/user-view.request';
 
 @Component({
   selector: 'xs-parameter-filter',
@@ -18,22 +20,21 @@ import {ParameterModel} from '../../../../../core/domain/models/parameter.model'
   styleUrl: './xs-parameter-filter.scss'
 })
 export class XsParameterFilter implements OnInit {
-  @Output() filter: EventEmitter<{
-    name: string,
-    shortName: string,
-    code: string,
-    type: number | null
-  }> = new EventEmitter();
-
-  @Output() clear: EventEmitter<{}> = new EventEmitter();
+  @Output() filter: EventEmitter<ParameterViewRequest> = new EventEmitter();
 
   public formulario!: FormGroup;
-  public types: ParameterModel[] =[];
+  @Input() typesParameter!: ParameterModel[];
+
+  public statusOptions = [
+    { label: 'Habilitado', value: true, active: true },
+    { label: 'Inhabilitado', value: false, active: true }
+  ];
 
   get name(): AbstractControl | null { return this.formulario.get('name'); }
   get shortName(): AbstractControl | null { return this.formulario.get('shortName'); }
   get code(): AbstractControl | null { return this.formulario.get('code'); }
   get type(): AbstractControl | null { return this.formulario.get('type'); }
+  get status(): AbstractControl | null { return this.formulario.get('status'); }
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -47,20 +48,32 @@ export class XsParameterFilter implements OnInit {
       shortName: [null],
       code: [null],
       type: [null],
+      status: [null]
     });
   }
 
   onClickFilter(): void {
-    this.filter.emit({
-      name: this.name?.value ?? '',
-      shortName: this.shortName?.value ?? '',
-      code: this.code?.value ?? '',
-      type: this.type?.value ?? null,
-    });
+    const request: ParameterViewRequest = {
+      name: this.name?.value || '',
+      shortName: this.shortName?.value || '',
+      code: this.code?.value || '',
+      type: this.type?.value || '',
+      status: this.status?.value !== null ? this.status?.value : undefined,
+      page: 0,
+      size: 5
+    };
+
+    this.filter.emit(request);
   }
 
   onClickClear(): void {
     this.formulario.reset();
-    this.clear.emit();
+
+    const request: ParameterViewRequest = {
+      page: 0,
+      size: 5
+    };
+
+    this.filter.emit(request);
   }
 }
