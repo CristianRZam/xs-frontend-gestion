@@ -11,6 +11,8 @@ import {ParameterService} from '../parameter.service';
 import {ParameterRepository} from '../../../core/domain/repositories/parameter.repository';
 import {ProfileRepository} from '../../../core/domain/repositories/profile.repository';
 import {ProfileService} from '../profile.service';
+import {ProductService} from '../product.service';
+import {ProductRepository} from '../../../core/domain/repositories/product.repository';
 
 export const infrastructureProviders: Provider[] = [
   { provide: AuthRepository, useClass: AuthService },
@@ -18,5 +20,6 @@ export const infrastructureProviders: Provider[] = [
   { provide: PermissionRepository, useClass: PermissionService },
   { provide: UserRepository, useClass: UserService },
   { provide: ParameterRepository, useClass: ParameterService },
-  {provide: ProfileRepository, useClass: ProfileService }
+  {provide: ProfileRepository, useClass: ProfileService },
+  {provide: ProductRepository, useClass: ProductService }
 ];

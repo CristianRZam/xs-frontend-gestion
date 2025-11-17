@@ -113,6 +113,13 @@ export class XsMainSidebar implements OnInit {
             ],
           },
           {
+            label: 'Productos',
+            icon: 'fas fa-box',
+            expanded: false,
+            permission: ['VIEW_PARAMETER'],
+            routerLink: '/admin/product',
+          },
+          {
             label: 'Configuración',
             icon: 'fas fa-cogs',
             expanded: false,

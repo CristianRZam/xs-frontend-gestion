@@ -1,0 +1,8 @@
+<div class="my-4">
+  <xs-table [columns]="columns" [dataSource]="products" title="Lista de productos" [addButtonShow]="canCreate" [editButtonShow]="canEdit"
+            [exportExcelButtonShow]="canExport" [deleteButtonShow]="canDelete"
+            [exportPdfButtonShow]="canExport" [statusToggleButtonActive]="canEdit" (onUpdateActiveItem)="onUpdateActiveItem($event)"
+            (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
+            (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
+  </xs-table>
+</div>

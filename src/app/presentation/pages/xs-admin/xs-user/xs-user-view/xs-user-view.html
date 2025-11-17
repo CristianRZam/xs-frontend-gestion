@@ -5,7 +5,7 @@
 <xs-user-filter (filter)="updateFilter($event)" (clear)="updateFilter($event)" [typeDocumentsData]="typeDocuments"></xs-user-filter>
 
 <xs-user-table [users]="users" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" (updateActiveItem)="onUpdateActiveItem($event)"
-               (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalUsers" ></xs-user-table>
+               (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalUsers"></xs-user-table>
 
 <xs-user-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-user-register>
 

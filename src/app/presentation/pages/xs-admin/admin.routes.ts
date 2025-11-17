@@ -7,6 +7,7 @@ import { XsParameterView } from './xs-parameter/xs-parameter-view/xs-parameter-v
 import { permissionGuard } from '../../../core/guards/permission.guard';
 import { XsProfileView } from './xs-profile/xs-profile-view/xs-profile-view';
 import { MenuItem } from 'primeng/api';
+import {XsProductView} from './xs-product/xs-product-view/xs-product-view';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -75,6 +76,17 @@ export const ADMIN_ROUTES: Routes = [
       breadcrumb: [
         { label: 'Configuraciones' },
         { label: 'Parámetros', routerLink: '/admin/parameter' }
+      ] as MenuItem[]
+    }
+  },
+  {
+    path: 'product',
+    component: XsProductView,
+    canActivate: [permissionGuard],
+    data: {
+      permissions: ['VIEW_PARAMETER'],
+      breadcrumb: [
+        { label: 'Productos' },
       ] as MenuItem[]
     }
   }

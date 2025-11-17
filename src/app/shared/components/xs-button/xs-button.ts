@@ -5,7 +5,10 @@ import { ButtonModule } from 'primeng/button';
 @Component({
   selector: 'xs-button',
   standalone: true,
-  imports: [CommonModule, ButtonModule],
+  imports: [
+    CommonModule,
+    ButtonModule
+  ],
   templateUrl: './xs-button.html',
   styleUrls: ['./xs-button.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

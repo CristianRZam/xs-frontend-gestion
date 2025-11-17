@@ -1,0 +1,113 @@
+<p-fileupload #fu
+              [mode]="mode"
+              [accept]="accept"
+              chooseLabel="Choose"
+              chooseIcon="pi pi-upload"
+              name="demo[]"
+              url="https://www.primefaces.org/cdn/api/upload.php"
+              [maxFileSize]="maxFileSize"
+              (onUpload)="onUpload($event)" >
+  <ng-template #header let-files let-chooseCallback="chooseCallback" let-clearCallback="clearCallback" let-uploadCallback="uploadCallback">
+    <div class="flex flex-wrap justify-between items-center flex-1 gap-4">
+      <div class="flex gap-2">
+        <xs-button [icon]="iconChoose" variant="outlined" size="large" severity="warn" (click)="choose($event, chooseCallback)"></xs-button>
+<!--        <p-button (onClick)="uploadEvent(uploadCallback)" icon="pi pi-cloud-upload" [rounded]="true" [outlined]="true" severity="success" [disabled]="!files || files.length === 0" />-->
+<!--        <p-button (onClick)="clearCallback()" icon="pi pi-times" [rounded]="true" [outlined]="true" severity="danger" [disabled]="!files || files.length === 0" />-->
+      </div>
+<!--      <p-progressbar [value]="totalSizePercent" [showValue]="false" class="w-full" class="md:w-20rem h-1 w-full md:ml-auto">-->
+<!--        <span class="whitespace-nowrap">{{ totalSize }}B / 1Mb</span>-->
+<!--      </p-progressbar>-->
+    </div>
+  </ng-template>
+
+  <ng-template #content let-files let-uploadedFiles="uploadedFiles" let-removeFileCallback="removeFileCallback" let-removeUploadedFileCallback="removeUploadedFileCallback">
+    <div class="flex flex-col gap-8 pt-4">
+
+      <!-- Archivos pendientes -->
+      @if (files?.length > 0) {
+        <div>
+          <h5>Pendientes</h5>
+          <div class="flex flex-wrap gap-4">
+            @for (file of files; track $index) {
+              <div class="p-8 rounded-border flex flex-col border border-surface items-center gap-4 w-48">
+
+                <div class="flex items-center justify-center w-24 h-24 border rounded-lg bg-surface-50">
+                  @if (isImage(file)) {
+                    <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="object-contain w-20 h-20" />
+                  } @else {
+                    <i class="fa-solid fa-file text-6xl"></i>
+                  }
+                </div>
+
+                <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden text-center">
+                {{ file.name }}
+              </span>
+
+                <div class="text-sm">{{ formatSize(file.size) }}</div>
+                <p-badge value="Nuevo" severity="warn"></p-badge>
+
+                <xs-button [icon]="'fa-solid fa-xmark'"
+                           variant="outlined"
+                           size="large"
+                           severity="danger"
+                           (click)="onRemoveTemplatingFile($event, file, removeFileCallback, $index)">
+                </xs-button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Archivos cargados -->
+      @if (uploadedFiles?.length > 0){
+        <div>
+          <h5>Cargados</h5>
+          <div class="flex flex-wrap gap-4">
+            @for (file of uploadedFiles; track $index) {
+              <div class="card m-0 p-8 flex flex-col border border-surface items-center gap-4 w-48">
+
+                <div class="flex items-center justify-center w-24 h-24 border rounded-lg bg-surface-50">
+                  @if (isImage(file)) {
+                    <img role="presentation" [alt]="file.name" [src]="file.objectURL" class="object-contain w-20 h-20" />
+                  } @else {
+                    <i class="fa-solid fa-file text-6xl"></i>
+                  }
+                </div>
+
+                <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden text-center">
+                {{ file.name }}
+              </span>
+
+                <div class="text-sm">{{ formatSize(file.size) }}</div>
+                <p-badge value="Cargado" class="mt-2" severity="success"></p-badge>
+
+                <xs-button [icon]="'fa-solid fa-xmark'"
+                           variant="outlined"
+                           size="large"
+                           severity="danger"
+                           (click)="removeUploadedFileCallback($index)">
+                </xs-button>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+    </div>
+  </ng-template>
+
+
+  <ng-template #empty>
+    <div class="flex flex-col items-center justify-center p-6">
+      <div class="flex items-center justify-center w-18 h-18 border-2  rounded-full">
+        <i class="fa-solid fa-upload text-4xl "></i>
+      </div>
+      <p class="mt-6 mb-0 text-center">
+        Arrastra y suelta los archivos aquí para subirlos.
+      </p>
+    </div>
+  </ng-template>
+
+  <!--  <ng-template #file></ng-template>-->
+</p-fileupload>
+

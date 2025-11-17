@@ -204,7 +204,7 @@ export class XsParameterView implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
-        const msg = this.errorHandler.getErrorMessage(e, "eliminar", "rol");
+        const msg = this.errorHandler.getErrorMessage(e, "eliminar", "parametro");
         this.toast.show(msg, 'error');
         this.loader.hide();
       },
@@ -225,7 +225,7 @@ export class XsParameterView implements OnInit, AfterViewInit {
         }
       },
       error: (e) => {
-        const msg = this.errorHandler.getErrorMessage(e, "actualizar", "rol");
+        const msg = this.errorHandler.getErrorMessage(e, "actualizar estado", "parametro");
         this.toast.show(msg, 'error');
         this.loader.hide();
       },

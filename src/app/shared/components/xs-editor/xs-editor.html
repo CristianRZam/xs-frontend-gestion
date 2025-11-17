@@ -1,0 +1,13 @@
+<label class="xs-control-label" [ngClass]="esRequerido ? 'es-p-invalid p-filled' : ''">{{ placeholder }}</label>
+
+<p-editor [formControl]="control" [style]="{ height: '320px' }" />
+
+@if (control.errors && control.touched) {
+  <p-message
+    class="xs-error-message"
+    severity="error"
+    size="small"
+    variant="simple">
+    {{ control.errors![objectFn.keys(control.errors!)[0]] }}
+  </p-message>
+}
