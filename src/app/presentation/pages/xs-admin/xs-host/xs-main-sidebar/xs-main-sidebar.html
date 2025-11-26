@@ -8,7 +8,7 @@
 
   <!-- Sidebar -->
   <div
-    class="h-full transition-all duration-300 bg-blue-700 dark:bg-gray-950 border-r dark:border-gray-700 z-50"
+    class="h-full transition-all duration-300 bg-[#e10f0e] dark:bg-gray-950 border-r dark:border-gray-700 z-50"
     [ngClass]="{
       'fixed top-0 left-0 w-72': isMobile,
       'absolute top-0 left-0': !isMobile
@@ -29,13 +29,13 @@
              bg-gradient-to-r from-indigo-500 to-purple-600
              text-white font-bold text-lg shadow"
           >
-            YL
+            <img src="assets/images/escudo.jpg" alt="Logo" class="h-10 rounded-full" />
           </div>
 
           <span
             class="font-bold text-xl text-white dark:text-gray-100 tracking-wide text-center"
           >
-            YULU GESTIÓN
+            Sistema Registral
           </span>
         </div>
       </header>
@@ -106,7 +106,7 @@
 
   <!-- Content -->
   <div
-    class="absolute top-0 right-0 h-full transition-all duration-300 bg-[#e2e8f6] dark:bg-[#1f1f1f] flex flex-col"
+    class="absolute top-0 right-0 h-full transition-all duration-300 bg-[#fff5f5] dark:bg-[#1f1f1f] flex flex-col"
     [style.left.px]="!isMobile ? (visible ? 280 : 0) : 0"
   >
     <div class="sticky top-0 z-10">

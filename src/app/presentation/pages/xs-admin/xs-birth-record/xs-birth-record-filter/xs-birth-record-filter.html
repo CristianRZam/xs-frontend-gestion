@@ -1,0 +1,69 @@
+<div class="mt-4">
+  <xs-fieldset legend="Criterios de búsqueda">
+    <ng-template #content>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- Año -->
+        <xs-input-text
+          placeholder="Año"
+          [control]="$any(formulario.get('year'))">
+        </xs-input-text>
+
+        <!-- Número de Acta -->
+        <xs-input-text
+          placeholder="Número de Acta"
+          [control]="$any(formulario.get('actNumber'))">
+        </xs-input-text>
+
+        <!-- Registrado -->
+        <xs-input-text
+          placeholder="Nombre del Registrado"
+          [control]="$any(formulario.get('personName'))">
+        </xs-input-text>
+
+        <!-- Padre -->
+        <xs-input-text
+          placeholder="Nombre Padre"
+          [control]="$any(formulario.get('fatherName'))">
+        </xs-input-text>
+
+        <!-- Madre -->
+        <xs-input-text
+          placeholder="Nombre Madre"
+          [control]="$any(formulario.get('motherName'))">
+        </xs-input-text>
+
+        <!-- Género -->
+        <xs-select
+          placeholder="Género"
+          [control]="$any(formulario.get('sex'))"
+          [dataSource]="[
+            { label: 'Masculino', value: '1' },
+            { label: 'Femenino', value: '0' }
+          ]"
+          optionLabel="label"
+          optionValue="value">
+        </xs-select>
+      </div>
+
+      <!-- Fechas -->
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-6">
+        <xs-input-text placeholder="Nacimiento desde" [control]="$any(formulario.get('birthDateFrom'))"></xs-input-text>
+        <xs-input-text placeholder="Nacimiento hasta" [control]="$any(formulario.get('birthDateTo'))"></xs-input-text>
+
+        <xs-input-text placeholder="Registro desde" [control]="$any(formulario.get('recordDateFrom'))"></xs-input-text>
+        <xs-input-text placeholder="Registro hasta" [control]="$any(formulario.get('recordDateTo'))"></xs-input-text>
+      </div>
+
+      <!-- Botones -->
+      <div class="mt-4 flex justify-center">
+        <xs-filter-buttons
+          (clear)="onClickClear()"
+          (filter)="onClickFilter()">
+        </xs-filter-buttons>
+      </div>
+
+    </ng-template>
+  </xs-fieldset>
+</div>

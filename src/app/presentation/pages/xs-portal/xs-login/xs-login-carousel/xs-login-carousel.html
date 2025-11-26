@@ -1,0 +1,33 @@
+<div class="carousel-container">
+  <div
+    class="carousel-slide"
+    *ngFor="let slide of slides; let i = index"
+    [class.active]="i === currentIndex"
+    [style.background-image]="'url(' + slide.image + ')'"
+  >
+    <div class="overlay">
+      <!-- Logo -->
+      <img src="assets/images/escudo.jpg"
+           alt="logo"
+           class="brand-top w-28 h-28 object-contain rounded-full" />
+
+
+
+      <!-- Contenedor texto -->
+      <div class="text-container">
+        <h2 class="text-[20px] text-semibold">{{ slides[currentIndex].title }}</h2>
+        <p class="text-[16px]">{{ slides[currentIndex].text }}</p>
+
+        <!-- Dots de navegación -->
+        <div class="dots">
+          <button
+            *ngFor="let s of slides; let i = index"
+            [class.active]="i === currentIndex"
+            (click)="goTo(i)"
+            [attr.aria-label]="'Slide ' + (i + 1)"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

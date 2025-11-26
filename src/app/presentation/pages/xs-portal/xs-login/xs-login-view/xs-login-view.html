@@ -1,39 +1,33 @@
 <div class="min-h-screen flex">
   <!-- Lado izquierdo con imagen -->
   <div class="hidden md:flex md:w-1/2 relative items-center justify-center  overflow-hidden">
-    
-    <!-- Overlay semitransparente -->
-    <div class="absolute inset-0"></div>
 
-    <!-- Imagen decorativa centrada -->
-    <img 
-      src="assets/images/img.png" 
-      alt="Login illustration" 
-      class="relative max-w-full max-h-full object-contain z-10"
-    />
-
-    <!-- Texto debajo de la imagen -->
-    <div class="absolute bottom-8 left-8  z-10">
-      <h3 class="text-3xl font-bold mb-2">Bienvenido a TuApp</h3>
-      <p class="text-sm opacity-80 max-w-xs">
-        Ingresa para acceder a todas tus herramientas y funcionalidades.
-      </p>
-    </div>
+    <xs-login-carousel></xs-login-carousel>
 
   </div>
 
 
   <!-- Lado derecho con el form -->
   <div class="w-full md:w-1/2 flex items-center justify-center p-6">
-    <div class="w-full max-w-md">
-      <!-- Logo arriba -->
+    <div
+      class="w-full max-w-md
+         bg-white/90 dark:bg-gray-800/90
+         shadow-2xl
+         rounded-2xl
+         p-8
+         border border-gray-200 dark:border-gray-700
+         backdrop-blur-md
+         text-gray-800 dark:text-gray-200"
+    >
+
+    <!-- Logo arriba -->
       <div class="flex justify-center mb-8">
-        <img src="assets/logos/logo.svg" alt="Logo" class="h-12" />
+        <img src="assets/images/escudo.jpg" alt="Logo" class="h-12 rounded-full" />
       </div>
 
       <!-- Título -->
-      <h2 class="text-2xl font-bold text-center mb-6">
-        Iniciar sesión
+      <h2 class="text-2xl font-bold text-center mb-6 text-[#e10f0e]">
+        INICIAR SESIÓN
       </h2>
 
       <!-- Aquí va el formulario -->
@@ -41,7 +35,7 @@
 
       <!-- Pie -->
       <p class="text-center text-sm text-gray-500 mt-6">
-        © 2025 Tu Empresa. Todos los derechos reservados.
+        © 2025 - Municipalidad distrital de Pira. Todos los derechos reservados.
       </p>
     </div>
   </div>

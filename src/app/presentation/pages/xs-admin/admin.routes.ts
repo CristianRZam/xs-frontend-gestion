@@ -7,7 +7,8 @@ import { XsParameterView } from './xs-parameter/xs-parameter-view/xs-parameter-v
 import { permissionGuard } from '../../../core/guards/permission.guard';
 import { XsProfileView } from './xs-profile/xs-profile-view/xs-profile-view';
 import { MenuItem } from 'primeng/api';
-import {XsProductView} from './xs-product/xs-product-view/xs-product-view';
+import {XsBirthRecordView} from './xs-birth-record/xs-birth-record-view/xs-birth-record-view';
+import {XsBirthRecordRegister} from './xs-birth-record/xs-birth-record-register/xs-birth-record-register';
 
 export const ADMIN_ROUTES: Routes = [
   {
@@ -80,14 +81,26 @@ export const ADMIN_ROUTES: Routes = [
     }
   },
   {
-    path: 'product',
-    component: XsProductView,
+    path: 'partida_registral',
+    component: XsBirthRecordView,
     canActivate: [permissionGuard],
     data: {
       permissions: ['VIEW_PARAMETER'],
       breadcrumb: [
-        { label: 'Productos' },
+        { label: 'Partida Registral' },
       ] as MenuItem[]
     }
-  }
+  },
+  {
+    path: 'partida_registral/register',
+    component: XsBirthRecordRegister,
+    canActivate: [permissionGuard],
+    data: {
+      permissions: ['VIEW_PARAMETER'],
+      breadcrumb: [
+        { label: 'Partida Registral', routerLink: 'partida_registral'  },
+        { label: 'Registro'}
+      ] as MenuItem[]
+    }
+  },
 ];

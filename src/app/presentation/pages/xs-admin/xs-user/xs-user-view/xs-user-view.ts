@@ -79,7 +79,7 @@ export class XsUserView implements OnInit, AfterViewInit {
           this.totalUsers = data.totalUsers;
           this.activeUsers = data.activeUsers;
           this.inactiveUsers = data.inactiveUsers;
-          this.totalAdmins = data.totalAdmins;
+          this.totalAdmins = data.totalAdmins;console.log(this.users);
         } else {
           console.warn('No se recibieron datos válidos de roles', response);
         }

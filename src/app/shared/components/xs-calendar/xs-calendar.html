@@ -1,0 +1,25 @@
+<p-datePicker
+  [id]="id"
+  [formControl]="control"
+  [showIcon]="showIcon"
+  [placeholder]="placeholder"
+  [dateFormat]="dateFormat"
+  [minDate]="minDate"
+  [maxDate]="maxDate"
+  [iconDisplay]="'input'"
+  [showTime]="showTime"
+  size="large"
+  [disabled]="disabled"
+  [ngClass]="{
+      'p-invalid': control.invalid && control.touched
+    }"
+  (onSelect)="onSelect($event)"
+  class="w-full"
+></p-datePicker>
+
+<p-message
+  *ngIf="control.errors && control.touched"
+  class="xs-error-message text-left"
+  severity="error"
+  [text]="control.errors![objectFn.keys(control.errors!)[0]]"
+></p-message>

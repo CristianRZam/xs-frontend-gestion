@@ -113,26 +113,26 @@ export class XsMainSidebar implements OnInit {
             ],
           },
           {
-            label: 'Productos',
-            icon: 'fas fa-box',
+            label: 'Partida Registral',
+            icon: 'fas fa-file-alt',
             expanded: false,
             permission: ['VIEW_PARAMETER'],
-            routerLink: '/admin/product',
+            routerLink: '/admin/partida_registral',
           },
-          {
-            label: 'Configuración',
-            icon: 'fas fa-cogs',
-            expanded: false,
-            permission: ['VIEW_PARAMETER'],
-            children: [
-              {
-                label: 'Parámetros',
-                icon: 'fas fa-sliders-h',
-                routerLink: '/admin/parameter',
-                permission: 'VIEW_PARAMETER',
-              }
-            ],
-          },
+          // {
+          //   label: 'Configuración',
+          //   icon: 'fas fa-cogs',
+          //   expanded: false,
+          //   permission: ['VIEW_PARAMETER'],
+          //   children: [
+          //     {
+          //       label: 'Parámetros',
+          //       icon: 'fas fa-sliders-h',
+          //       routerLink: '/admin/parameter',
+          //       permission: 'VIEW_PARAMETER',
+          //     }
+          //   ],
+          // },
         ],
       },
     ];

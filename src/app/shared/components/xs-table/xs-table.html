@@ -118,7 +118,7 @@
         {{ col.badgeTextFn ? col.badgeTextFn!(item[col.field || ''], item) : item[col.field || ''] }}
       </span>
           } @else {
-            {{ getValue(item, col.field) }}
+            {{ col.valueFn ? col.valueFn!(item) : getValue(item, col.field) }}
           }
         </td>
       }

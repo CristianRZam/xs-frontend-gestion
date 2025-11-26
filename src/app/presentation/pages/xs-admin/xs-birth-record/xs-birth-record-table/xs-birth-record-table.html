@@ -1,0 +1,8 @@
+<div class="my-4">
+  <xs-table [columns]="columns" [dataSource]="birthRecords" title="Lista de partidas" [addButtonShow]="canCreate" [editButtonShow]="canEdit"
+            [exportExcelButtonShow]="false" [deleteButtonShow]="false"
+            [exportPdfButtonShow]="false" [statusToggleButtonActive]="canEdit"
+            (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
+            (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
+  </xs-table>
+</div>

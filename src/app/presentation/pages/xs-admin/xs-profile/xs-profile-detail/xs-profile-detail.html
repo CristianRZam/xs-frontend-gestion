@@ -3,12 +3,13 @@
   <ng-template #header>
     <div
       class="relative
-             bg-gradient-to-r from-blue-700 via-blue-500 to-blue-700
-             dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
-             p-8 flex flex-col sm:flex-row items-center sm:items-end gap-6
-             text-white transition-colors duration-300">
+         bg-gradient-to-r from-[#b80c0b] via-[#e10f0e] to-[#b80c0b]
+         dark:from-gray-900 dark:via-gray-800 dark:to-gray-900
+         p-8 flex flex-col sm:flex-row items-center sm:items-end gap-6
+         text-white transition-colors duration-300">
 
-      <!-- Avatar -->
+
+    <!-- Avatar -->
       <div class="relative w-28 h-28 rounded-full overflow-hidden shadow-lg border border-gray-200 dark:border-gray-700 group">
         <img [src]="user.avatarUrl || 'https://www.w3schools.com/howto/img_avatar.png'"
              alt="Avatar"
@@ -49,7 +50,7 @@
 
       <!-- Botón editar -->
       <div class="flex gap-2">
-        <xs-button label="Editar Perfil" icon="fas fa-pen me-2" variant="outlined" (click)="onUpdate()"></xs-button>
+        <xs-button label="Editar Perfil" icon="fas fa-pen me-2" variant="outlined" (click)="onUpdate()" severity="danger"></xs-button>
       </div>
     </div>
   </ng-template>

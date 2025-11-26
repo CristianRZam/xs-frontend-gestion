@@ -1,0 +1,149 @@
+<xs-page-header title="Registro - Partida Registral" description="Llene el formulario para registrar la partida"></xs-page-header>
+
+<div class="p-6 bg-white dark:bg-[#18181b] rounded-lg shadow-md mx-auto text-gray-800 dark:text-gray-200">
+
+  <!-- BOTÓN DESCARGAR -->
+  @if (this.id){
+    <div class="flex justify-end mb-6">
+      <button type="button"
+              class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded"
+              (click)="onDownload()">
+        Descargar
+      </button>
+    </div>
+  }
+
+  <form [formGroup]="formConfig.formulario" (ngSubmit)="onSubmit()" class="space-y-10">
+
+    <!-- ENCABEZADO -->
+    <div class="text-center">
+      <h2 class="text-2xl font-bold">ACTA DE NACIMIENTO</h2>
+
+      <h3 class="text-lg font-medium mt-1">
+        Nº {{ formConfig.actNumber?.value }} - Año {{ formConfig.year?.value }}
+      </h3>
+    </div>
+
+    <!-- DATOS GEOGRÁFICOS -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">Datos Geográficos</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- DISTRITO -->
+        <xs-select
+          placeholder="Distrito"
+          [dataSource]="districtOptions"
+          optionLabel="label"
+          optionValue="value"
+          [showClear]="false"
+          [disabled]="true"
+          [control]="$any(formConfig.districtId)">
+        </xs-select>
+
+        <xs-input-text placeholder="Provincia" [control]="$any(formConfig.districtProvince)" [disabled]="true"></xs-input-text>
+        <xs-input-text placeholder="Departamento" [control]="$any(formConfig.districtDepartment)" [disabled]="true"></xs-input-text>
+      </div>
+    </div>
+
+    <!-- DATOS DEL REGISTRADO -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">Datos del Registrado</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="md:col-span-2">
+          <xs-input-text placeholder="De: (Nombre completo)" [control]="$any(formConfig.personName)"></xs-input-text>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-2">Género</label>
+
+          <div class="flex gap-6">
+            <xs-radio-button label="Femenino" [value]="'F'" name="sex" [control]="$any(formConfig.sex)"></xs-radio-button>
+            <xs-radio-button label="Masculino" [value]="'M'" name="sex" [control]="$any(formConfig.sex)"></xs-radio-button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mt-4">
+        <div class="md:col-span-2">
+          <xs-input-text placeholder="Dirección" [control]="$any(formConfig.birthPlace)"></xs-input-text>
+        </div>
+
+        <xs-input-text placeholder="Lugar de Nacimiento" [control]="$any(formConfig.birthPlaceDetail)" [disabled]="true"></xs-input-text>
+        <xs-calendar placeholder="Fecha" [control]="$any(formConfig.birthDatetime)"></xs-calendar>
+      </div>
+    </div>
+
+    <!-- INFORMACIÓN DE LOS PADRES -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">Información de los Padres</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Padre -->
+        <div class="p-4 border rounded border-gray-200 dark:border-gray-700">
+          <h4 class="font-semibold mb-3">Datos del Padre</h4>
+          <div class="grid gap-4">
+            <xs-input-text placeholder="Nombre del padre" [control]="$any(formConfig.fatherName)"></xs-input-text>
+            <xs-input-text placeholder="Natural de" [control]="$any(formConfig.fatherNaturalOf)"></xs-input-text>
+            <xs-input-text placeholder="Nacionalidad" [control]="$any(formConfig.fatherNationality)"></xs-input-text>
+            <xs-input-text placeholder="Ocupación" [control]="$any(formConfig.fatherOccupation)"></xs-input-text>
+            <xs-input-text placeholder="Domicilio" [control]="$any(formConfig.fatherAddress)"></xs-input-text>
+          </div>
+        </div>
+
+        <!-- Madre -->
+        <div class="p-4 border rounded border-gray-200 dark:border-gray-700">
+          <h4 class="font-semibold mb-3">Datos de la Madre</h4>
+          <div class="grid gap-4">
+            <xs-input-text placeholder="Nombre de la madre" [control]="$any(formConfig.motherName)"></xs-input-text>
+            <xs-input-text placeholder="Natural de" [control]="$any(formConfig.motherNaturalOf)"></xs-input-text>
+            <xs-input-text placeholder="Nacionalidad" [control]="$any(formConfig.motherNationality)"></xs-input-text>
+            <xs-input-text placeholder="Ocupación" [control]="$any(formConfig.motherOccupation)"></xs-input-text>
+            <xs-input-text placeholder="Domicilio" [control]="$any(formConfig.motherAddress)"></xs-input-text>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- DECLARANTE -->
+    <div>
+      <h3 class="text-xl font-semibold mb-4 border-b border-gray-300 pb-2">Datos del Declarante</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <xs-input-text placeholder="Declarante" [control]="$any(formConfig.declarantName)"></xs-input-text>
+        <xs-input-text placeholder="Nº documento declarante" [control]="$any(formConfig.declarantDocument)"></xs-input-text>
+        <xs-input-text placeholder="Se extiende esta acta en" [control]="$any(formConfig.recordPlace)"></xs-input-text>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+        <xs-calendar placeholder="Fecha de expedición" [control]="$any(formConfig.recordDatetime)"></xs-calendar>
+      </div>
+    </div>
+
+    <!-- BOTONES -->
+    <div class="flex justify-end gap-3 pt-6">
+      <xs-button
+        label="Cancelar"
+        [severity]="'danger'"
+        icon="fa-solid fa-xmark"
+        (click)="onCancel()"
+        [variant]="'outlined'">
+      </xs-button>
+
+      <xs-button
+        label="Guardar"
+        [severity]="'info'"
+        icon="fa-solid fa-floppy-disk"
+        type="submit"
+        [variant]="'outlined'">
+      </xs-button>
+
+    </div>
+  </form>
+</div>
+
+<xs-loader #xsLoader></xs-loader>
+<xs-toast #xsToastRoleView position="top-center"></xs-toast>

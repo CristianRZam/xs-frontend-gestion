@@ -1,1 +1,114 @@
-<p>DASHBOARD VIEW</p>
+<div class="min-h-screen  p-6">
+
+  <!-- Título principal -->
+  <h1 class="text-3xl font-bold text-[#e10f0e] mb-6">
+    Dashboard - Registro de Partidas de Nacimiento
+  </h1>
+
+  <!-- Tarjetas de estadísticas -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-4">
+
+    <!-- Partidas registradas -->
+    <xs-card-detail
+      titulo="Partidas registradas"
+      [cantidad]="1248"
+      icono="fa-solid fa-file-alt"
+      color="#3B82F6"> <!-- Azul -->
+    </xs-card-detail>
+
+    <!-- Pendientes -->
+    <xs-card-detail
+      titulo="Pendientes de validación"
+      [cantidad]="32"
+      icono="fa-solid fa-hourglass-half"
+      color="#F59E0B"> <!-- Amarillo -->
+    </xs-card-detail>
+
+    <!-- Registrados hoy -->
+    <xs-card-detail
+      titulo="Registrados hoy"
+      [cantidad]="12"
+      icono="fa-solid fa-calendar-day"
+      color="#10B981"> <!-- Verde -->
+    </xs-card-detail>
+
+    <!-- Usuarios activos -->
+    <xs-card-detail
+      titulo="Usuarios activos"
+      [cantidad]="5"
+      icono="fa-solid fa-user-check"
+      color="#EF4444"> <!-- Rojo -->
+    </xs-card-detail>
+
+  </div>
+
+
+
+  <!-- Tabla de últimos registros -->
+  <div class="bg-white shadow rounded-xl p-6 border border-gray-200">
+    <h2 class="text-xl font-semibold mb-4">Últimos registros</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full text-left border-collapse text-sm">
+        <thead>
+        <tr class="bg-gray-50 border-b">
+          <th class="p-3">Nº</th>
+          <th class="p-3">Nombre</th>
+          <th class="p-3">Fecha Nacimiento</th>
+          <th class="p-3">Distrito</th>
+          <th class="p-3 text-center">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr class="border-b hover:bg-gray-50">
+          <td class="p-3">2025-0012</td>
+          <td class="p-3">María Torres</td>
+          <td class="p-3">12 Feb 2025</td>
+          <td class="p-3">Pira</td>
+          <td class="p-3 text-center">
+            <xs-button
+              icon="fa-solid fa-eye"
+              [rounded]="false"
+              [variant]="'outlined'"
+              [severity]="'info'">
+            </xs-button>
+          </td>
+        </tr>
+
+        <tr class="border-b hover:bg-gray-50">
+          <td class="p-3">2025-0013</td>
+          <td class="p-3">José Alvarez</td>
+          <td class="p-3">15 Feb 2025</td>
+          <td class="p-3">Pira</td>
+          <td class="p-3 text-center">
+            <xs-button
+              icon="fa-solid fa-eye"
+              [rounded]="false"
+              [variant]="'outlined'"
+              [severity]="'info'">
+            </xs-button>
+          </td>
+        </tr>
+
+        <tr class="border-b hover:bg-gray-50">
+          <td class="p-3">2025-0014</td>
+          <td class="p-3">Lucia Rojas</td>
+          <td class="p-3">18 Feb 2025</td>
+          <td class="p-3">Pira</td>
+          <td class="p-3 text-center">
+            <xs-button
+              icon="fa-solid fa-eye"
+              [rounded]="false"
+              [variant]="'outlined'"
+              [severity]="'info'">
+            </xs-button>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

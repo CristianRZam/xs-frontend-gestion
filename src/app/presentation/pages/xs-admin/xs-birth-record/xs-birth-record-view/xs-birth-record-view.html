@@ -1,0 +1,10 @@
+<xs-page-header title="Gestión de Partidas Registrales" description="Gestiona todas las partidas registrales del sisetma aquí"></xs-page-header>
+
+<xs-birth-record-card-detail [totalRecords]="totalRecords" [recordsThisMonth]="recordsThisMonth"
+[femaleCount]="femaleCount" [maleCount]="maleCount"></xs-birth-record-card-detail>
+
+<xs-birth-record-filter (filter)="onFilter($event)"></xs-birth-record-filter>
+
+<xs-birth-record-table (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" [birthRecords]="birthRecords"></xs-birth-record-table>
+
+<xs-loader #xsLoader></xs-loader>

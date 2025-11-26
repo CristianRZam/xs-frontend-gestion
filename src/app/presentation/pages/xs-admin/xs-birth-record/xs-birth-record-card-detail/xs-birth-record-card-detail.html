@@ -1,0 +1,35 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+  <!-- Total de partidas registrales -->
+  <xs-card-detail
+    titulo="Partidas Totales"
+    [cantidad]="totalRecords"
+    icono="fa-solid fa-file-alt"
+    color="#3B82F6"> <!-- Azul -->
+  </xs-card-detail>
+
+  <!-- Partidas registradas este mes -->
+  <xs-card-detail
+    titulo="Registradas este mes"
+    [cantidad]="recordsThisMonth"
+    icono="fa-solid fa-calendar-check"
+    color="#10B981"> <!-- Verde -->
+  </xs-card-detail>
+
+  <!-- Cantidad de partidas de varones -->
+  <xs-card-detail
+    titulo="Masculino"
+    [cantidad]="maleCount"
+    icono="fa-solid fa-mars"
+    color="#06B6D4"> <!-- Celeste -->
+  </xs-card-detail>
+
+  <!-- Cantidad de partidas de mujeres -->
+  <xs-card-detail
+    titulo="Femenino"
+    [cantidad]="femaleCount"
+    icono="fa-solid fa-venus"
+    color="#EC4899"> <!-- Rosado -->
+  </xs-card-detail>
+
+</div>
