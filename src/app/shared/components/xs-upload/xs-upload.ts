@@ -62,4 +62,20 @@ export class XsUpload {
     return `${formattedSize} ${unit}`;
   }
 
+  formatFileName(name: string): string {
+    if (!name) return '';
+
+    const lastDot = name.lastIndexOf('.');
+    if (lastDot === -1) return name; // sin extensión
+
+    const baseName = name.substring(0, lastDot);
+    const extension = name.substring(lastDot);
+
+    if (baseName.length <= 3) {
+      return baseName + extension;
+    }
+
+    return baseName.substring(0, 3) + '...' + extension;
+  }
+
 }

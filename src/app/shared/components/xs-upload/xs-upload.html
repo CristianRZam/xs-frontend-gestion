@@ -40,7 +40,7 @@
                 </div>
 
                 <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden text-center">
-                {{ file.name }}
+                {{ formatFileName(file.name) }}
               </span>
 
                 <div class="text-sm">{{ formatSize(file.size) }}</div>
@@ -75,8 +75,8 @@
                 </div>
 
                 <span class="font-semibold text-ellipsis max-w-60 whitespace-nowrap overflow-hidden text-center">
-                {{ file.name }}
-              </span>
+                  {{ formatFileName(file.name) }}
+                </span>
 
                 <div class="text-sm">{{ formatSize(file.size) }}</div>
                 <p-badge value="Cargado" class="mt-2" severity="success"></p-badge>
