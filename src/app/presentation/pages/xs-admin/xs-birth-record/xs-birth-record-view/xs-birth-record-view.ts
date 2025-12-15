@@ -9,6 +9,8 @@ import {XsLoader} from '../../../../../shared/components/xs-loader/xs-loader';
 import {BirthRecordListDTO} from '../../../../../core/domain/dtos/responses/birth-record-list.dto';
 import {BirthRecordUsecase} from '../../../../../core/application/use-cases/birth-record.usecase';
 import {BirthRecordFilterList} from '../../../../../core/domain/dtos/resquests/birth-record-filter-list';
+import {XsToast} from '../../../../../shared/components/xs-toast/xs-toast';
+import {Formvalidators} from '../../../../../shared/validators/form-validators';
 
 @Component({
   selector: 'xs-birth-record-view',
@@ -17,7 +19,8 @@ import {BirthRecordFilterList} from '../../../../../core/domain/dtos/resquests/b
     XsBirthRecordCardDetail,
     XsBirthRecordFilter,
     XsBirthRecordTable,
-    XsLoader
+    XsLoader,
+    XsToast
   ],
   templateUrl: './xs-birth-record-view.html',
   styleUrl: './xs-birth-record-view.scss'
@@ -25,6 +28,7 @@ import {BirthRecordFilterList} from '../../../../../core/domain/dtos/resquests/b
 export class XsBirthRecordView implements OnInit, AfterViewInit {
 
   @ViewChild('xsLoader') loader!: XsLoader;
+  @ViewChild('xsToastRoleView') private toast!: XsToast;
 
   public birthRecords: BirthRecordListDTO[] = [];
   public totalRecords = 0;
@@ -38,6 +42,7 @@ export class XsBirthRecordView implements OnInit, AfterViewInit {
   constructor(
     private router: Router,
     private birthRecordUseCase: BirthRecordUsecase,
+    private util: Formvalidators,
     ) {}
 
   ngOnInit(): void {}
@@ -84,5 +89,21 @@ export class XsBirthRecordView implements OnInit, AfterViewInit {
   onFilter($event: BirthRecordFilterList) {
     this.filter = $event;
     this.load();
+  }
+
+  download(item: BirthRecordModel) {
+    this.loader.show('Generando...');
+    this.birthRecordUseCase.exportCertificate(item.id!).subscribe({
+      next: (blob) => {
+        this.util.downloadFile(blob, 'certificate.pdf');
+        this.toast.show("Certificado generado con éxito.");
+      },
+      error: (e) => {
+        console.error('Error al generar PDF', e);
+        this.toast.show("Error al generar PDF", 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
   }
 }

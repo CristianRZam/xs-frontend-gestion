@@ -5,12 +5,14 @@ import {XsTableColumn} from '../../../../../shared/components/xs-table/xs-table.
 import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
 import {BirthRecordModel} from '../../../../../core/domain/models/birth-record.model';
 import {BirthRecordListDTO} from '../../../../../core/domain/dtos/responses/birth-record-list.dto';
+import {XsButton} from '../../../../../shared/components/xs-button/xs-button';
 
 @Component({
   selector: 'xs-birth-record-table',
-    imports: [
-        XsTable
-    ],
+  imports: [
+    XsTable,
+    XsButton
+  ],
   templateUrl: './xs-birth-record-table.html',
   styleUrl: './xs-birth-record-table.scss'
 })
@@ -21,6 +23,7 @@ export class XsBirthRecordTable implements OnInit {
   @Output() addItem: EventEmitter<any> = new EventEmitter();
   @Output() updateItem: EventEmitter<BirthRecordModel> = new EventEmitter();
   @Output() deleteItem: EventEmitter<BirthRecordModel> = new EventEmitter();
+  @Output() downloadItem: EventEmitter<BirthRecordModel> = new EventEmitter();
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
 
@@ -108,5 +111,9 @@ export class XsBirthRecordTable implements OnInit {
 
   onExportExcel($event: any) {
     this.exportExcel.emit($event);
+  }
+
+  onDownload(item: any) {
+    this.downloadItem.emit(item);
   }
 }

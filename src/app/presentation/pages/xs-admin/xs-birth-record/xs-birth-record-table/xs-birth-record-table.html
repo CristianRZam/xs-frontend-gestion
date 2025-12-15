@@ -4,5 +4,8 @@
             [exportPdfButtonShow]="false" [statusToggleButtonActive]="canEdit"
             (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
             (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
+    <ng-template #additionalTableButtons let-item="item">
+        <xs-button [rounded]="false" [variant]="'outlined'" icon="fa-solid fa-download" (click)="onDownload(item)"></xs-button>
+    </ng-template>
   </xs-table>
 </div>

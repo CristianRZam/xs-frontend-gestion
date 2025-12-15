@@ -5,6 +5,9 @@
 
 <xs-birth-record-filter (filter)="onFilter($event)"></xs-birth-record-filter>
 
-<xs-birth-record-table (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" [birthRecords]="birthRecords"></xs-birth-record-table>
+<xs-birth-record-table (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" [birthRecords]="birthRecords" (downloadItem)="download($event)"></xs-birth-record-table>
 
 <xs-loader #xsLoader></xs-loader>
+
+<xs-loader #xsLoader></xs-loader>
+<xs-toast #xsToastRoleView position="top-center"></xs-toast>
