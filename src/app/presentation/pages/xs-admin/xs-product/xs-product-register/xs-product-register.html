@@ -101,7 +101,16 @@
         class="w-full">
       </xs-editor>
 
-      <xs-upload></xs-upload>
+      <xs-upload
+        [multiple]="true"
+        accept="image/*"
+        [existingFiles]="existingUploadFiles"
+        (filesChange)="onFilesSelected($event)"
+        (existingFilesRemoved)="onExistingFilesRemoved($event)"
+        (mainFileChange)="onMainImageChange($event)"
+      >
+      </xs-upload>
+
     </form>
   </ng-template>
 </xs-dialog>

@@ -12,6 +12,9 @@ import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
 import {XsInputNumber} from '../../../../../shared/components/xs-input-number/xs-input-number';
 import {XsEditor} from '../../../../../shared/components/xs-editor/xs-editor';
 import {XsUpload} from '../../../../../shared/components/xs-upload/xs-upload';
+import {ProductPayloadRequest} from '../../../../../core/domain/dtos/resquests/product-payload.request';
+import {ProductImageDTO} from '../../../../../core/domain/dtos/product-image.dto';
+import {ExistingFile} from '../../../../../core/domain/models/existing-file';
 
 @Component({
   selector: 'xs-product-register',
@@ -31,13 +34,20 @@ import {XsUpload} from '../../../../../shared/components/xs-upload/xs-upload';
 export class XsProductRegister implements OnInit {
   @ViewChild('xsToastRegister') private toast!: XsToast;
 
-  @Output() onCreate: EventEmitter<ProductRequest> = new EventEmitter();
-  @Output() onUpdate: EventEmitter<ProductRequest> = new EventEmitter();
+  @Output() onCreate: EventEmitter<ProductPayloadRequest> = new EventEmitter();
+  @Output() onUpdate: EventEmitter<ProductPayloadRequest> = new EventEmitter();
 
 
   dialogModel: { header?: string, display?: boolean, showOkButton?: boolean } = { header: '', display: false, showOkButton: true };
   public opcion: '' | 'AGREGAR' | 'MODIFICAR' = '';
   public productRequest: ProductRequest = {};
+  selectedImages: File[] = [];
+  existingImages: ProductImageDTO[] = [];
+
+  deletedImageIds: (number | string)[] = [];
+  existingUploadFiles: ExistingFile[] = [];
+  mainImageKey: string | number | null = null;
+
 
   public constructor(
     public formConfig: FormRegisterConfig,
@@ -60,6 +70,12 @@ export class XsProductRegister implements OnInit {
     this.formConfig.formulario.reset();
     this.formConfig.configForm();
 
+    this.selectedImages = [];
+    this.existingImages = [];
+
+    this.deletedImageIds = [];
+    this.existingUploadFiles = [];
+
     if (item?.product && opcion === 'MODIFICAR') {
       this.formConfig.formulario.patchValue({
         id: item.product.id,
@@ -73,6 +89,15 @@ export class XsProductRegister implements OnInit {
         promoPrice: item.product.promoPrice,
         baseCost: item.product.baseCost,
       });
+      this.existingImages = [...item.images!];
+      this.existingUploadFiles = (item.images ?? []).map(img => ({
+        id: img.id!,
+        url: img.imageUrl!,
+        name: img.altText,
+        isImage: true,
+        isMain: img.isMain
+      }));
+
     }
 
     // --- Filtrado de categorias ---
@@ -124,6 +149,21 @@ export class XsProductRegister implements OnInit {
   }
 
 
+  onExistingFilesRemoved(ids: (number | string)[]) {
+    // IDs a eliminar (para backend)
+    this.deletedImageIds = [...ids];
+
+    // Sincronizar imágenes originales
+    this.existingImages = this.existingImages.filter(
+      img => !this.deletedImageIds.includes(img.id!)
+    );
+
+    // Sincronizar las que se muestran en xs-upload
+    this.existingUploadFiles = this.existingUploadFiles.filter(
+      file => !this.deletedImageIds.includes(file.id)
+    );
+  }
+
 
 
   cerrarDialog() {
@@ -153,11 +193,31 @@ export class XsProductRegister implements OnInit {
 
   agregar() {
     this.productRequest = this.formConfig.assignModel();
-    this.onCreate.emit(this.productRequest);
+
+    this.onCreate.emit({
+      product: this.productRequest,
+      images: this.selectedImages,
+      mainImageKey: this.mainImageKey
+    });
   }
+
 
   modificar() {
     this.productRequest = this.formConfig.assignModel();
-    this.onUpdate.emit(this.productRequest);
+    this.onUpdate.emit({
+      product: this.productRequest,
+      images: this.selectedImages,
+      imagesToKeep: this.existingImages,
+      mainImageKey: this.mainImageKey
+    });
   }
+
+  onFilesSelected(files: File[]) {
+    this.selectedImages = files;
+  }
+
+  onMainImageChange(key: string | number | null) {
+    this.mainImageKey = key;
+  }
+
 }

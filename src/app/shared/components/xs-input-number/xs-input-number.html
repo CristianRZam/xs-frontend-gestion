@@ -1,14 +1,20 @@
 <p-floatlabel [variant]="variant">
-  <p-inputnumber [formControl]="control"
-                 [inputId]="id"
-                 [size]="size"
-                 [ngClass]="{
-                    'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
-                    'p-invalid ng-dirty': control.invalid && control.touched
-                  }"
-                 autocomplete="off"
-                 (input)="onInput($event)"></p-inputnumber>
-  <label [for]="id">{{placeholder}}</label>
+  <p-inputnumber
+    [formControl]="control"
+    [inputId]="id"
+    [size]="size"
+    [min]="min"
+    [max]="max"
+    [ngClass]="{
+      'p-filled': control.value !== null && control.value !== undefined && control.value !== '',
+      'p-invalid': control.invalid && control.touched
+    }"
+    autocomplete="off"
+    (input)="onInput($event)"
+    (onBlur)="onBlur()">
+  </p-inputnumber>
+
+  <label [for]="id">{{ placeholder }}</label>
 </p-floatlabel>
 
 @if (control.errors && control.touched) {

@@ -13,6 +13,8 @@ import {ProfileRepository} from '../../../core/domain/repositories/profile.repos
 import {ProfileService} from '../profile.service';
 import {ProductService} from '../product.service';
 import {ProductRepository} from '../../../core/domain/repositories/product.repository';
+import {CatalogConfigService} from '../catalogconfig.service';
+import {CatalogconfigRepository} from '../../../core/domain/repositories/catalogconfig.repository';
 
 export const infrastructureProviders: Provider[] = [
   { provide: AuthRepository, useClass: AuthService },
@@ -21,5 +23,6 @@ export const infrastructureProviders: Provider[] = [
   { provide: UserRepository, useClass: UserService },
   { provide: ParameterRepository, useClass: ParameterService },
   {provide: ProfileRepository, useClass: ProfileService },
-  {provide: ProductRepository, useClass: ProductService }
+  {provide: ProductRepository, useClass: ProductService },
+  {provide: CatalogconfigRepository, useClass: CatalogConfigService }
 ];

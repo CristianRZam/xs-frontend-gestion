@@ -160,6 +160,34 @@ export class Formvalidators {
     };
   }
 
+  public minNumberValidator(min: number, message: string = '') {
+    return (control: FormControl) => {
+      const value = Number(control.value);
+
+      if (control.value !== null && control.value !== undefined && value < min) {
+        return {
+          minNumber: message || `El valor mínimo es ${min}`
+        };
+      }
+
+      return null;
+    };
+  }
+
+  public maxNumberValidator(max: number, message: string = '') {
+    return (control: FormControl) => {
+      const value = Number(control.value);
+
+      if (control.value !== null && control.value !== undefined && value > max) {
+        return {
+          maxNumber: message || `El valor máximo es ${max}`
+        };
+      }
+
+      return null;
+    };
+  }
+
   // Email form control validator function
   public emailValidator = function (message: string) {
     const reg = /^([a-zA-Z0-9_\-\.]+)@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*(\.[a-zA-Z]{2,3})$/;

@@ -20,7 +20,7 @@ export class XsDialog implements OnInit {
   @Input() display: boolean = false;
   @Input() header: string = '';
   @Input() okButtonLabel: string = 'Guardar';
-  @Input() cancelButtonLabel: string = 'Salir';
+  @Input() cancelButtonLabel: string = 'Cancelar';
   @Input() showOkButton: boolean = false;
   @Input() showCancelButton: boolean = true;
   @Input() isDisabled: boolean = false;

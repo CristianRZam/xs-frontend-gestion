@@ -5,9 +5,12 @@
 <xs-product-filter (filter)="updateFilter($event)" [categoriesData]="categories" [unitMeasuresData]="unitMeasures" [valuationMethodsData]="valuationMethods"></xs-product-filter>
 
 <xs-product-table [products]="products" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" (updateActiveItem)="onUpdateActiveItem($event)"
-                  (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalProducts"></xs-product-table>
+                  (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalProducts"
+                  (catalog)="onCatalog()"></xs-product-table>
 
 <xs-product-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-product-register>
+
+<xs-product-catalog-dialog [configurations]="catalogConfigurations" (onSave)="saveCatalogConfiguration($event)"></xs-product-catalog-dialog>
 
 <xs-loader #xsLoader></xs-loader>
 

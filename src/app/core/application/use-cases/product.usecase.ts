@@ -6,7 +6,7 @@ import {ProductViewResponse} from '../../domain/dtos/responses/product-view.resp
 import {ProductViewRequest} from '../../domain/dtos/resquests/product-view.request';
 import {ProductFormResponse} from '../../domain/dtos/responses/product-form.response';
 import {ProductModel} from '../../domain/models/product.model';
-import {ProductRequest} from '../../domain/dtos/resquests/product.request';
+import {ProductPayloadRequest} from '../../domain/dtos/resquests/product-payload.request';
 
 @Injectable({ providedIn: 'root' })
 export class ProductUseCase {
@@ -20,12 +20,12 @@ export class ProductUseCase {
     return this.repository.initForm(id);
   }
 
-  create(item: ProductRequest): Observable<ApiResponse<ProductModel>> {
-    return this.repository.create(item);
+  create(payload: ProductPayloadRequest): Observable<ApiResponse<ProductModel>> {
+    return this.repository.create(payload);
   }
 
-  update(item: ProductRequest): Observable<ApiResponse<ProductModel>> {
-    return this.repository.update(item);
+  update(payload: ProductPayloadRequest): Observable<ApiResponse<ProductModel>> {
+    return this.repository.update(payload);
   }
 
   updateStatus(id: number): Observable<ApiResponse<boolean>> {

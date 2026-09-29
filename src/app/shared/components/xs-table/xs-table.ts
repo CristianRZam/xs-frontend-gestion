@@ -61,6 +61,7 @@ export class XsTable implements OnInit {
   @Output() lazyLoad: EventEmitter<any> = new EventEmitter();
 
   @ContentChild('additionalTableButtons', { read: TemplateRef }) additionalTableButtons!: TemplateRef<unknown>;
+  @ContentChild('additionalOutLeftButtons', { read: TemplateRef }) additionalOutLeftButtons!: TemplateRef<unknown>;
 
   @ViewChild('xsConfirmDialog') private confirmDialog!: XsConfirmDialog;
 

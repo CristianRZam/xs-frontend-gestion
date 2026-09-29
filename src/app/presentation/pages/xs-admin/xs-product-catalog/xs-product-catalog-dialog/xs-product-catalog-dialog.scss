@@ -1,0 +1,23 @@
+.a4-page {
+  width: 794px;
+  min-height: 1123px;
+  background: white;
+  border: 1px solid #d1d5db;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+.custom-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll::-webkit-scrollbar-thumb {
+  background: rgba(120, 120, 120, 0.35);
+  border-radius: 999px;
+}
+
+.custom-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}

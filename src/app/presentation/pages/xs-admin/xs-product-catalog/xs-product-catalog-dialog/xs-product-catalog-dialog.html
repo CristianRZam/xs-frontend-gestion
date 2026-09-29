@@ -1,0 +1,600 @@
+<xs-dialog
+  [header]="dialogModel.header"
+  okButtonLabel="Generar catálogo"
+  [showOkButton]="dialogModel.showOkButton"
+  [display]="dialogModel.display"
+  (onAceptar)="generarCatalogo()"
+  (onCerrar)="cerrarDialog()">
+
+  <ng-template #content>
+    <div class="flex gap-8 h-[780px] overflow-hidden">
+
+      <!-- PANEL CONFIGURACIONES -->
+      <div class="w-[380px] h-full flex flex-col border-r border-gray-200 dark:border-gray-700 pr-4 overflow-hidden">
+        <div class="flex-1 overflow-y-auto pr-2 custom-scroll">
+
+          <div class="space-y-6 pb-4">
+
+            <!-- CONFIGURACIÓN GENERAL -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Configuración general</h3>
+
+              <div class="space-y-4">
+                <div class="mt-2">
+                  <xs-select
+                    [control]="$any(formConfig.id)"
+                    [dataSource]="savedConfigsWithNew"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Configuraciones"
+                    [showClear]="false"
+                    (change)="onConfigChange($event)">
+                  </xs-select>
+                </div>
+
+                <div class="mt-2">
+                  <xs-input-text
+                    [control]="$any(formConfig.name)"
+                    placeholder="Nombre"
+                    [maxLength]="100">
+                  </xs-input-text>
+                </div>
+
+                <div class="grid gap-3 mt-2" [ngClass]="catalogConfig.viewMode === 'GRID' ? 'grid-cols-2' : 'grid-cols-1'">
+                  <xs-select
+                    [control]="$any(formConfig.viewMode)"
+                    [dataSource]="viewModes"
+                    optionLabel="name"
+                    optionValue="id"
+                    placeholder="Vista"
+                    [showClear]="false"
+                    (change)="onViewModeChange($event)">
+                  </xs-select>
+
+                  @if (catalogConfig.viewMode === 'GRID') {
+                    <xs-input-number
+                      [control]="$any(formConfig.columns)"
+                      placeholder="Columnas"
+                      [min]="1"
+                      [max]="4"
+                      (input)="onColumnsChange($event)">
+                    </xs-input-number>
+                  }
+                </div>
+
+                <xs-input-number
+                  [control]="$any(formConfig.productsPerPage)"
+                  placeholder="Productos por página"
+                  [min]="1"
+                  [max]="50"
+                  class="mt-2">
+                </xs-input-number>
+              </div>
+            </div>
+
+            <!-- PORTADA -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Portada</h3>
+
+              <div class="space-y-4 text-sm">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="catalogConfig.showCover"
+                    (change)="catalogConfig.showCover ? goToCover() : goToProducts()">
+                  <span>Mostrar portada</span>
+                </label>
+
+                @if (catalogConfig.showCover) {
+                  <div class="space-y-3">
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Imagen de portada
+                    </label>
+
+                    <label class="flex items-center justify-center gap-2 w-full px-4 py-3 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
+
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           class="w-5 h-5 text-gray-500"
+                           viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                      </svg>
+
+                      <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                        Subir imagen
+                      </span>
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onCoverImageSelected($event)"
+                        class="hidden">
+                    </label>
+
+                    <div class="text-xs text-gray-500 leading-relaxed">
+                      Recomendado:
+                      <span class="font-medium">2480 × 3508 px</span>
+                      para formato A4 vertical con mejor calidad de impresión.
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- ENCABEZADO -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Encabezado</h3>
+
+              <div class="space-y-4 text-sm">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="catalogConfig.showHeader"
+                    (change)="goToProducts()">
+                  <span>Mostrar encabezado</span>
+                </label>
+
+                @if (catalogConfig.showHeader) {
+                  <div class="space-y-3">
+
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Imagen del encabezado
+                    </label>
+
+                    <label
+                      class="flex items-center justify-center gap-2 w-full px-4 py-3 border border-dashed border-gray-300 dark:border-gray-600 rounded-xl cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-200">
+
+                      <svg xmlns="http://www.w3.org/2000/svg"
+                           class="w-5 h-5 text-gray-500"
+                           viewBox="0 0 24 24"
+                           stroke="currentColor">
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                      </svg>
+
+                      <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+                        Subir imagen
+                      </span>
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        (change)="onHeaderImageSelected($event)"
+                        class="hidden">
+                    </label>
+
+                    <div class="text-xs text-gray-500 leading-relaxed">
+                      Recomendado:
+                      <span class="font-medium">2480 × 400 px</span>
+                      para un encabezado horizontal en formato A4.
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+
+            <!-- CONTENIDO -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Contenido del producto</h3>
+
+              <div class="grid grid-cols-2 gap-3 text-sm">
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showImage" (change)="goToProducts()">
+                  <span>Imagen</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showCode" (change)="goToProducts()">
+                  <span>Código</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showDescription" (change)="goToProducts()">
+                  <span>Descripción</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showPrice" (change)="goToProducts()">
+                  <span>Precio</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showPricePromo" (change)="goToProducts()">
+                  <span>Precio promo</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showStatus" (change)="goToProducts()">
+                  <span>Estado</span>
+                </label>
+
+                <label class="flex items-center gap-2 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.cardBorder" (change)="goToProducts()">
+                  <span>Bordes</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- PIE -->
+            <div class="bg-white dark:bg-gray-900 rounded-2xl border border-gray-200 dark:border-gray-700 p-4 shadow-sm">
+              <h3 class="font-semibold text-sm mb-4">Pie de página</h3>
+
+              <div class="space-y-3 text-sm">
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showFooter" (change)="goToProducts()">
+                  <span>Mostrar pie</span>
+                </label>
+
+                <label class="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" [(ngModel)]="catalogConfig.showPageNumber" (change)="goToProducts()">
+                  <span>Número de página</span>
+                </label>
+              </div>
+            </div>
+
+            <div class="flex gap-2 mt-4">
+
+              @if(selectedConfigId === -1){
+                <xs-button
+                  label="Guardar configuración"
+                  icon="fa-solid fa-floppy-disk"
+                  severity="success"
+                  (click)="guardarConfiguracion()">
+                </xs-button>
+              }
+
+              @if(selectedConfigId !== -1){
+                <xs-button
+                  label="Actualizar configuración"
+                  icon="fa-solid fa-pen"
+                  severity="info"
+                  (click)="guardarConfiguracion()">
+                </xs-button>
+              }
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- PREVIEW -->
+      <div class="flex-1 h-full overflow-auto">
+        <div class="flex flex-col items-center gap-4 min-h-full">
+          @if (catalogConfig.showCover){
+            <div class="flex gap-3">
+              <xs-button
+                label="Portada"
+                icon="fa-solid fa-book-open"
+                severity="warn"
+                [rounded]="false"
+                [variant]="'outlined'"
+                (click)="goToCover()"
+                [fullWidth]="true"
+                class="w-full sm:w-auto">
+              </xs-button>
+              <xs-button
+                label="Productos"
+                icon="fa-solid fa-book-open"
+                severity="warn"
+                [rounded]="false"
+                [variant]="'outlined'"
+                (click)="goToProducts()"
+                [fullWidth]="true"
+                class="w-full sm:w-auto">
+              </xs-button>
+            </div>
+          }
+
+          <div class="flex justify-center items-start min-h-full pt-2">
+            <div class="origin-top scale-[0.72]">
+              <div class="a4-page bg-white text-gray-900 shadow-2xl rounded-sm overflow-hidden relative transition-all duration-500">
+
+                <!-- PORTADA -->
+                @if (currentPreviewPage === 'cover' && catalogConfig.showCover){
+                  <ng-container>
+                    <img [src]="coverImage" class="absolute inset-0 w-full h-full object-cover"  alt=""/>
+                  </ng-container>
+                }
+
+                <!-- PRODUCTOS -->
+                @if (currentPreviewPage === 'products' || !catalogConfig.showCover){
+                  <ng-container>
+                    <!-- ENCABEZADO -->
+                    @if(catalogConfig.showHeader){
+                      <div class="overflow-hidden">
+                        <img [src]="headerImage" class="w-full h-[90px] object-cover" alt="">
+                      </div>
+                    }
+
+                    <!-- GRID -->
+                    @if(catalogConfig.viewMode === 'GRID'){
+                      <div class="p-8">
+                        <div class="grid gap-5" [style.grid-template-columns]="gridColumns">
+                          @for (product of previewProducts; track $index) {
+                            <div class="rounded-2xl p-4 bg-white shadow-sm hover:shadow-lg transition-all duration-300"
+                                 [class.border]="catalogConfig.cardBorder">
+                              <div class="relative">
+                                @if(catalogConfig.showImage){
+                                  <img [src]="product.image" class="w-full h-36 object-contain mb-3" alt="">
+                                }
+
+                                @if(catalogConfig.showStatus){
+                                  <div class="absolute top-0 right-0">
+                                    <span class="px-2 py-1 rounded-full text-[11px] font-semibold"
+                                      [ngClass]="product.status === 'AGOTADO'
+                                        ? 'bg-red-100 text-red-600'
+                                        : 'bg-green-100 text-green-600'">
+                                      {{ product.status }}
+                                    </span>
+                                  </div>
+                                }
+                              </div>
+
+                              @if(catalogConfig.showCode){
+                                <div class="text-xs text-gray-400 mb-1">
+                                  {{ product.code }}
+                                </div>
+                              }
+
+                              <div class="font-semibold text-gray-900 leading-snug">
+                                {{ product.name }}
+                              </div>
+
+                              @if(catalogConfig.showDescription){
+                                <div class="text-sm text-gray-500 mt-1 leading-relaxed">
+                                  {{ product.description }}
+                                </div>
+                              }
+
+                              @if(catalogConfig.showPrice){
+                                <div class="mt-3">
+                                  @if(catalogConfig.showPricePromo && hasPromo(product)){
+                                    <div class="flex items-center gap-3">
+                                      <span class="text-sm text-gray-400 line-through">
+                                        S/ {{ product.price }}
+                                      </span>
+
+                                      <span class="text-xl font-bold text-green-600">
+                                        S/ {{ product.promoPrice }}
+                                      </span>
+                                    </div>
+                                  }
+
+                                  @if(!catalogConfig.showPricePromo || !hasPromo(product)){
+                                    <div class="text-lg font-bold text-gray-900">
+                                      S/ {{ product.price }}
+                                    </div>
+                                  }
+                                </div>
+                              }
+                            </div>
+                          }
+                        </div>
+                      </div>
+                    }
+
+                    <!-- LIST -->
+                    @if(catalogConfig.viewMode === 'LIST'){
+                      <div class="p-8 space-y-5">
+                        @for (product of previewProducts; track $index) {
+                          <div class="rounded-2xl p-4 bg-white flex gap-5 items-center shadow-sm hover:shadow-lg transition-all duration-300"
+                               [class.border]="catalogConfig.cardBorder">
+
+                            <div class="relative">
+                              @if(catalogConfig.showImage){
+                                <img [src]="product.image" class="w-28 h-28 object-contain" alt="">
+                              }
+
+                              @if(catalogConfig.showStatus){
+                                <div class="absolute -top-2 -right-2">
+                                  <span class="px-2 py-1 rounded-full text-[11px] font-semibold"
+                                    [ngClass]="product.status === 'AGOTADO'
+                                      ? 'bg-red-100 text-red-600'
+                                      : 'bg-green-100 text-green-600'">
+                                    {{ product.status }}
+                                  </span>
+                                </div>
+                              }
+                            </div>
+
+                            <div class="flex-1">
+                              @if(catalogConfig.showCode){
+                                <div class="text-xs text-gray-400 mb-1">
+                                  {{ product.code }}
+                                </div>
+                              }
+
+                              <div class="font-semibold text-gray-900">
+                                {{ product.name }}
+                              </div>
+
+                              @if(catalogConfig.showDescription){
+                                <div class="text-sm text-gray-500 mt-1">
+                                  {{ product.description }}
+                                </div>
+                              }
+
+                              @if(catalogConfig.showPrice){
+                                <div class="mt-3">
+                                  @if(catalogConfig.showPricePromo && hasPromo(product)){
+                                    <div class="flex items-center gap-3">
+                                      <span class="text-sm text-gray-400 line-through">
+                                        S/ {{ product.price }}
+                                      </span>
+
+                                      <span class="text-xl font-bold text-green-600">
+                                        S/ {{ product.promoPrice }}
+                                      </span>
+                                    </div>
+                                  }
+
+                                  @if(!catalogConfig.showPricePromo || !hasPromo(product)){
+                                    <div class="text-lg font-bold text-gray-900">
+                                      S/ {{ product.price }}
+                                    </div>
+                                  }
+                                </div>
+                              }
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    }
+
+                    <!-- TABLE -->
+                    @if(catalogConfig.viewMode === 'TABLE'){
+                      <div class="p-8">
+                        <table class="w-full text-sm border-collapse" [class.border]="catalogConfig.cardBorder">
+                          <thead>
+                            <tr>
+                              @if(catalogConfig.showCode){
+                                <th class="text-left px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  Código
+                                </th>
+                              }
+
+                              <th class="text-left px-4 py-3"
+                                  [class.border]="catalogConfig.cardBorder"
+                                  [class.border-b]="!catalogConfig.cardBorder">
+                                Producto
+                              </th>
+
+                              @if(catalogConfig.showDescription){
+                                <th class="text-left px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  Descripción
+                                </th>
+                              }
+
+                              @if(catalogConfig.showPrice || catalogConfig.showPricePromo){
+                                <th class="text-left px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  Precio
+                                </th>
+                              }
+
+                              @if(catalogConfig.showStatus){
+                                <th class="text-center px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  Estado
+                                </th>
+                              }
+
+                              @if(catalogConfig.showImage){
+                                <th class="text-center px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  Imagen
+                                </th>
+                              }
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            @for (product of previewProducts; track $index) {
+                              <tr>
+                                @if(catalogConfig.showCode){
+                                  <td class="px-4 py-3"
+                                      [class.border]="catalogConfig.cardBorder"
+                                      [class.border-b]="!catalogConfig.cardBorder">
+                                    {{ product.code }}
+                                  </td>
+                                }
+
+                                <td class="px-4 py-3"
+                                    [class.border]="catalogConfig.cardBorder"
+                                    [class.border-b]="!catalogConfig.cardBorder">
+                                  {{ product.name }}
+                                </td>
+
+                                @if(catalogConfig.showDescription){
+                                  <td class="px-4 py-3"
+                                      [class.border]="catalogConfig.cardBorder"
+                                      [class.border-b]="!catalogConfig.cardBorder">
+                                    {{ product.description }}
+                                  </td>
+                                }
+
+                                @if(catalogConfig.showPrice || catalogConfig.showPricePromo){
+                                  <td class="px-4 py-3"
+                                      [class.border]="catalogConfig.cardBorder"
+                                      [class.border-b]="!catalogConfig.cardBorder">
+
+                                    @if(catalogConfig.showPricePromo && hasPromo(product)){
+                                      <div class="space-y-1">
+                                        <div class="text-xs text-gray-400 line-through whitespace-nowrap">
+                                          S/ {{ product.price }}
+                                        </div>
+
+                                        <div class="font-bold text-green-600 whitespace-nowrap">
+                                          S/ {{ product.promoPrice }}
+                                        </div>
+                                      </div>
+                                    }
+
+                                    @if(!catalogConfig.showPricePromo || !hasPromo(product)){
+                                      <div class="font-bold text-gray-900 whitespace-nowrap">
+                                        S/ {{ product.price }}
+                                      </div>
+                                    }
+                                  </td>
+                                }
+
+                                @if(catalogConfig.showStatus){
+                                  <td class="px-4 py-3 text-center"
+                                      [class.border]="catalogConfig.cardBorder"
+                                      [class.border-b]="!catalogConfig.cardBorder">
+                                    <span class="px-2 py-1 rounded-full text-[11px] font-semibold"
+                                      [ngClass]="product.status === 'AGOTADO'
+                                        ? 'bg-red-100 text-red-600'
+                                        : 'bg-green-100 text-green-600'">
+                                      {{ product.status }}
+                                    </span>
+                                  </td>
+                                }
+
+                                @if(catalogConfig.showImage){
+                                  <td class="px-4 py-3 text-center"
+                                      [class.border]="catalogConfig.cardBorder"
+                                      [class.border-b]="!catalogConfig.cardBorder">
+                                    <img [src]="product.image" class="w-14 h-14 object-contain mx-auto" alt="">
+                                  </td>
+                                }
+
+                              </tr>
+                            }
+                          </tbody>
+                        </table>
+                      </div>
+                    }
+
+                    @if(catalogConfig.showFooter){
+                      <div class="absolute bottom-0 left-0 right-0 pt-3 px-8 pb-4 text-sm text-gray-500 flex justify-between">
+                        <span>PIE DE PÁGINA</span>
+                        @if(catalogConfig.showPageNumber){
+                          <span>Página 1</span>
+                        }
+                      </div>
+                    }
+                  </ng-container>
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+</xs-dialog>

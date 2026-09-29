@@ -4,5 +4,17 @@
             [exportPdfButtonShow]="canExport" [statusToggleButtonActive]="canEdit" (onUpdateActiveItem)="onUpdateActiveItem($event)"
             (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
             (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
+    <ng-template #additionalOutLeftButtons>
+      <xs-button
+        label="Catálogo"
+        icon="fa-solid fa-book-open"
+        severity="warn"
+        [rounded]="false"
+        [variant]="'outlined'"
+        (click)="onClickCatalogo()"
+        [fullWidth]="true"
+        class="w-full sm:w-auto">
+      </xs-button>
+    </ng-template>
   </xs-table>
 </div>

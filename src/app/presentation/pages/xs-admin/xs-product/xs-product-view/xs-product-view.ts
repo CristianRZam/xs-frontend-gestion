@@ -14,6 +14,10 @@ import {ErrorHandlerService} from '../../../../../shared/services/error-handler.
 import {Formvalidators} from '../../../../../shared/validators/form-validators';
 import {ProductUseCase} from '../../../../../core/application/use-cases/product.usecase';
 import {ProductFormResponse} from '../../../../../core/domain/dtos/responses/product-form.response';
+import {ProductPayloadRequest} from '../../../../../core/domain/dtos/resquests/product-payload.request';
+import {XsProductCatalogDialog} from '../../xs-product-catalog/xs-product-catalog-dialog/xs-product-catalog-dialog';
+import {CatalogConfigUseCase} from '../../../../../core/application/use-cases/catalog-config.usecase';
+import {CatalogConfigDTO} from '../../../../../core/domain/dtos/responses/catalog-config-dto';
 
 
 @Component({
@@ -26,6 +30,7 @@ import {ProductFormResponse} from '../../../../../core/domain/dtos/responses/pro
     XsProductFilter,
     XsProductRegister,
     XsProductTable,
+    XsProductCatalogDialog,
   ],
   templateUrl: './xs-product-view.html',
   styleUrl: './xs-product-view.scss'
@@ -34,6 +39,7 @@ export class XsProductView implements OnInit, AfterViewInit{
   @ViewChild('xsLoader') loader!: XsLoader;
   @ViewChild('xsToastProductView') private toast!: XsToast;
   @ViewChild(XsProductRegister) productRegister!: XsProductRegister;
+  @ViewChild(XsProductCatalogDialog) productCatalogDialog!: XsProductCatalogDialog;
 
   public totalProducts = 0;
   public activeProducts = 0;
@@ -48,8 +54,10 @@ export class XsProductView implements OnInit, AfterViewInit{
     size: 5
   };
   productFormResponse: ProductFormResponse = {};
+  public catalogConfigurations: CatalogConfigDTO[] = [];
 
   constructor(
+    private catalogConfigUseCase: CatalogConfigUseCase,
     private productUsecase: ProductUseCase,
     private errorHandler: ErrorHandlerService,
     private util: Formvalidators
@@ -116,7 +124,6 @@ export class XsProductView implements OnInit, AfterViewInit{
 
   updateFilter(event: ProductViewRequest) {
     this.filter= event;
-
     this.load();
   }
 
@@ -202,9 +209,9 @@ export class XsProductView implements OnInit, AfterViewInit{
     });
   }
 
-  create(item: ProductRequest) {
+  create(payload: ProductPayloadRequest) {
     this.loader.show('Guardando producto...');
-    this.productUsecase.create(item).subscribe({
+    this.productUsecase.create(payload).subscribe({
       next: (res) => {
         if (res.success) {
           this.toast.show("Producto registrado con éxito.");
@@ -223,9 +230,9 @@ export class XsProductView implements OnInit, AfterViewInit{
     });
   }
 
-  update(item: ProductRequest) {
-    this.loader.show('Actualizado producto...');
-    this.productUsecase.update(item).subscribe({
+  update(payload: ProductPayloadRequest) {
+    this.loader.show('Actualizando producto...');
+    this.productUsecase.update(payload).subscribe({
       next: (res) => {
         if (res.success) {
           this.toast.show("Producto actualizado con éxito.");
@@ -237,6 +244,84 @@ export class XsProductView implements OnInit, AfterViewInit{
       },
       error: (e) => {
         const msg = this.errorHandler.getErrorMessage(e, "actualizar", "producto");
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  onCatalog(){
+    this.loader.show('Cargando...');
+    this.catalogConfigUseCase.findAll().subscribe({
+      next: response => {
+        this.catalogConfigurations = response.data ?? [];
+        this.productCatalogDialog.openDialog();
+        this.loader.hide();
+      },
+      error: error => {
+        console.error('Error cargando configuraciones de catalogo', error);
+        this.loader.hide();
+      }
+    });
+  }
+
+
+  saveCatalogConfiguration(payload: any): void {
+    if (payload.id != null && payload.id !== -1) {
+      this.updateCatalogConfiguration(payload);
+    } else {
+      this.createCatalogConfiguration(payload);
+    }
+  }
+
+  private createCatalogConfiguration(payload: any): void {
+    this.loader.show('Guardando configuración...');
+
+    this.catalogConfigUseCase.create(payload).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show('Configuración registrada con éxito.');
+        } else {
+          this.toast.show(
+            res.message || 'No se pudo registrar la configuración.',
+            'error'
+          );
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(
+          e,
+          'registrar',
+          'configuración'
+        );
+        this.toast.show(msg, 'error');
+        this.loader.hide();
+      },
+      complete: () => this.loader.hide()
+    });
+  }
+
+  private updateCatalogConfiguration(payload: any): void {
+    this.loader.show('Actualizando configuración...');
+
+    this.catalogConfigUseCase.update(payload).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.toast.show('Configuración actualizada con éxito.');
+        } else {
+          this.toast.show(
+            res.message || 'No se pudo actualizar la configuración.',
+            'error'
+          );
+        }
+      },
+      error: (e) => {
+        const msg = this.errorHandler.getErrorMessage(
+          e,
+          'actualizar',
+          'configuración'
+        );
         this.toast.show(msg, 'error');
         this.loader.hide();
       },

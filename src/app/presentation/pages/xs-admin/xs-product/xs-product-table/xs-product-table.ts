@@ -3,11 +3,13 @@ import {ProductModel} from '../../../../../core/domain/models/product.model';
 import {XsTable} from '../../../../../shared/components/xs-table/xs-table';
 import {XsTableColumn} from '../../../../../shared/components/xs-table/xs-table.model';
 import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
+import {XsButton} from '../../../../../shared/components/xs-button/xs-button';
 
 @Component({
   selector: 'xs-product-table',
   imports: [
-    XsTable
+    XsTable,
+    XsButton
   ],
   templateUrl: './xs-product-table.html',
   styleUrl: './xs-product-table.scss'
@@ -22,6 +24,7 @@ export class XsProductTable {
   @Output() updateActiveItem: EventEmitter<ProductModel> = new EventEmitter();
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
+  @Output() catalog: EventEmitter<any> = new EventEmitter();
 
   canExport = false;
   canCreate = false;
@@ -90,4 +93,7 @@ export class XsProductTable {
     this.exportExcel.emit($event);
   }
 
+  onClickCatalogo() {
+    this.catalog.emit();
+  }
 }

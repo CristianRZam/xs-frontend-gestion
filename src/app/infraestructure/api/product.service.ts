@@ -9,6 +9,8 @@ import {ProductViewRequest} from '../../core/domain/dtos/resquests/product-view.
 import {ProductFormResponse} from '../../core/domain/dtos/responses/product-form.response';
 import {ProductRequest} from '../../core/domain/dtos/resquests/product.request';
 import {ProductModel} from '../../core/domain/models/product.model';
+import {ProductPayloadRequest} from '../../core/domain/dtos/resquests/product-payload.request';
+import {ProductImageDTO} from '../../core/domain/dtos/product-image.dto';
 
 @Injectable({ providedIn: 'root' })
 export class ProductService implements ProductRepository {
@@ -26,19 +28,66 @@ export class ProductService implements ProductRepository {
     );
   }
 
-  create(request: ProductRequest): Observable<ApiResponse<ProductModel>> {
+  create(payload: ProductPayloadRequest): Observable<ApiResponse<ProductModel>> {
+    const formData = new FormData();
+
+    formData.append(
+      'product',
+      new Blob([JSON.stringify(payload.product)], { type: 'application/json' })
+    );
+
+    payload.images?.forEach(file => {
+      formData.append('images', file, file.name);
+    });
+
+    if (payload.mainImageKey !== undefined) {
+      formData.append(
+        'mainImageKey',
+        new Blob([JSON.stringify(payload.mainImageKey)], { type: 'application/json' })
+      );
+    }
+
     return this.http.post<ApiResponse<ProductModel>>(
       `${this.baseUrl}/create`,
-      request
+      formData
     );
   }
 
-  update(request: ProductRequest): Observable<ApiResponse<ProductModel>> {
+
+
+  update(payload: ProductPayloadRequest): Observable<ApiResponse<ProductModel>> {
+    const formData = new FormData();
+
+    formData.append(
+      'product',
+      new Blob([JSON.stringify(payload.product)], { type: 'application/json' })
+    );
+
+    payload.images?.forEach(file => {
+      formData.append('images', file, file.name);
+    });
+
+    if (payload.imagesToKeep) {
+      formData.append(
+        'imagesToKeep',
+        new Blob([JSON.stringify(payload.imagesToKeep)], { type: 'application/json' })
+      );
+    }
+
+    if (payload.mainImageKey !== undefined) {
+      formData.append(
+        'mainImageKey',
+        new Blob([JSON.stringify(payload.mainImageKey)], { type: 'application/json' })
+      );
+    }
+
     return this.http.put<ApiResponse<ProductModel>>(
       `${this.baseUrl}/update`,
-      request
+      formData
     );
   }
+
+
 
   delete(id: number): Observable<ApiResponse<boolean>> {
     return this.http.delete<ApiResponse<boolean>>(

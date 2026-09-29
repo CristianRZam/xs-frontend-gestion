@@ -14,6 +14,7 @@
 
       <!-- Botones -->
       <div class="flex flex-col sm:flex-row sm:justify-center sm:gap-x-2 gap-y-2 w-full sm:w-auto ml-auto">
+        <ng-container *ngTemplateOutlet="additionalOutLeftButtons;"></ng-container>
         @if (exportExcelButtonShow) {
           <xs-button
             label="Exportar"
@@ -110,13 +111,13 @@
               class="px-2 py-1 rounded-full text-xs font-semibold"
               [class.cursor-pointer]="col.field === 'active' && statusToggleButtonActive"
               [ngStyle]="{
-          'background-color': col.badgeColorMap ? col.badgeColorMap[item[col.field || '']] : '#E5E7EB',
-          'color': col.badgeColorMap ? getTextColor(col.badgeColorMap[item[col.field || '']]) : '#374151'
-        }"
-              (click)="col.field === 'active' && statusToggleButtonActive ? onClickToggleActive(item) : null"
-            >
-        {{ col.badgeTextFn ? col.badgeTextFn!(item[col.field || ''], item) : item[col.field || ''] }}
-      </span>
+                'background-color': col.badgeColorMap ? col.badgeColorMap[item[col.field || '']] : '#E5E7EB',
+                'color': col.badgeColorMap ? getTextColor(col.badgeColorMap[item[col.field || '']]) : '#374151'
+              }"
+                    (click)="col.field === 'active' && statusToggleButtonActive ? onClickToggleActive(item) : null"
+                  >
+              {{ col.badgeTextFn ? col.badgeTextFn!(item[col.field || ''], item) : item[col.field || ''] }}
+            </span>
           } @else {
             {{ getValue(item, col.field) }}
           }
