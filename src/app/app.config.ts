@@ -1,4 +1,6 @@
-import { ApplicationConfig, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, LOCALE_ID, provideBrowserGlobalErrorListeners, provideZoneChangeDetection } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEsPe from '@angular/common/locales/es-PE';
 import { provideRouter } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -9,9 +11,12 @@ import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { infrastructureProviders } from './infraestructure/api/config/infraestructure-providers';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 
+registerLocaleData(localeEsPe);
+
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
+    { provide: LOCALE_ID, useValue: 'es-PE' },
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
     provideAnimationsAsync(),

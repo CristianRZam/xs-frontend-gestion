@@ -16,5 +16,8 @@
         class="w-full sm:w-auto">
       </xs-button>
     </ng-template>
+    <ng-template #additionalTableButtons let-item="item">
+      <xs-button icon="fa-solid fa-clock-rotate-left" severity="secondary" variant="outlined" [rounded]="false" (click)="onMovements(item)"></xs-button>
+    </ng-template>
   </xs-table>
 </div>

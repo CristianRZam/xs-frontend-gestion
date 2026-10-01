@@ -1,0 +1,8 @@
+:host,
+.chart-container {
+  display: block;
+  min-height: 18rem;
+  position: relative;
+}
+
+canvas { height: 100% !important; max-height: 22rem; width: 100% !important; }

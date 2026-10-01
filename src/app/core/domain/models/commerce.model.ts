@@ -1,0 +1,4 @@
+export interface CommerceItem { productId: number; productName?: string; quantity: number; unitPrice: number; discount?: number; subtotal?: number; notes?: string; }
+export interface SalePayment { paymentMethod: string; amount: number; receivedAmount?: number; changeAmount?: number; reference?: string; }
+export interface SaleModel { id: number; saleNumber: string; orderId?: number; subtotal: number; discount: number; total: number; status: string; createdByName?: string; createdAt?: string; cancellationReason?: string; cancelledByName?: string; cancelledAt?: string; items: CommerceItem[]; payments: SalePayment[]; }
+export interface OrderModel { id: number; orderNumber: string; orderType: string; tableNumber?: string; status?: string; notes?: string; createdAt?: string; modifiedAt?: string; createdByName?: string; items: CommerceItem[]; }

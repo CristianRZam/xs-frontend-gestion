@@ -8,10 +8,19 @@ import { permissionGuard } from '../../../core/guards/permission.guard';
 import { XsProfileView } from './xs-profile/xs-profile-view/xs-profile-view';
 import { MenuItem } from 'primeng/api';
 import {XsProductView} from './xs-product/xs-product-view/xs-product-view';
+import { XsCashSessionView } from './xs-cash-session/xs-cash-session-view/xs-cash-session-view';
+import { XsInventoryCountView } from './xs-inventory-count/xs-inventory-count-view/xs-inventory-count-view';
+import { XsSaleView } from './xs-sale/xs-sale-view/xs-sale-view';
+import { XsOrderView } from './xs-order/xs-order-view/xs-order-view';
 
 export const ADMIN_ROUTES: Routes = [
   {
     path: '',
+    pathMatch: 'full',
+    redirectTo: 'dashboard'
+  },
+  {
+    path: 'dashboard',
     component: XsDashboard,
     canActivate: [permissionGuard],
     data: {
@@ -89,5 +98,27 @@ export const ADMIN_ROUTES: Routes = [
         { label: 'Productos' },
       ] as MenuItem[]
     }
-  }
+  },
+  {
+    path: 'cash-session',
+    component: XsCashSessionView,
+    data: {
+      breadcrumb: [
+        { label: 'Operaciones' },
+        { label: 'Caja', routerLink: '/admin/cash-session' }
+      ] as MenuItem[]
+    }
+  },
+  {
+    path: 'inventory-count',
+    component: XsInventoryCountView,
+    data: {
+      breadcrumb: [
+        { label: 'Operaciones' },
+        { label: 'Conteo de productos', routerLink: '/admin/inventory-count' }
+      ] as MenuItem[]
+    }
+  },
+  { path: 'sales', component: XsSaleView, data: { breadcrumb: [{ label: 'Operaciones' }, { label: 'Ventas', routerLink: '/admin/sales' }] as MenuItem[] } },
+  { path: 'orders', component: XsOrderView, data: { breadcrumb: [{ label: 'Operaciones' }, { label: 'Órdenes', routerLink: '/admin/orders' }] as MenuItem[] } }
 ];

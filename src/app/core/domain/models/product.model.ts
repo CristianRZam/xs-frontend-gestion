@@ -13,6 +13,7 @@ export interface ProductModel {
   promoPrice?: number;
   baseCost?: number;
   totalStock?: number;
+  reservedStock?: number;
   active?: boolean;
   deleted?: boolean;
 }

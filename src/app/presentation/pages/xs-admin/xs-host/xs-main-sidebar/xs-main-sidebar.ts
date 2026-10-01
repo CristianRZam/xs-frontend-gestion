@@ -85,7 +85,12 @@ export class XsMainSidebar implements OnInit {
         label: 'INICIO',
         expanded: true,
         items: [
-          { label: 'Dashboard', icon: 'fas fa-home', routerLink: '/admin' },
+          {
+            label: 'Dashboard',
+            icon: 'fas fa-home',
+            routerLink: '/admin/dashboard',
+            permission: 'VIEW_DASHBOARD'
+          },
         ],
       },
       {
@@ -134,6 +139,32 @@ export class XsMainSidebar implements OnInit {
             ],
           },
         ],
+      },
+      {
+        label: 'OPERACIONES',
+        expanded: true,
+        items: [
+          {
+            label: 'Caja',
+            icon: 'fas fa-cash-register',
+            routerLink: '/admin/cash-session'
+          },
+          {
+            label: 'Conteo de productos',
+            icon: 'fas fa-clipboard-check',
+            routerLink: '/admin/inventory-count'
+          },
+          {
+            label: 'Órdenes',
+            icon: 'fas fa-clipboard-list',
+            routerLink: '/admin/orders'
+          },
+          {
+            label: 'Ventas',
+            icon: 'fas fa-receipt',
+            routerLink: '/admin/sales'
+          }
+        ]
       },
     ];
 

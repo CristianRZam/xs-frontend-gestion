@@ -1,1 +1,52 @@
-<p>DASHBOARD VIEW</p>
+<xs-loader #dashboardLoader></xs-loader>
+<xs-toast #dashboardToast></xs-toast>
+
+<section class="dashboard" aria-labelledby="dashboard-title">
+  <header class="dashboard__header">
+    <div>
+      <p class="dashboard__eyebrow">Resumen operativo</p>
+      <h1 id="dashboard-title">Dashboard</h1>
+      @if (dashboard?.summaryDate) {
+        <p class="dashboard__date">Información al {{ dashboard?.summaryDate | date: 'longDate':'':'es-PE' }}</p>
+      }
+    </div>
+    <xs-button label="Actualizar" icon="fa-solid fa-rotate" severity="secondary" variant="outlined" (xsClick)="load()"></xs-button>
+  </header>
+
+  @if (dashboard; as summary) {
+    <p class="dashboard__scope">{{ summary.scope === 'PERSONAL' ? 'Mostrando tu actividad del día.' : 'Mostrando el resumen global del negocio.' }}</p>
+    <div class="dashboard__metrics">
+      <xs-dashboard-metric-card title="Ventas de hoy" [value]="summary.todaySales | currency: 'PEN':'symbol-narrow':'1.2-2':'es-PE'" icon="fa-solid fa-wallet" description="Monto de ventas completadas" tone="primary"></xs-dashboard-metric-card>
+      <xs-dashboard-metric-card title="Ventas completadas" [value]="summary.todaySalesCount.toString()" icon="fa-solid fa-receipt" description="Operaciones registradas hoy" tone="success"></xs-dashboard-metric-card>
+      <xs-dashboard-metric-card title="Ticket promedio" [value]="summary.averageSale | currency: 'PEN':'symbol-narrow':'1.2-2':'es-PE'" icon="fa-solid fa-chart-line" description="Promedio por venta" tone="info"></xs-dashboard-metric-card>
+      <xs-dashboard-metric-card title="Órdenes de hoy" [value]="summary.todayOrders.toString()" icon="fa-solid fa-clipboard-list" description="Órdenes creadas hoy" tone="warning"></xs-dashboard-metric-card>
+    </div>
+
+    <div class="dashboard__charts">
+      @if (summary.weeklySales.length) {
+        <article class="dashboard__chart dashboard__chart--wide">
+          <header><h2>Ventas de los últimos 7 días</h2><p>Evolución de ventas completadas.</p></header>
+          <xs-chart type="line" [data]="weeklySalesData" [options]="lineOptions" ariaLabel="Gráfico de ventas de los últimos siete días"></xs-chart>
+        </article>
+      }
+      <article class="dashboard__chart">
+        <header><h2>Productos más vendidos</h2><p>Unidades vendidas por producto.</p></header>
+        @if (summary.topProducts.length) {
+          <xs-chart type="bar" [data]="topProductsData" [options]="barOptions" ariaLabel="Gráfico de productos más vendidos"></xs-chart>
+        } @else {
+          <p class="dashboard__empty">Aún no hay productos vendidos para este periodo.</p>
+        }
+      </article>
+      <article class="dashboard__chart">
+        <header><h2>Medios de pago</h2><p>Distribución por importe cobrado.</p></header>
+        @if (summary.paymentMethods.length) {
+          <xs-chart type="doughnut" [data]="paymentMethodsData" [options]="doughnutOptions" ariaLabel="Gráfico de medios de pago"></xs-chart>
+        } @else {
+          <p class="dashboard__empty">Aún no hay pagos registrados para este periodo.</p>
+        }
+      </article>
+    </div>
+  } @else {
+    <div class="dashboard__empty dashboard__empty--initial">No hay información disponible para mostrar.</div>
+  }
+</section>

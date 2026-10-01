@@ -1,0 +1,32 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+:host ::ng-deep {
+  .p-floatlabel,
+  .p-datepicker {
+    display: block;
+    width: 100%;
+  }
+
+  .p-datepicker-input {
+    width: 100%;
+  }
+
+  .p-datepicker-input-icon-container {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--p-form-field-icon-color);
+  }
+
+  .p-datepicker-input-icon {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .p-floatlabel label {
+    font-size: 0.875rem;
+  }
+}

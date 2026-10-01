@@ -25,6 +25,7 @@ export class XsProductTable {
   @Output() exportPdf: EventEmitter<any> = new EventEmitter();
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
   @Output() catalog: EventEmitter<any> = new EventEmitter();
+  @Output() movements: EventEmitter<ProductModel> = new EventEmitter();
 
   canExport = false;
   canCreate = false;
@@ -96,4 +97,6 @@ export class XsProductTable {
   onClickCatalogo() {
     this.catalog.emit();
   }
+
+  onMovements(item: ProductModel): void { this.movements.emit(item); }
 }

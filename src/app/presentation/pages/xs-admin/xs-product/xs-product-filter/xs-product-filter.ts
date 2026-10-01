@@ -8,6 +8,7 @@ import {XsMultiselect} from '../../../../../shared/components/xs-multiselect/xs-
 import {XsSelect} from '../../../../../shared/components/xs-select/xs-select';
 import {AbstractControl, FormBuilder, FormGroup} from '@angular/forms';
 import {XsInputNumber} from '../../../../../shared/components/xs-input-number/xs-input-number';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'xs-product-filter',
@@ -86,7 +87,7 @@ export class XsProductFilter implements OnInit {
       maximumStock: this.formulario.value.maximumStock,
       status: this.formulario.value.status !== null ? this.formulario.value.status : undefined,
       page: 0,
-      size: 5
+      size: environment.PRODUCT_PAGE_SIZE
     };
 
     this.filter.emit(request);
@@ -97,7 +98,7 @@ export class XsProductFilter implements OnInit {
 
     const request: ProductViewRequest = {
       page: 0,
-      size: 5
+      size: environment.PRODUCT_PAGE_SIZE
     };
 
     this.filter.emit(request);

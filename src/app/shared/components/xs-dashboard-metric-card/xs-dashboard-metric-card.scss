@@ -1,0 +1,37 @@
+:host { display: block; }
+
+.metric-card {
+  align-items: center;
+  background: var(--p-content-background);
+  border: 1px solid var(--p-content-border-color);
+  border-radius: 1rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  min-height: 8.5rem;
+  padding: 1.25rem;
+}
+
+.metric-card__content { display: grid; gap: 0.35rem; }
+
+.metric-card__title,
+.metric-card__description { color: var(--p-text-muted-color); font-size: 0.875rem; }
+
+.metric-card__value { color: var(--p-text-color); font-size: clamp(1.5rem, 2vw, 2rem); line-height: 1.1; }
+
+.metric-card__icon {
+  align-items: center;
+  background: color-mix(in srgb, var(--metric-color) 14%, transparent);
+  border-radius: 0.875rem;
+  color: var(--metric-color);
+  display: inline-flex;
+  font-size: 1.5rem;
+  height: 3.25rem;
+  justify-content: center;
+  width: 3.25rem;
+}
+
+.metric-card--primary { --metric-color: var(--p-primary-color); }
+.metric-card--success { --metric-color: var(--p-green-500); }
+.metric-card--warning { --metric-color: var(--p-orange-500); }
+.metric-card--info { --metric-color: var(--p-blue-500); }

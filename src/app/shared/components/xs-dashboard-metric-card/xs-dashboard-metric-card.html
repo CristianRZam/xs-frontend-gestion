@@ -1,0 +1,12 @@
+<article class="metric-card" [class]="'metric-card--' + tone">
+  <div class="metric-card__content">
+    <span class="metric-card__title">{{ title }}</span>
+    <strong class="metric-card__value">{{ value }}</strong>
+    @if (description) {
+      <span class="metric-card__description">{{ description }}</span>
+    }
+  </div>
+  <span class="metric-card__icon" aria-hidden="true">
+    <i [class]="icon"></i>
+  </span>
+</article>

@@ -1,0 +1,17 @@
+<p-floatlabel variant="on">
+  <p-datepicker
+    [formControl]="control"
+    [inputId]="id"
+    [dateFormat]="dateFormat"
+    [showIcon]="showIcon"
+    iconDisplay="input"
+    [showClear]="showClear"
+    [readonlyInput]="readonlyInput"
+    [inputStyleClass]="size === 'large' ? 'p-inputtext-lg' : 'p-inputtext-sm'"
+    [ngClass]="{ 'p-filled': control.value, 'p-invalid': control.invalid && control.touched }"
+  ></p-datepicker>
+  <label [for]="id">{{ placeholder }}</label>
+</p-floatlabel>
+@if (control.errors && control.touched) {
+  <p-message severity="error" size="small" variant="simple">{{ control.errors | json }}</p-message>
+}

@@ -18,6 +18,8 @@ import {ProductPayloadRequest} from '../../../../../core/domain/dtos/resquests/p
 import {XsProductCatalogDialog} from '../../xs-product-catalog/xs-product-catalog-dialog/xs-product-catalog-dialog';
 import {CatalogConfigUseCase} from '../../../../../core/application/use-cases/catalog-config.usecase';
 import {CatalogConfigDTO} from '../../../../../core/domain/dtos/responses/catalog-config-dto';
+import { environment } from '../../../../../../environments/environment';
+import { XsInventoryMovementHistory } from '../../../../../shared/components/xs-inventory-movement-history/xs-inventory-movement-history';
 
 
 @Component({
@@ -31,6 +33,7 @@ import {CatalogConfigDTO} from '../../../../../core/domain/dtos/responses/catalo
     XsProductRegister,
     XsProductTable,
     XsProductCatalogDialog,
+    XsInventoryMovementHistory,
   ],
   templateUrl: './xs-product-view.html',
   styleUrl: './xs-product-view.scss'
@@ -51,10 +54,12 @@ export class XsProductView implements OnInit, AfterViewInit{
   public products: ProductModel[] = [];
   filter: ProductViewRequest = {
     page: 0,
-    size: 5
+    size: environment.PRODUCT_PAGE_SIZE
   };
   productFormResponse: ProductFormResponse = {};
   public catalogConfigurations: CatalogConfigDTO[] = [];
+  public movementProduct?: ProductModel;
+  public movementHistoryVisible = false;
 
   constructor(
     private catalogConfigUseCase: CatalogConfigUseCase,
@@ -264,6 +269,15 @@ export class XsProductView implements OnInit, AfterViewInit{
         this.loader.hide();
       }
     });
+  }
+
+  onMovements(product: ProductModel): void {
+    this.movementProduct = product;
+    this.movementHistoryVisible = true;
+  }
+
+  onMovementHistoryClose(): void {
+    this.movementHistoryVisible = false;
   }
 
 
