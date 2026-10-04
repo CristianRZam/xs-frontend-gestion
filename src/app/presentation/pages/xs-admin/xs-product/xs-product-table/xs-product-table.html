@@ -1,9 +1,9 @@
 <div class="my-4">
-  <xs-table [columns]="columns" [dataSource]="products" title="Lista de productos" [addButtonShow]="canCreate" [editButtonShow]="canEdit"
+  <xs-table [columns]="columns" [dataSource]="products" title="Lista de productos" [addButtonShow]="canCreate" [editButtonShow]="canEdit" [lazy]="true" [rows]="pageSize"
             [exportExcelButtonShow]="canExport" [deleteButtonShow]="canDelete"
             [exportPdfButtonShow]="canExport" [statusToggleButtonActive]="canEdit" (onUpdateActiveItem)="onUpdateActiveItem($event)"
             (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" [totalRecords]="totalRecords"
-            (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)">
+            (exportPdf)="onExportPdf($event)" (exportExcel)="onExportExcel($event)" (lazyLoad)="onLazyLoad($event)">
     <ng-template #additionalOutLeftButtons>
       <xs-button
         label="Catálogo"
@@ -17,7 +17,18 @@
       </xs-button>
     </ng-template>
     <ng-template #additionalTableButtons let-item="item">
+      @if (canCreateInventoryEntry) {
+      <xs-button icon="fa-solid fa-box-open" severity="success" variant="outlined" [rounded]="false" (click)="onEntry(item)"></xs-button>
+      }
+      @if (canCreateProductWaste) {
+      <xs-button icon="fa-solid fa-circle-minus" severity="danger" variant="outlined" [rounded]="false" (click)="onWaste(item)"></xs-button>
+      }
+      @if (canAdjustProductInventory) {
+      <xs-button icon="fa-solid fa-sliders" severity="warn" variant="outlined" [rounded]="false" (click)="onAdjustment(item)"></xs-button>
+      }
+      @if (canViewMovements) {
       <xs-button icon="fa-solid fa-clock-rotate-left" severity="secondary" variant="outlined" [rounded]="false" (click)="onMovements(item)"></xs-button>
+      }
     </ng-template>
   </xs-table>
 </div>

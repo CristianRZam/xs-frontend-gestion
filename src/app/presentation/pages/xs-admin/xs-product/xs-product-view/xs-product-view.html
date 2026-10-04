@@ -6,13 +6,14 @@
 
 <xs-product-table [products]="products" (addItem)="onAddItem()" (updateItem)="onUpdateItem($event)" (deleteItem)="onDeleteItem($event)" (updateActiveItem)="onUpdateActiveItem($event)"
                   (exportPdf)="exportPdf($event)" (exportExcel)="exportExcel($event)" [totalRecords]="totalProducts"
-                  (catalog)="onCatalog()" (movements)="onMovements($event)"></xs-product-table>
+                  (catalog)="onCatalog()" (movements)="onMovements($event)" (entry)="openInventoryMovement($event, 'ENTRY')" (waste)="openInventoryMovement($event, 'WASTE')" (adjustment)="openInventoryMovement($event, 'ADJUSTMENT')" (pageChange)="onProductPageChange($event)"></xs-product-table>
 
 <xs-product-register (onCreate)="create($event)" (onUpdate)="update($event)"></xs-product-register>
 
 <xs-product-catalog-dialog [configurations]="catalogConfigurations" (onSave)="saveCatalogConfiguration($event)"></xs-product-catalog-dialog>
 
 <xs-inventory-movement-history [visible]="movementHistoryVisible" [productId]="movementProduct?.id" [productName]="movementProduct?.name || ''" (closed)="onMovementHistoryClose()"></xs-inventory-movement-history>
+<xs-inventory-movement-register [visible]="movementRegisterVisible" [product]="movementRegisterProduct" [type]="movementRegisterType" (save)="createInventoryMovement($event)" (closed)="closeInventoryMovement()"></xs-inventory-movement-register>
 
 <xs-loader #xsLoader></xs-loader>
 

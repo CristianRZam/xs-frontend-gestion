@@ -19,6 +19,7 @@ import { XsSelect } from '../../../../../shared/components/xs-select/xs-select';
 import { XsTextArea } from '../../../../../shared/components/xs-text-area/xs-text-area';
 import { XsToast } from '../../../../../shared/components/xs-toast/xs-toast';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 
 type SaleItemForm = FormGroup<{
   productId: FormControl<number>;
@@ -63,6 +64,8 @@ export class XsSaleView implements AfterViewInit {
   public formVisible = false;
   public sourceOrder?: OrderModel;
   public cancelVisible = false;
+  public canCreateSale = false;
+  public canCancelSale = false;
   public readonly cancellationReason = new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.maxLength(255)] });
   public readonly filters = new FormGroup({
     fromDate: new FormControl<Date | null>(null),
@@ -81,8 +84,13 @@ export class XsSaleView implements AfterViewInit {
     private readonly productsApi: ProductUseCase,
     private readonly errors: ErrorHandlerService,
     private readonly orderApi: OrderUseCase,
-    private readonly route: ActivatedRoute
-  ) {}
+    private readonly route: ActivatedRoute,
+    authService: AuthService
+  ) {
+    const permissions = authService.getPermissions();
+    this.canCreateSale = permissions.includes('CREATE_SALE');
+    this.canCancelSale = permissions.includes('CANCEL_SALE');
+  }
 
   get items(): FormArray<SaleItemForm> { return this.saleForm.controls.items; }
   get payments(): FormArray<PaymentForm> { return this.saleForm.controls.payments; }
@@ -90,11 +98,13 @@ export class XsSaleView implements AfterViewInit {
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.refresh();
-      this.resetProducts();
-      this.route.queryParamMap.subscribe(params => {
-        const orderId = Number(params.get('orderId'));
-        if (Number.isInteger(orderId) && orderId > 0) this.openOrderSale(orderId);
-      });
+      if (this.canCreateSale) {
+        this.resetProducts();
+        this.route.queryParamMap.subscribe(params => {
+          const orderId = Number(params.get('orderId'));
+          if (Number.isInteger(orderId) && orderId > 0) this.openOrderSale(orderId);
+        });
+      }
     });
   }
 
@@ -124,6 +134,7 @@ export class XsSaleView implements AfterViewInit {
   }
 
   openForm(): void {
+    if (!this.canCreateSale) return;
     this.sourceOrder = undefined;
     this.saleForm.reset({ discount: 0 });
     this.items.clear();
@@ -134,6 +145,7 @@ export class XsSaleView implements AfterViewInit {
   }
 
   openOrderSale(orderId: number): void {
+    if (!this.canCreateSale) return;
     this.loader.show('Cargando orden para cobro...');
     this.orderApi.getById(orderId).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => {
@@ -251,6 +263,7 @@ export class XsSaleView implements AfterViewInit {
   }
 
   save(): void {
+    if (!this.canCreateSale) return;
     this.saleForm.markAllAsTouched();
     const discount = this.discountAmount();
     const invalidStock = !this.sourceOrder && this.items.controls.some((item, index) => item.controls.quantity.value > this.itemMax(index));
@@ -299,9 +312,14 @@ export class XsSaleView implements AfterViewInit {
     });
   }
 
-  openCancellation(): void { this.cancellationReason.reset(''); this.cancelVisible = true; }
+  openCancellation(): void {
+    if (!this.canCancelSale) return;
+    this.cancellationReason.reset('');
+    this.cancelVisible = true;
+  }
 
   cancelSale(): void {
+    if (!this.canCancelSale) return;
     this.cancellationReason.markAsTouched();
     if (!this.detail || this.cancellationReason.invalid) return this.toast.show('Indica el motivo de la anulación.', 'error');
     this.loader.show('Anulando venta...');

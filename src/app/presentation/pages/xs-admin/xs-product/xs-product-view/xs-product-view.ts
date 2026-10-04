@@ -20,6 +20,10 @@ import {CatalogConfigUseCase} from '../../../../../core/application/use-cases/ca
 import {CatalogConfigDTO} from '../../../../../core/domain/dtos/responses/catalog-config-dto';
 import { environment } from '../../../../../../environments/environment';
 import { XsInventoryMovementHistory } from '../../../../../shared/components/xs-inventory-movement-history/xs-inventory-movement-history';
+import { InventoryMovementCreateRequest } from '../../../../../core/domain/models/inventory-movement.model';
+import { InventoryMovementUseCase } from '../../../../../core/application/use-cases/inventory-movement.usecase';
+import { InventoryRegisterType, XsInventoryMovementRegister } from '../../../../../shared/components/xs-inventory-movement-register/xs-inventory-movement-register';
+import { finalize } from 'rxjs';
 
 
 @Component({
@@ -34,6 +38,7 @@ import { XsInventoryMovementHistory } from '../../../../../shared/components/xs-
     XsProductTable,
     XsProductCatalogDialog,
     XsInventoryMovementHistory,
+    XsInventoryMovementRegister,
   ],
   templateUrl: './xs-product-view.html',
   styleUrl: './xs-product-view.scss'
@@ -60,10 +65,14 @@ export class XsProductView implements OnInit, AfterViewInit{
   public catalogConfigurations: CatalogConfigDTO[] = [];
   public movementProduct?: ProductModel;
   public movementHistoryVisible = false;
+  public movementRegisterProduct?: ProductModel;
+  public movementRegisterType: InventoryRegisterType = 'ENTRY';
+  public movementRegisterVisible = false;
 
   constructor(
     private catalogConfigUseCase: CatalogConfigUseCase,
     private productUsecase: ProductUseCase,
+    private inventoryMovementUseCase: InventoryMovementUseCase,
     private errorHandler: ErrorHandlerService,
     private util: Formvalidators
   ) {}
@@ -129,6 +138,12 @@ export class XsProductView implements OnInit, AfterViewInit{
 
   updateFilter(event: ProductViewRequest) {
     this.filter= event;
+    this.load();
+  }
+
+  onProductPageChange(event: { page: number; size: number }): void {
+    if (event.page === this.filter.page && event.size === this.filter.size) return;
+    this.filter = { ...this.filter, page: event.page, size: event.size };
     this.load();
   }
 
@@ -278,6 +293,27 @@ export class XsProductView implements OnInit, AfterViewInit{
 
   onMovementHistoryClose(): void {
     this.movementHistoryVisible = false;
+  }
+
+  openInventoryMovement(product: ProductModel, type: InventoryRegisterType): void {
+    this.movementRegisterProduct = product;
+    this.movementRegisterType = type;
+    this.movementRegisterVisible = true;
+  }
+
+  closeInventoryMovement(): void { this.movementRegisterVisible = false; }
+
+  createInventoryMovement(request: InventoryMovementCreateRequest): void {
+    this.loader.show('Registrando movimiento de inventario...');
+    this.inventoryMovementUseCase.create(request).pipe(finalize(() => this.loader.hide())).subscribe({
+      next: response => {
+        if (!response.success) return this.toast.show(response.message || 'No se pudo registrar el movimiento.', 'error');
+        this.closeInventoryMovement();
+        this.toast.show('Movimiento de inventario registrado correctamente.');
+        this.load();
+      },
+      error: error => this.toast.show(this.errorHandler.getErrorMessage(error, 'registrar', 'movimiento de inventario'), 'error')
+    });
   }
 
 

@@ -18,6 +18,7 @@ import { XsSelect } from '../../../../../shared/components/xs-select/xs-select';
 import { XsTextArea } from '../../../../../shared/components/xs-text-area/xs-text-area';
 import { XsToast } from '../../../../../shared/components/xs-toast/xs-toast';
 import { ErrorHandlerService } from '../../../../../shared/services/error-handler.service';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 
 type OrderItemForm = FormGroup<{
   productId: FormControl<number>;
@@ -60,6 +61,11 @@ export class XsOrderView implements AfterViewInit {
   public formVisible = false;
   public deleteVisible = false;
   public editing?: OrderModel;
+  public canCreateOrder = false;
+  public canEditOrder = false;
+  public canUpdateOrderStatus = false;
+  public canDeleteOrder = false;
+  public canChargeOrder = false;
   public readonly filters = new FormGroup({
     search: new FormControl('', { nonNullable: true, validators: [Validators.maxLength(100)] }),
     status: new FormControl('ALL', { nonNullable: true }),
@@ -80,8 +86,16 @@ export class XsOrderView implements AfterViewInit {
     private readonly orderUseCase: OrderUseCase,
     private readonly productUseCase: ProductUseCase,
     private readonly errorHandler: ErrorHandlerService,
-    private readonly router: Router
-  ) {}
+    private readonly router: Router,
+    authService: AuthService
+  ) {
+    const permissions = authService.getPermissions();
+    this.canCreateOrder = permissions.includes('CREATE_ORDER');
+    this.canEditOrder = permissions.includes('EDIT_ORDER');
+    this.canUpdateOrderStatus = permissions.includes('UPDATE_ORDER_STATUS');
+    this.canDeleteOrder = permissions.includes('DELETE_ORDER');
+    this.canChargeOrder = permissions.includes('VIEW_SALE') && permissions.includes('CREATE_SALE');
+  }
 
   get items(): FormArray<OrderItemForm> { return this.orderForm.controls.items; }
 
@@ -135,6 +149,7 @@ export class XsOrderView implements AfterViewInit {
   }
 
   openCreate(): void {
+    if (!this.canCreateOrder) return;
     this.editing = undefined;
     this.originalReserved.clear();
     this.orderForm.reset({ orderType: 'DINE_IN', tableNumber: '', notes: '' });
@@ -144,7 +159,7 @@ export class XsOrderView implements AfterViewInit {
   }
 
   openEdit(): void {
-    if (!this.detail || this.detail.status !== 'PENDING') return;
+    if (!this.canEditOrder || !this.detail || this.detail.status !== 'PENDING') return;
     this.editing = this.detail;
     this.originalReserved.clear();
     this.orderForm.reset({ orderType: this.detail.orderType || 'DINE_IN', tableNumber: this.detail.tableNumber || '', notes: this.detail.notes || '' });
@@ -203,6 +218,7 @@ export class XsOrderView implements AfterViewInit {
   }
 
   save(): void {
+    if ((this.editing && !this.canEditOrder) || (!this.editing && !this.canCreateOrder)) return;
     this.orderForm.markAllAsTouched();
     const invalidStock = this.items.controls.some((_, index) => this.items.at(index).controls.quantity.value > this.itemMax(index));
     if (!this.items.length) return this.toast.show('La orden debe incluir al menos un producto.', 'error');
@@ -234,12 +250,12 @@ export class XsOrderView implements AfterViewInit {
   cancelOrder(): void { this.changeStatus('CANCELLED'); }
 
   chargeOrder(): void {
-    if (!this.detail) return;
+    if (!this.canChargeOrder || !this.detail) return;
     this.router.navigate(['/admin/sales'], { queryParams: { orderId: this.detail.id } });
   }
 
   changeStatus(status: string): void {
-    if (!this.detail) return;
+    if (!this.canUpdateOrderStatus || !this.detail) return;
     this.loader.show('Actualizando estado...');
     this.orderUseCase.updateStatus(this.detail.id, { status }).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => {
@@ -251,7 +267,7 @@ export class XsOrderView implements AfterViewInit {
   }
 
   deleteOrder(): void {
-    if (!this.detail) return;
+    if (!this.canDeleteOrder || !this.detail) return;
     this.loader.show('Eliminando orden...');
     this.orderUseCase.delete(this.detail.id).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => {

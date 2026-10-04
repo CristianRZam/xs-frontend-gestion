@@ -34,6 +34,7 @@ export class XsTable implements OnInit {
   @Input() paginator: boolean = true;
   @Input() showCurrentPageReport: boolean = false;
   @Input() lazy: boolean = false;
+  @Input() rows: number = 5;
 
   @Input() buttonsColumnWidth: number = 60;
   @Input() showOptionsColumn: boolean = true;

@@ -102,7 +102,9 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'cash-session',
     component: XsCashSessionView,
+    canActivate: [permissionGuard],
     data: {
+      permissions: ['VIEW_CASH_SESSION'],
       breadcrumb: [
         { label: 'Operaciones' },
         { label: 'Caja', routerLink: '/admin/cash-session' }
@@ -112,13 +114,31 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'inventory-count',
     component: XsInventoryCountView,
+    canActivate: [permissionGuard],
     data: {
+      permissions: ['VIEW_INVENTORY_COUNT'],
       breadcrumb: [
         { label: 'Operaciones' },
         { label: 'Conteo de productos', routerLink: '/admin/inventory-count' }
       ] as MenuItem[]
     }
   },
-  { path: 'sales', component: XsSaleView, data: { breadcrumb: [{ label: 'Operaciones' }, { label: 'Ventas', routerLink: '/admin/sales' }] as MenuItem[] } },
-  { path: 'orders', component: XsOrderView, data: { breadcrumb: [{ label: 'Operaciones' }, { label: 'Órdenes', routerLink: '/admin/orders' }] as MenuItem[] } }
+  {
+    path: 'sales',
+    component: XsSaleView,
+    canActivate: [permissionGuard],
+    data: {
+      permissions: ['VIEW_SALE'],
+      breadcrumb: [{ label: 'Operaciones' }, { label: 'Ventas', routerLink: '/admin/sales' }] as MenuItem[]
+    }
+  },
+  {
+    path: 'orders',
+    component: XsOrderView,
+    canActivate: [permissionGuard],
+    data: {
+      permissions: ['VIEW_ORDER'],
+      breadcrumb: [{ label: 'Operaciones' }, { label: 'Órdenes', routerLink: '/admin/orders' }] as MenuItem[]
+    }
+  }
 ];

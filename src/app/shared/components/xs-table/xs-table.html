@@ -1,5 +1,5 @@
 <p-table #table [value]="dataSource" [selectionMode]="selectByCheckbox ? 'multiple' : null" [dataKey]="rowID"
-         [paginator]="paginator" [rows]="5" [rowsPerPageOptions]="showRowsPerPage ? rowsPerPageOptions : undefined"
+         [paginator]="paginator" [rows]="rows" [rowsPerPageOptions]="showRowsPerPage ? rowsPerPageOptions : undefined"
          [showCurrentPageReport]="showCurrentPageReport" currentPageReportTemplate="Registros {first}-{last} de {totalRecords}"
          [lazy]="lazy" [totalRecords]="totalRecords" (onLazyLoad)="loadLazyData($event)">
   <!-- Caption dinámico -->

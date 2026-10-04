@@ -11,6 +11,7 @@ import { XsDialog } from '../../../../../shared/components/xs-dialog/xs-dialog';
 import { XsLoader } from '../../../../../shared/components/xs-loader/xs-loader';
 import { XsToast } from '../../../../../shared/components/xs-toast/xs-toast';
 import { XsInventoryMovementHistory } from '../../../../../shared/components/xs-inventory-movement-history/xs-inventory-movement-history';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 
 type CountStage = 'EMPTY' | 'COUNTING' | 'REVIEW';
 
@@ -34,14 +35,31 @@ export class XsInventoryCountView implements AfterViewInit {
   public historyDetailVisible = false;
   public movementProduct?: InventoryCountDetailItem;
   public movementHistoryVisible = false;
+  public canViewProductMovements = false;
+  public canCreateInventoryCount = false;
+  public canReviewInventoryCount = false;
+  public canCloseInventoryCount = false;
+  public canViewInventoryCountHistory = false;
 
   get count(): InventoryCountDetail { return this.detail!; }
 
-  constructor(private readonly inventoryCountUseCase: InventoryCountUseCase, private readonly errorHandler: ErrorHandlerService) {}
+  constructor(
+    private readonly inventoryCountUseCase: InventoryCountUseCase,
+    private readonly errorHandler: ErrorHandlerService,
+    authService: AuthService
+  ) {
+    const permissions = authService.getPermissions();
+    this.canViewProductMovements = permissions.includes('VIEW_PRODUCT_MOVEMENT');
+    this.canCreateInventoryCount = permissions.includes('CREATE_INVENTORY_COUNT');
+    this.canReviewInventoryCount = permissions.includes('REVIEW_INVENTORY_COUNT');
+    this.canCloseInventoryCount = permissions.includes('CLOSE_INVENTORY_COUNT');
+    this.canViewInventoryCountHistory = permissions.includes('VIEW_INVENTORY_COUNT_HISTORY');
+  }
 
   ngAfterViewInit(): void { setTimeout(() => this.restore()); }
 
   start(): void {
+    if (!this.canCreateInventoryCount) return;
     this.loader.show('Iniciando conteo...');
     this.inventoryCountUseCase.open().pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => {
@@ -54,7 +72,7 @@ export class XsInventoryCountView implements AfterViewInit {
   }
 
   review(): void {
-    if (!this.session || !this.detail) return;
+    if (!this.canReviewInventoryCount || !this.session || !this.detail) return;
     this.fillBlankCounts();
     this.loader.show('Validando conteo...');
     this.inventoryCountUseCase.review(this.session.id, this.request()).pipe(finalize(() => this.loader.hide())).subscribe({
@@ -69,18 +87,21 @@ export class XsInventoryCountView implements AfterViewInit {
   }
 
   confirmClose(): void {
+    if (!this.canCloseInventoryCount) return;
     if (!this.hasAdjustmentReasons()) return this.toast.show('Indica el motivo de cada ajuste seleccionado.', 'error');
     this.closeConfirm.show({ message: 'Se aplicarán los ajustes seleccionados y el conteo quedará guardado en el historial.', onClickAceptar: () => this.close() });
   }
 
-  edit(): void { this.stage = 'COUNTING'; this.detail?.items.forEach(item => { item.applyAdjustment = false; item.reason = undefined; }); }
+  edit(): void { if (!this.canReviewInventoryCount) return; this.stage = 'COUNTING'; this.detail?.items.forEach(item => { item.applyAdjustment = false; item.reason = undefined; }); }
 
   setPhysicalStock(item: InventoryCountDetailItem, value: string): void {
+    if (!this.canReviewInventoryCount) return;
     item.item.physicalStock = value === '' ? undefined : Number(value);
     item.suggested = false;
   }
 
   loadHistory(): void {
+    if (!this.canViewInventoryCountHistory) return;
     this.historyVisible = true;
     this.loader.show('Cargando historial de conteos...');
     this.inventoryCountUseCase.history().pipe(finalize(() => this.loader.hide())).subscribe({
@@ -90,6 +111,7 @@ export class XsInventoryCountView implements AfterViewInit {
   }
 
   showHistoryDetail(id: number): void {
+    if (!this.canViewInventoryCountHistory) return;
     this.loader.show('Cargando detalle del conteo...');
     this.inventoryCountUseCase.detail(id).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => { if (response.success && response.data) { this.historyDetail = response.data; this.historyDetailVisible = true; } },
@@ -98,6 +120,7 @@ export class XsInventoryCountView implements AfterViewInit {
   }
 
   showProductMovements(product: InventoryCountDetailItem): void {
+    if (!this.canViewProductMovements) return;
     this.movementProduct = product;
     this.movementHistoryVisible = true;
   }
@@ -134,7 +157,7 @@ export class XsInventoryCountView implements AfterViewInit {
   private request(): InventoryCountCloseRequest { return { items: (this.detail?.items ?? []).map(row => ({ productId: row.item.productId, physicalStock: row.item.physicalStock ?? 0, applyAdjustment: row.applyAdjustment ?? false, reason: row.reason?.trim() || undefined })) }; }
   private hasAdjustmentReasons(): boolean { return (this.detail?.items ?? []).every(row => !row.applyAdjustment || !!row.reason?.trim()); }
   private close(): void {
-    if (!this.session) return;
+    if (!this.canCloseInventoryCount || !this.session) return;
     this.loader.show('Finalizando conteo...');
     this.inventoryCountUseCase.close(this.session.id, this.request()).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => { if (response.success) { this.stage = 'EMPTY'; this.session = undefined; this.detail = undefined; this.toast.show('Conteo finalizado y guardado en el historial.'); } else this.toast.show(response.message || 'No se pudo finalizar el conteo.', 'error'); },

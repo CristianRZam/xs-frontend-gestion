@@ -87,6 +87,7 @@ Al añadir un módulo que consulte el backend, crea o adapta en ese orden: model
 - Las rutas raíz están en `app.routes.ts`. Las rutas hijas viven en `presentation/pages/xs-admin/admin.routes.ts` y `presentation/pages/xs-portal/portal.routes.ts`, cargadas de forma diferida.
 - Cada nueva página administrativa debe añadirse a `ADMIN_ROUTES`, protegerse con `permissionGuard`, declarar el permiso correcto y definir su breadcrumb como `MenuItem[]`. También revisa el menú lateral para mostrar el acceso de acuerdo con el permiso.
 - Para ocultar o mostrar elementos por permisos reutiliza `appHasPermission`; no confíes solo en ello: el guard y el backend siguen siendo las barreras de seguridad.
+- Toda respuesta HTTP `403` por una operación protegida debe activar el mensaje global reutilizable de autorización (título: “Acción no autorizada”), incluso si la acción pertenece a movimientos de inventario. No reemplaces este aviso por un toast local genérico ni expongas el detalle interno del backend; el interceptor HTTP y `AuthorizationFeedbackService` son la vía única para este aviso transversal.
 - No expongas JWT, contraseñas, cabeceras Authorization ni datos sensibles en consola, toasts, HTML o logs.
 
 ## Convenciones de presentación y UX

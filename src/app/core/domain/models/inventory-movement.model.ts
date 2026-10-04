@@ -23,3 +23,12 @@ export interface InventoryMovementPage {
   size: number;
   hasMore: boolean;
 }
+
+export interface InventoryMovementCreateRequest {
+  productId: number;
+  type: 'ENTRY' | 'WASTE' | 'ADJUSTMENT';
+  quantity: number;
+  reason?: string;
+  referenceType?: string;
+  referenceId?: number;
+}

@@ -14,6 +14,7 @@ import { XsLoader } from '../../../../../shared/components/xs-loader/xs-loader';
 import { XsTextArea } from '../../../../../shared/components/xs-text-area/xs-text-area';
 import { XsToast } from '../../../../../shared/components/xs-toast/xs-toast';
 import { environment } from '../../../../../../environments/environment';
+import { AuthService } from '../../../../../infraestructure/persistence/auth.service';
 
 @Component({
   selector: 'xs-cash-session-view',
@@ -35,6 +36,10 @@ export class XsCashSessionView implements AfterViewInit {
   public salesDialogVisible = false;
   public salesSummary?: CashSessionSalesSummary;
   public closeSalesSummary?: CashSessionSalesSummary;
+  public canOpenCashSession = false;
+  public canCloseCashSession = false;
+  public canViewCashSessionHistory = false;
+  public canViewCashSessionSales = false;
 
   public readonly openForm = new FormGroup({
     openingAmount: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
@@ -48,8 +53,15 @@ export class XsCashSessionView implements AfterViewInit {
   constructor(
     private readonly cashSessionUseCase: CashSessionUseCase,
     private readonly saleUseCase: SaleUseCase,
-    private readonly errorHandler: ErrorHandlerService
-  ) {}
+    private readonly errorHandler: ErrorHandlerService,
+    authService: AuthService
+  ) {
+    const permissions = authService.getPermissions();
+    this.canOpenCashSession = permissions.includes('OPEN_CASH_SESSION');
+    this.canCloseCashSession = permissions.includes('CLOSE_CASH_SESSION');
+    this.canViewCashSessionHistory = permissions.includes('VIEW_CASH_SESSION_HISTORY');
+    this.canViewCashSessionSales = permissions.includes('VIEW_CASH_SESSION_SALES');
+  }
 
   ngAfterViewInit(): void { setTimeout(() => this.loadCurrentSession()); }
 
@@ -75,11 +87,13 @@ export class XsCashSessionView implements AfterViewInit {
   }
 
   showOpenDialog(): void {
+    if (!this.canOpenCashSession) return;
     this.openForm.reset({ openingAmount: 0, openingComment: '' });
     this.openDialogVisible = true;
   }
 
   openSession(): void {
+    if (!this.canOpenCashSession) return;
     if (!this.isValid(this.openForm)) return;
     const value = this.openForm.getRawValue();
     this.loader.show('Abriendo caja...');
@@ -100,21 +114,22 @@ export class XsCashSessionView implements AfterViewInit {
   }
 
   showCloseDialog(): void {
-    if (!this.currentSession) return;
+    if (!this.currentSession || !this.canCloseCashSession) return;
     this.closeForm.reset({ closingAmount: 0, closingComment: '' });
+    this.closeSalesSummary = undefined;
     this.closeDialogVisible = true;
-    this.loadSalesSummary(this.currentSession.id, 'close');
+    if (this.canViewCashSessionSales) this.loadSalesSummary(this.currentSession.id, 'close');
   }
 
   showSalesDialog(): void {
-    if (!this.currentSession) return;
+    if (!this.currentSession || !this.canViewCashSessionSales) return;
     this.salesSummary = undefined;
     this.salesDialogVisible = true;
     this.loadSalesSummary(this.currentSession.id, 'dialog');
   }
 
   closeSession(): void {
-    if (!this.currentSession || !this.isValid(this.closeForm)) return;
+    if (!this.currentSession || !this.canCloseCashSession || !this.isValid(this.closeForm)) return;
     const value = this.closeForm.getRawValue();
     this.loader.show('Cerrando caja...');
     this.cashSessionUseCase.close(this.currentSession.id, {
@@ -133,6 +148,7 @@ export class XsCashSessionView implements AfterViewInit {
   }
 
   showHistory(): void {
+    if (!this.canViewCashSessionHistory) return;
     this.history = [];
     this.historyPage = 0;
     this.historyHasMore = false;
@@ -141,6 +157,7 @@ export class XsCashSessionView implements AfterViewInit {
   }
 
   loadHistory(): void {
+    if (!this.canViewCashSessionHistory) return;
     this.loader.show('Cargando historial de cajas...');
     this.cashSessionUseCase.getHistory(this.historyPage, environment.CASH_SESSION_HISTORY_PAGE_SIZE).pipe(finalize(() => this.loader.hide())).subscribe({
       next: response => {

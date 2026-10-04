@@ -4,6 +4,7 @@ import {XsTable} from '../../../../../shared/components/xs-table/xs-table';
 import {XsTableColumn} from '../../../../../shared/components/xs-table/xs-table.model';
 import {AuthService} from '../../../../../infraestructure/persistence/auth.service';
 import {XsButton} from '../../../../../shared/components/xs-button/xs-button';
+import { environment } from '../../../../../../environments/environment';
 
 @Component({
   selector: 'xs-product-table',
@@ -17,6 +18,7 @@ import {XsButton} from '../../../../../shared/components/xs-button/xs-button';
 export class XsProductTable {
   @Input() products: ProductModel[] = [];
   @Input() totalRecords: number = 0;
+  readonly pageSize = environment.PRODUCT_PAGE_SIZE;
 
   @Output() addItem: EventEmitter<any> = new EventEmitter();
   @Output() updateItem: EventEmitter<ProductModel> = new EventEmitter();
@@ -26,11 +28,19 @@ export class XsProductTable {
   @Output() exportExcel: EventEmitter<any> = new EventEmitter();
   @Output() catalog: EventEmitter<any> = new EventEmitter();
   @Output() movements: EventEmitter<ProductModel> = new EventEmitter();
+  @Output() entry: EventEmitter<ProductModel> = new EventEmitter();
+  @Output() waste: EventEmitter<ProductModel> = new EventEmitter();
+  @Output() adjustment: EventEmitter<ProductModel> = new EventEmitter();
+  @Output() pageChange: EventEmitter<{ page: number; size: number }> = new EventEmitter();
 
   canExport = false;
   canCreate = false;
   canEdit = false;
   canDelete = false;
+  canViewMovements = false;
+  canCreateInventoryEntry = false;
+  canCreateProductWaste = false;
+  canAdjustProductInventory = false;
 
   columns = [
     new XsTableColumn({ field: 'code', headerText: 'Código', displayOnInit: true, isDefault: true }),
@@ -68,6 +78,10 @@ export class XsProductTable {
     this.canCreate = permissions.includes('CREATE_PRODUCT');
     this.canEdit = permissions.includes('EDIT_PRODUCT');
     this.canDelete = permissions.includes('DELETE_PRODUCT');
+    this.canViewMovements = permissions.includes('VIEW_PRODUCT_MOVEMENT');
+    this.canCreateInventoryEntry = permissions.includes('CREATE_PRODUCT_INVENTORY_ENTRY');
+    this.canCreateProductWaste = permissions.includes('CREATE_PRODUCT_WASTE');
+    this.canAdjustProductInventory = permissions.includes('ADJUST_PRODUCT_INVENTORY');
   }
 
   onAddItem() {
@@ -99,4 +113,11 @@ export class XsProductTable {
   }
 
   onMovements(item: ProductModel): void { this.movements.emit(item); }
+  onEntry(item: ProductModel): void { this.entry.emit(item); }
+  onWaste(item: ProductModel): void { this.waste.emit(item); }
+  onAdjustment(item: ProductModel): void { this.adjustment.emit(item); }
+  onLazyLoad(event: { first?: number; rows?: number }): void {
+    const size = event.rows || this.pageSize;
+    this.pageChange.emit({ page: Math.floor((event.first || 0) / size), size });
+  }
 }

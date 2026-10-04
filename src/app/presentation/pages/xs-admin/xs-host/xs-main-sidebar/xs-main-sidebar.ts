@@ -147,22 +147,26 @@ export class XsMainSidebar implements OnInit {
           {
             label: 'Caja',
             icon: 'fas fa-cash-register',
-            routerLink: '/admin/cash-session'
+            routerLink: '/admin/cash-session',
+            permission: 'VIEW_CASH_SESSION'
           },
           {
             label: 'Conteo de productos',
             icon: 'fas fa-clipboard-check',
-            routerLink: '/admin/inventory-count'
+            routerLink: '/admin/inventory-count',
+            permission: 'VIEW_INVENTORY_COUNT'
           },
           {
             label: 'Órdenes',
             icon: 'fas fa-clipboard-list',
-            routerLink: '/admin/orders'
+            routerLink: '/admin/orders',
+            permission: 'VIEW_ORDER'
           },
           {
             label: 'Ventas',
             icon: 'fas fa-receipt',
-            routerLink: '/admin/sales'
+            routerLink: '/admin/sales',
+            permission: 'VIEW_SALE'
           }
         ]
       },
