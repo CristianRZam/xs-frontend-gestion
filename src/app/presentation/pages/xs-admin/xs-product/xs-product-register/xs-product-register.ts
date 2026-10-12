@@ -58,6 +58,7 @@ export class XsProductRegister implements OnInit {
   public categories: ParameterModel[] = [];
   public unitMeasures: ParameterModel[] = [];
   public valuationMethods: ParameterModel[] = [];
+  readonly maxImageFileSize = 2 * 1024 * 1024;
 
   ngOnInit(): void {
     this.formConfig.configForm();

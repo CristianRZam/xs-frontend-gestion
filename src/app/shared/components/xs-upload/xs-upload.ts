@@ -50,7 +50,8 @@ export class XsUpload implements OnChanges{
 
   // 📌 Seleccionar archivos (ACUMULA + EVITA DUPLICADOS)
   onSelect(event: any) {
-    const nuevos: File[] = Array.from(event.files || []);
+    const selectedFiles = Array.from(event.files || []) as File[];
+    const nuevos = selectedFiles.filter(file => file.size <= this.maxFileSize);
 
     // 🔴 MODO SINGLE
     if (!this.multiple) {
